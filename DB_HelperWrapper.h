@@ -10,7 +10,7 @@ namespace unsaintedWinApp {
 
     public ref class DB_HelperWrapper {
     private:
-        //DB_Helper* nativeHelper; // ”казатель на неуправл€емый класс
+        DB_Helper* nativeHelper; // ”казатель на неуправл€емый класс
 
     public:
         DB_HelperWrapper(String^ dbPath);

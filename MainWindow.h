@@ -3978,10 +3978,10 @@ private: System::Void F8_button_Click(System::Object^ sender, System::EventArgs^
     SetTabMenuLabelBottomLine(UnworkableList_label);
 }
 private: Void FillComboBox(ComboBox^ box, String^ table, String^ column) {
-    List<String^>^ items = dbHelperWrapper->PopulateComboBox(table, column);
-    for each (String ^ item in items) {
-        box->Items->Add(item);
-    }
+    //List<String^>^ items = dbHelperWrapper->PopulateComboBox(table, column);
+    //for each (String ^ item in items) {
+    //    box->Items->Add(item);
+    //}
 }
 private: Void InitializeData() {
 

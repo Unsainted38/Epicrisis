@@ -1,0 +1,12 @@
+/Include/
+/Interop/
+/x64/
+/.git/
+/.vs/
+prod.db
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.licx
+

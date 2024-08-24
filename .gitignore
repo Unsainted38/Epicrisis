@@ -4,9 +4,5 @@
 /.git/
 /.vs/
 prod.db
-*.sln
-*.vcxproj
-*.vcxproj.filters
-*.vcxproj.user
 *.licx
 

@@ -24,9 +24,6 @@
     <ClCompile Include="Word_Helper.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="DB_HelperWrapper.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="MyMarshallingClass.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -41,22 +38,11 @@
     <ClInclude Include="Word_Helper.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Include\sqlite3.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="DB_HelperWrapper.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="MyMarshallingClass.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\libs\sqlite3\sqlite3.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\libs\sqlite3\sqlite3.dll" />
-    <None Include="sqlite3.dll" />
     <None Include="prod.db" />
   </ItemGroup>
 </Project>

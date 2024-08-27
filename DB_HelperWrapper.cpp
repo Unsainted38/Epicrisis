@@ -7,9 +7,8 @@ using namespace msclr::interop;
 namespace unsaintedWinApp {
 
     DB_HelperWrapper::DB_HelperWrapper(String^ dbPath) {
-        //string dbPathStr = ConvertSystemStringToStdString(dbPath);
         //string dbPathStr = marshal_as<string>(dbPath);
-        //nativeHelper = new DB_Helper(dbPathStr);
+        nativeHelper = new DB_Helper(dbPath);
     }
 
     DB_HelperWrapper::~DB_HelperWrapper() {
@@ -17,19 +16,14 @@ namespace unsaintedWinApp {
     }
 
     DB_HelperWrapper::!DB_HelperWrapper() {
-        //delete nativeHelper;
-        //nativeHelper = nullptr;
+        delete nativeHelper;
+        nativeHelper = nullptr;
     }
 
     List<String^>^ DB_HelperWrapper::PopulateComboBox(String^ table, String^ column)
     {
-        string nativeTable = ConvertSystemStringToStdString(table);
-        string nativeColumn = ConvertSystemStringToStdString(column);
-        vector<string> nativeItems;// = nativeHelper->GetColumnData(nativeTable, nativeColumn);
         List<String^>^ managedItems = gcnew List<String^>();
-        for (const string& item : nativeItems) {
-            managedItems->Add(gcnew String(item.c_str()));
-        }
+        managedItems = nativeHelper->GetColumnData(table, column);
         return managedItems;
     }
 }

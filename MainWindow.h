@@ -1,27 +1,30 @@
 #pragma once
-#include "DB_HelperWrapper.h"
+#include <vcclr.h>
+#include "DB_Helper.h"
 
 namespace unsaintedWinApp {
-
-	using namespace System;
+    using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+    using namespace System::Collections::Generic;
+
 
 	/// <summary>
 	/// Сводка для MainWindow
 	/// </summary>
 	public ref class MainWindow : public System::Windows::Forms::Form
 	{
+
 	public:
 		MainWindow(void)
 		{
 			InitializeComponent();
             dbPath = "prod.db";
-            dbHelperWrapper = gcnew DB_HelperWrapper(dbPath);
-            FillComboBox(Names_comboBox,"firstNames", "value");
+            dbHelper = gcnew DB_Helper(dbPath);
+            FillComboBox(Names_comboBox, dbHelper->GetColumnData("firstNames", "value"));
 
 			//
 			//TODO: добавьте код конструктора
@@ -42,7 +45,8 @@ namespace unsaintedWinApp {
 		}
     private:
         String^ dbPath;
-        DB_HelperWrapper^ dbHelperWrapper;
+        DB_Helper^ dbHelper;
+        
         
     public:       
         String^ IllBeginingDate;
@@ -3977,8 +3981,8 @@ private: System::Void F8_button_Click(System::Object^ sender, System::EventArgs^
     CleanEpicrisisTabLastLabel();
     SetTabMenuLabelBottomLine(UnworkableList_label);
 }
-private: Void FillComboBox(ComboBox^ box, String^ table, String^ column) {
-    List<String^>^ items = dbHelperWrapper->PopulateComboBox(table, column);
+private: Void FillComboBox(ComboBox^ box, List<String^>^ items) {
+    box->Items->Clear();
     for each (String ^ item in items) {
         box->Items->Add(item);
     }

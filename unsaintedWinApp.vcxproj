@@ -22,10 +22,10 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <ProjectGuid>{A7CD166A-6E38-4A0F-83BE-32437CB66EA2}</ProjectGuid>
     <EnableManagedPackageReferenceSupport>true</EnableManagedPackageReferenceSupport>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>unsaintedWinApp</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -76,13 +76,16 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Users\erik\develop\host\projects\unsaintedWinApp\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\erik\develop\host\libs\sqlite3;$(LibraryPath)</LibraryPath>
+    <ManagedAssembly>
+    </ManagedAssembly>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\erik\develop\host\projects\unsaintedWinApp\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalDependencies>sqlite3.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -119,8 +122,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Reference Include="SQLite.Designer">
+      <HintPath>libs\sqlite-netFx46-binary-x64-2015-1.0.118.0\SQLite.Designer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+	<Reference Include="SQLite.Interop">
+      <HintPath>libs\sqlite-netFx46-binary-x64-2015-1.0.118.0\SQLite.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>libs\sqlite-netFx46-binary-x64-2015-1.0.118.0\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6">
+      <HintPath>libs\sqlite-netFx46-binary-x64-2015-1.0.118.0\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq">
+      <HintPath>libs\sqlite-netFx46-binary-x64-2015-1.0.118.0\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SqlXml" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Messaging" />
@@ -130,15 +150,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DB_Helper.cpp" />
-    <ClCompile Include="DB_HelperWrapper.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MyMarshallingClass.cpp" />
     <ClCompile Include="Word_Helper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DB_Helper.h" />
-    <ClInclude Include="DB_HelperWrapper.h" />
-    <ClInclude Include="Include\sqlite3.h" />
     <ClInclude Include="MainWindow.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -151,16 +168,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\libs\sqlite3\sqlite3.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\libs\sqlite3\sqlite3.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="prod.db" />
-    <None Include="sqlite3.dll">
-      <CopyToOutputDirectory>CopyIfNewer</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

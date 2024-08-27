@@ -1,32 +1,23 @@
 #pragma once
 
-#include <sqlite3.h>
-#include <string>
-#include <vector>
-#include <stdio.h>
-
 
 using namespace System;
 using namespace System::Windows::Forms;
-using namespace std;
+using namespace System::Collections::Generic;
+using namespace System::Data;
+using namespace System::Data::SQLite;
 
-public class DB_Helper {
+namespace unsaintedWinApp {
 
-private:    
-    sqlite3* db;
-    bool OpenDataBase(const string& dbPath);
-    void CloseDataBase();
-    
-public:
-    // Конструктор класса
-    DB_Helper(string dbPath);
+    public ref class DB_Helper {
 
-    //Деструктор класса
-    ~DB_Helper();
-  
+    private:
+        String^ connectionString;
+        
+    public:
 
-    // Mетод для заполнения ComboBox данными из столбца таблицы
-    vector<string> GetColumnData(string table, string column, int columnIndex = 0);
-private:
-    string GenerateSqlSelectQuery(string table, string column);
-};
+        DB_Helper(String^ dbPath);
+
+        List<String^>^ GetColumnData(String^ tableName, String^ columnName);
+    };
+}

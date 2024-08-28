@@ -2,6 +2,7 @@
 #include <vcclr.h>
 #include "DB_Helper.h"
 
+
 namespace unsaintedWinApp {
     using namespace System;
 	using namespace System::ComponentModel;
@@ -10,6 +11,8 @@ namespace unsaintedWinApp {
 	using namespace System::Data;
 	using namespace System::Drawing;
     using namespace System::Collections::Generic;
+    using namespace DevExpress;
+    using namespace DevExpress::XtraEditors;
 
 
 	/// <summary>
@@ -22,9 +25,8 @@ namespace unsaintedWinApp {
 		MainWindow(void)
 		{
 			InitializeComponent();
-            dbPath = "prod.db";
-            dbHelper = gcnew DB_Helper(dbPath);
-            FillComboBox(Names_comboBox, dbHelper->GetColumnData("firstNames", "value"));
+            
+            InitializeData();
 
 			//
 			//TODO: добавьте код конструктора
@@ -78,8 +80,10 @@ namespace unsaintedWinApp {
     private: System::Windows::Forms::Panel^ Epicrisis_panel;
     private: System::Windows::Forms::Button^ BackToHome_button;
     private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel9;
-    private: System::Windows::Forms::NumericUpDown^ numericUpDown2;
-    private: System::Windows::Forms::NumericUpDown^ numericUpDown1;
+    private: System::Windows::Forms::NumericUpDown^ id_numericUpDown;
+    private: System::Windows::Forms::NumericUpDown^ year_numericUpDown;
+
+
     private: System::Windows::Forms::Label^ ID_label;
     private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel1;
     private: System::Windows::Forms::Button^ button3;
@@ -102,10 +106,12 @@ namespace unsaintedWinApp {
     private: System::Windows::Forms::Button^ SideInfo_button;
     private: System::Windows::Forms::Button^ Recomendations_button;
     private: System::Windows::Forms::Panel^ Ill_History_panel;
-    private: System::Windows::Forms::DateTimePicker^ dateTimePicker1;
+    private: System::Windows::Forms::DateTimePicker^ income_dateTimePicker;
+
     private: System::Windows::Forms::GroupBox^ groupBox13;
     private: System::Windows::Forms::GroupBox^ groupBox12;
-    private: System::Windows::Forms::DateTimePicker^ dateTimePicker2;
+    private: System::Windows::Forms::DateTimePicker^ outcome_dateTimePicker;
+
     private: System::Windows::Forms::GroupBox^ MKB_groupBox;
     private: System::Windows::Forms::GroupBox^ groupBox14;
     private: System::Windows::Forms::Label^ label4;
@@ -114,19 +120,36 @@ namespace unsaintedWinApp {
     private: System::Windows::Forms::GroupBox^ groupBox15;
     private: System::Windows::Forms::Label^ label9;
     private: System::Windows::Forms::Button^ F3_button;
-    private: System::Windows::Forms::DateTimePicker^ dateTimePicker3;
-    private: System::Windows::Forms::ComboBox^ comboBox3;
-    private: System::Windows::Forms::ComboBox^ comboBox2;
-    private: System::Windows::Forms::ComboBox^ Diagnoses_comboBox;
+    private: System::Windows::Forms::DateTimePicker^ birthday_dateTimePicker;
+private: System::Windows::Forms::ComboBox^ related_comboBox;
+private: System::Windows::Forms::ComboBox^ mkb_comboBox;
+private: System::Windows::Forms::ComboBox^ epicrizdiagnoses_comboBox;
 
 
-    private: System::Windows::Forms::ComboBox^ comboBox4;
-    private: System::Windows::Forms::ComboBox^ comboBox8;
-    private: System::Windows::Forms::ComboBox^ comboBox6;
-    private: System::Windows::Forms::ComboBox^ comboBox9;
+
+
+
+
+
+
+private: System::Windows::Forms::ComboBox^ complications_comboBox;
+
+
+
+
+
+private: System::Windows::Forms::ComboBox^ militaryUnit_comboBox;
+
+
+private: System::Windows::Forms::ComboBox^ rank_comboBox;
+private: System::Windows::Forms::ComboBox^ Patronymic_comboBox;
+
+
+
 private: System::Windows::Forms::ComboBox^ Names_comboBox;
+private: System::Windows::Forms::ComboBox^ Surname_comboBox;
 
-    private: System::Windows::Forms::ComboBox^ comboBox5;
+
     private: System::Windows::Forms::Label^ BackToHome_label;
     private: System::Windows::Forms::Label^ Ill_History_label;
     private: System::Windows::Forms::Label^ Anamnesis_label;
@@ -263,7 +286,21 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
     private: System::Windows::Forms::Button^ F9_button;
     private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel19;
     private: System::Windows::Forms::Button^ F8_button;
-	private: System::ComponentModel::IContainer^ components;
+private: System::Windows::Forms::OpenFileDialog^ DB_PathChanger_openFileDialog;
+private: System::Windows::Forms::Label^ dbPath_label;
+private: System::Windows::Forms::Label^ tamplatesPath_label;
+
+
+
+
+
+
+
+
+
+
+
+    private: System::ComponentModel::IContainer^ components;
 
 		/// <summary>
 		/// Обязательная переменная конструктора.
@@ -303,11 +340,13 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->tableLayoutPanel3 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->TemplatesChange_button = (gcnew System::Windows::Forms::Button());
             this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+            this->tamplatesPath_label = (gcnew System::Windows::Forms::Label());
             this->Template_label = (gcnew System::Windows::Forms::Label());
             this->tableLayoutPanel4 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->DB_create_button = (gcnew System::Windows::Forms::Button());
             this->DB_change_button = (gcnew System::Windows::Forms::Button());
             this->DB_groupBox = (gcnew System::Windows::Forms::GroupBox());
+            this->dbPath_label = (gcnew System::Windows::Forms::Label());
             this->DoctorsNotes_tableLayoutPanel = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->ReportDir_groupBox = (gcnew System::Windows::Forms::GroupBox());
             this->label2 = (gcnew System::Windows::Forms::Label());
@@ -343,24 +382,20 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->Stamp_label = (gcnew System::Windows::Forms::Label());
             this->tableLayoutPanel10 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->groupBox11 = (gcnew System::Windows::Forms::GroupBox());
-            this->dateTimePicker3 = (gcnew System::Windows::Forms::DateTimePicker());
+            this->birthday_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
             this->groupBox10 = (gcnew System::Windows::Forms::GroupBox());
-            this->comboBox8 = (gcnew System::Windows::Forms::ComboBox());
+            this->militaryUnit_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->groupBox9 = (gcnew System::Windows::Forms::GroupBox());
-            this->comboBox6 = (gcnew System::Windows::Forms::ComboBox());
+            this->rank_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->groupBox8 = (gcnew System::Windows::Forms::GroupBox());
-            this->comboBox9 = (gcnew System::Windows::Forms::ComboBox());
+            this->Patronymic_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->groupBox7 = (gcnew System::Windows::Forms::GroupBox());
             this->Names_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->groupBox6 = (gcnew System::Windows::Forms::GroupBox());
-            this->comboBox5 = (gcnew System::Windows::Forms::ComboBox());
-            this->SideInfo_panel = (gcnew System::Windows::Forms::Panel());
-            this->F7_button = (gcnew System::Windows::Forms::Button());
-            this->SideInfo_groupBox = (gcnew System::Windows::Forms::GroupBox());
-            this->SideInfo_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->Surname_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->tableLayoutPanel9 = (gcnew System::Windows::Forms::TableLayoutPanel());
-            this->numericUpDown2 = (gcnew System::Windows::Forms::NumericUpDown());
-            this->numericUpDown1 = (gcnew System::Windows::Forms::NumericUpDown());
+            this->id_numericUpDown = (gcnew System::Windows::Forms::NumericUpDown());
+            this->year_numericUpDown = (gcnew System::Windows::Forms::NumericUpDown());
             this->ID_label = (gcnew System::Windows::Forms::Label());
             this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
             this->button3 = (gcnew System::Windows::Forms::Button());
@@ -368,20 +403,24 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->Ill_History_panel = (gcnew System::Windows::Forms::Panel());
             this->F3_button = (gcnew System::Windows::Forms::Button());
             this->groupBox15 = (gcnew System::Windows::Forms::GroupBox());
-            this->comboBox4 = (gcnew System::Windows::Forms::ComboBox());
+            this->complications_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->label9 = (gcnew System::Windows::Forms::Label());
             this->groupBox16 = (gcnew System::Windows::Forms::GroupBox());
-            this->comboBox3 = (gcnew System::Windows::Forms::ComboBox());
+            this->related_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->label7 = (gcnew System::Windows::Forms::Label());
             this->MKB_groupBox = (gcnew System::Windows::Forms::GroupBox());
-            this->comboBox2 = (gcnew System::Windows::Forms::ComboBox());
+            this->mkb_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->groupBox14 = (gcnew System::Windows::Forms::GroupBox());
-            this->Diagnoses_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->epicrizdiagnoses_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->label4 = (gcnew System::Windows::Forms::Label());
             this->groupBox13 = (gcnew System::Windows::Forms::GroupBox());
-            this->dateTimePicker2 = (gcnew System::Windows::Forms::DateTimePicker());
+            this->outcome_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
             this->groupBox12 = (gcnew System::Windows::Forms::GroupBox());
-            this->dateTimePicker1 = (gcnew System::Windows::Forms::DateTimePicker());
+            this->income_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
+            this->SideInfo_panel = (gcnew System::Windows::Forms::Panel());
+            this->F7_button = (gcnew System::Windows::Forms::Button());
+            this->SideInfo_groupBox = (gcnew System::Windows::Forms::GroupBox());
+            this->SideInfo_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->Anamnesis_panel = (gcnew System::Windows::Forms::Panel());
             this->tableLayoutPanel14 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->panel3 = (gcnew System::Windows::Forms::Panel());
@@ -470,6 +509,7 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->radioButton3 = (gcnew System::Windows::Forms::RadioButton());
             this->radioButton2 = (gcnew System::Windows::Forms::RadioButton());
             this->Stamp_panel = (gcnew System::Windows::Forms::Panel());
+            this->DB_PathChanger_openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
             this->Home_panel->SuspendLayout();
             this->tableLayoutPanel12->SuspendLayout();
             this->tableLayoutPanel1->SuspendLayout();
@@ -482,6 +522,7 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->tableLayoutPanel3->SuspendLayout();
             this->groupBox1->SuspendLayout();
             this->tableLayoutPanel4->SuspendLayout();
+            this->DB_groupBox->SuspendLayout();
             this->DoctorsNotes_tableLayoutPanel->SuspendLayout();
             this->ReportDir_groupBox->SuspendLayout();
             this->tableLayoutPanel5->SuspendLayout();
@@ -496,11 +537,9 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox8->SuspendLayout();
             this->groupBox7->SuspendLayout();
             this->groupBox6->SuspendLayout();
-            this->SideInfo_panel->SuspendLayout();
-            this->SideInfo_groupBox->SuspendLayout();
             this->tableLayoutPanel9->SuspendLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown2))->BeginInit();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->id_numericUpDown))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->year_numericUpDown))->BeginInit();
             this->flowLayoutPanel1->SuspendLayout();
             this->Ill_History_panel->SuspendLayout();
             this->groupBox15->SuspendLayout();
@@ -509,6 +548,8 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox14->SuspendLayout();
             this->groupBox13->SuspendLayout();
             this->groupBox12->SuspendLayout();
+            this->SideInfo_panel->SuspendLayout();
+            this->SideInfo_groupBox->SuspendLayout();
             this->Anamnesis_panel->SuspendLayout();
             this->tableLayoutPanel14->SuspendLayout();
             this->panel3->SuspendLayout();
@@ -978,6 +1019,7 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             // 
             // groupBox1
             // 
+            this->groupBox1->Controls->Add(this->tamplatesPath_label);
             this->groupBox1->Controls->Add(this->Template_label);
             this->groupBox1->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox1->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -990,6 +1032,19 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox1->TabIndex = 1;
             this->groupBox1->TabStop = false;
             this->groupBox1->Text = L"Папка с шаблонами";
+            // 
+            // tamplatesPath_label
+            // 
+            this->tamplatesPath_label->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->tamplatesPath_label->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->tamplatesPath_label->ForeColor = System::Drawing::SystemColors::ControlText;
+            this->tamplatesPath_label->Location = System::Drawing::Point(3, 18);
+            this->tamplatesPath_label->Name = L"tamplatesPath_label";
+            this->tamplatesPath_label->Size = System::Drawing::Size(1146, 35);
+            this->tamplatesPath_label->TabIndex = 1;
+            this->tamplatesPath_label->Text = L"C:\\Users\\erik\\develop\\host\\project\\unsaintedWinApp\\Templates\\";
+            this->tamplatesPath_label->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
             // 
             // Template_label
             // 
@@ -1052,9 +1107,11 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->DB_change_button->TabStop = false;
             this->DB_change_button->Text = L"Изменить";
             this->DB_change_button->UseVisualStyleBackColor = false;
+            this->DB_change_button->Click += gcnew System::EventHandler(this, &MainWindow::DB_change_button_Click);
             // 
             // DB_groupBox
             // 
+            this->DB_groupBox->Controls->Add(this->dbPath_label);
             this->DB_groupBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->DB_groupBox->Dock = System::Windows::Forms::DockStyle::Fill;
             this->DB_groupBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -1065,6 +1122,19 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->DB_groupBox->TabIndex = 0;
             this->DB_groupBox->TabStop = false;
             this->DB_groupBox->Text = L"Файл базы данных";
+            // 
+            // dbPath_label
+            // 
+            this->dbPath_label->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->dbPath_label->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->dbPath_label->ForeColor = System::Drawing::SystemColors::ControlText;
+            this->dbPath_label->Location = System::Drawing::Point(3, 18);
+            this->dbPath_label->Name = L"dbPath_label";
+            this->dbPath_label->Size = System::Drawing::Size(1020, 35);
+            this->dbPath_label->TabIndex = 0;
+            this->dbPath_label->Text = L"C:\\Users\\erik\\develop\\host\\projects\\unsaintedWinApp\\prod.db";
+            this->dbPath_label->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
             // 
             // DoctorsNotes_tableLayoutPanel
             // 
@@ -1261,9 +1331,9 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->Epicrisis_panel->BackColor = System::Drawing::SystemColors::ControlLightLight;
             this->Epicrisis_panel->Controls->Add(this->EpiricisisTabMenu_tableLayoutPanel);
             this->Epicrisis_panel->Controls->Add(this->tableLayoutPanel10);
-            this->Epicrisis_panel->Controls->Add(this->SideInfo_panel);
             this->Epicrisis_panel->Controls->Add(this->tableLayoutPanel9);
             this->Epicrisis_panel->Controls->Add(this->Ill_History_panel);
+            this->Epicrisis_panel->Controls->Add(this->SideInfo_panel);
             this->Epicrisis_panel->Controls->Add(this->Anamnesis_panel);
             this->Epicrisis_panel->Controls->Add(this->AnalysisResults_panel);
             this->Epicrisis_panel->Controls->Add(this->AddingInfo_panel);
@@ -1609,7 +1679,7 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             // 
             // groupBox11
             // 
-            this->groupBox11->Controls->Add(this->dateTimePicker3);
+            this->groupBox11->Controls->Add(this->birthday_dateTimePicker);
             this->groupBox11->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox11->Dock = System::Windows::Forms::DockStyle::Fill;
             this->groupBox11->Location = System::Drawing::Point(877, 53);
@@ -1619,18 +1689,18 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox11->TabStop = false;
             this->groupBox11->Text = L"Дата рождения*";
             // 
-            // dateTimePicker3
+            // birthday_dateTimePicker
             // 
-            this->dateTimePicker3->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->dateTimePicker3->Format = System::Windows::Forms::DateTimePickerFormat::Short;
-            this->dateTimePicker3->Location = System::Drawing::Point(3, 16);
-            this->dateTimePicker3->Name = L"dateTimePicker3";
-            this->dateTimePicker3->Size = System::Drawing::Size(427, 20);
-            this->dateTimePicker3->TabIndex = 8;
+            this->birthday_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->birthday_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
+            this->birthday_dateTimePicker->Location = System::Drawing::Point(3, 16);
+            this->birthday_dateTimePicker->Name = L"birthday_dateTimePicker";
+            this->birthday_dateTimePicker->Size = System::Drawing::Size(427, 20);
+            this->birthday_dateTimePicker->TabIndex = 8;
             // 
             // groupBox10
             // 
-            this->groupBox10->Controls->Add(this->comboBox8);
+            this->groupBox10->Controls->Add(this->militaryUnit_comboBox);
             this->groupBox10->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox10->Dock = System::Windows::Forms::DockStyle::Fill;
             this->groupBox10->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -1642,22 +1712,26 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox10->TabStop = false;
             this->groupBox10->Text = L"Воинская часть*";
             // 
-            // comboBox8
+            // militaryUnit_comboBox
             // 
-            this->comboBox8->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->comboBox8->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->comboBox8->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->comboBox8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->comboBox8->FormattingEnabled = true;
-            this->comboBox8->Location = System::Drawing::Point(3, 16);
-            this->comboBox8->Name = L"comboBox8";
-            this->comboBox8->Size = System::Drawing::Size(425, 24);
-            this->comboBox8->TabIndex = 7;
+            this->militaryUnit_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->militaryUnit_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->militaryUnit_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->militaryUnit_comboBox->DropDownHeight = 150;
+            this->militaryUnit_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->militaryUnit_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->militaryUnit_comboBox->FormattingEnabled = true;
+            this->militaryUnit_comboBox->IntegralHeight = false;
+            this->militaryUnit_comboBox->Location = System::Drawing::Point(3, 16);
+            this->militaryUnit_comboBox->MaxDropDownItems = 10;
+            this->militaryUnit_comboBox->Name = L"militaryUnit_comboBox";
+            this->militaryUnit_comboBox->Size = System::Drawing::Size(425, 24);
+            this->militaryUnit_comboBox->TabIndex = 7;
             // 
             // groupBox9
             // 
-            this->groupBox9->Controls->Add(this->comboBox6);
+            this->groupBox9->Controls->Add(this->rank_comboBox);
             this->groupBox9->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox9->Dock = System::Windows::Forms::DockStyle::Fill;
             this->groupBox9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -1669,22 +1743,26 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox9->TabStop = false;
             this->groupBox9->Text = L"Звание*";
             // 
-            // comboBox6
+            // rank_comboBox
             // 
-            this->comboBox6->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->comboBox6->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->comboBox6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->comboBox6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->rank_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->rank_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->rank_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->rank_comboBox->DropDownHeight = 150;
+            this->rank_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->rank_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->comboBox6->FormattingEnabled = true;
-            this->comboBox6->Location = System::Drawing::Point(3, 16);
-            this->comboBox6->Name = L"comboBox6";
-            this->comboBox6->Size = System::Drawing::Size(425, 24);
-            this->comboBox6->TabIndex = 6;
+            this->rank_comboBox->FormattingEnabled = true;
+            this->rank_comboBox->IntegralHeight = false;
+            this->rank_comboBox->Location = System::Drawing::Point(3, 16);
+            this->rank_comboBox->MaxDropDownItems = 10;
+            this->rank_comboBox->Name = L"rank_comboBox";
+            this->rank_comboBox->Size = System::Drawing::Size(425, 24);
+            this->rank_comboBox->TabIndex = 6;
             // 
             // groupBox8
             // 
-            this->groupBox8->Controls->Add(this->comboBox9);
+            this->groupBox8->Controls->Add(this->Patronymic_comboBox);
             this->groupBox8->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox8->Dock = System::Windows::Forms::DockStyle::Fill;
             this->groupBox8->Location = System::Drawing::Point(877, 3);
@@ -1694,18 +1772,22 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox8->TabStop = false;
             this->groupBox8->Text = L"Отчество";
             // 
-            // comboBox9
+            // Patronymic_comboBox
             // 
-            this->comboBox9->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->comboBox9->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->comboBox9->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->comboBox9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->comboBox9->FormattingEnabled = true;
-            this->comboBox9->Location = System::Drawing::Point(3, 16);
-            this->comboBox9->Name = L"comboBox9";
-            this->comboBox9->Size = System::Drawing::Size(427, 24);
-            this->comboBox9->TabIndex = 5;
+            this->Patronymic_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->Patronymic_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->Patronymic_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->Patronymic_comboBox->DropDownHeight = 150;
+            this->Patronymic_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Patronymic_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->Patronymic_comboBox->FormattingEnabled = true;
+            this->Patronymic_comboBox->IntegralHeight = false;
+            this->Patronymic_comboBox->Location = System::Drawing::Point(3, 16);
+            this->Patronymic_comboBox->MaxDropDownItems = 10;
+            this->Patronymic_comboBox->Name = L"Patronymic_comboBox";
+            this->Patronymic_comboBox->Size = System::Drawing::Size(427, 24);
+            this->Patronymic_comboBox->TabIndex = 5;
             // 
             // groupBox7
             // 
@@ -1723,20 +1805,24 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             // 
             // Names_comboBox
             // 
-            this->Names_comboBox->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->Names_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->Names_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->Names_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->Names_comboBox->DropDownHeight = 150;
             this->Names_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
             this->Names_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
             this->Names_comboBox->FormattingEnabled = true;
+            this->Names_comboBox->IntegralHeight = false;
             this->Names_comboBox->Location = System::Drawing::Point(3, 16);
+            this->Names_comboBox->MaxDropDownItems = 10;
             this->Names_comboBox->Name = L"Names_comboBox";
             this->Names_comboBox->Size = System::Drawing::Size(425, 24);
             this->Names_comboBox->TabIndex = 4;
             // 
             // groupBox6
             // 
-            this->groupBox6->Controls->Add(this->comboBox5);
+            this->groupBox6->Controls->Add(this->Surname_comboBox);
             this->groupBox6->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox6->Dock = System::Windows::Forms::DockStyle::Fill;
             this->groupBox6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -1748,68 +1834,23 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox6->TabStop = false;
             this->groupBox6->Text = L"Фамилия";
             // 
-            // comboBox5
+            // Surname_comboBox
             // 
-            this->comboBox5->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->comboBox5->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->comboBox5->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->comboBox5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->comboBox5->FormattingEnabled = true;
-            this->comboBox5->Location = System::Drawing::Point(3, 16);
-            this->comboBox5->Name = L"comboBox5";
-            this->comboBox5->Size = System::Drawing::Size(425, 24);
-            this->comboBox5->TabIndex = 3;
-            // 
-            // SideInfo_panel
-            // 
-            this->SideInfo_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
-            this->SideInfo_panel->Controls->Add(this->F7_button);
-            this->SideInfo_panel->Controls->Add(this->SideInfo_groupBox);
-            this->SideInfo_panel->Location = System::Drawing::Point(0, 159);
-            this->SideInfo_panel->Name = L"SideInfo_panel";
-            this->SideInfo_panel->Size = System::Drawing::Size(1313, 488);
-            this->SideInfo_panel->TabIndex = 4;
-            // 
-            // F7_button
-            // 
-            this->F7_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
-            this->F7_button->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->F7_button->FlatAppearance->BorderSize = 0;
-            this->F7_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->F7_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->F7_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
-                static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F7_button->Location = System::Drawing::Point(569, 226);
-            this->F7_button->Name = L"F7_button";
-            this->F7_button->Size = System::Drawing::Size(173, 37);
-            this->F7_button->TabIndex = 16;
-            this->F7_button->Text = L"Продолжить";
-            this->F7_button->UseVisualStyleBackColor = true;
-            this->F7_button->Click += gcnew System::EventHandler(this, &MainWindow::F7_button_Click);
-            // 
-            // SideInfo_groupBox
-            // 
-            this->SideInfo_groupBox->Controls->Add(this->SideInfo_comboBox);
-            this->SideInfo_groupBox->Dock = System::Windows::Forms::DockStyle::Top;
-            this->SideInfo_groupBox->Location = System::Drawing::Point(0, 0);
-            this->SideInfo_groupBox->Name = L"SideInfo_groupBox";
-            this->SideInfo_groupBox->Size = System::Drawing::Size(1313, 47);
-            this->SideInfo_groupBox->TabIndex = 0;
-            this->SideInfo_groupBox->TabStop = false;
-            // 
-            // SideInfo_comboBox
-            // 
-            this->SideInfo_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->SideInfo_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->SideInfo_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+            this->Surname_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->Surname_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->Surname_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->Surname_comboBox->DropDownHeight = 150;
+            this->Surname_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Surname_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->SideInfo_comboBox->FormattingEnabled = true;
-            this->SideInfo_comboBox->Location = System::Drawing::Point(3, 16);
-            this->SideInfo_comboBox->Name = L"SideInfo_comboBox";
-            this->SideInfo_comboBox->Size = System::Drawing::Size(1307, 24);
-            this->SideInfo_comboBox->TabIndex = 0;
+            this->Surname_comboBox->FormattingEnabled = true;
+            this->Surname_comboBox->IntegralHeight = false;
+            this->Surname_comboBox->Location = System::Drawing::Point(3, 16);
+            this->Surname_comboBox->MaxDropDownItems = 10;
+            this->Surname_comboBox->Name = L"Surname_comboBox";
+            this->Surname_comboBox->Size = System::Drawing::Size(425, 24);
+            this->Surname_comboBox->TabIndex = 3;
+            this->Surname_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
             // 
             // tableLayoutPanel9
             // 
@@ -1825,8 +1866,8 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
                 136)));
             this->tableLayoutPanel9->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
                 163)));
-            this->tableLayoutPanel9->Controls->Add(this->numericUpDown2, 0, 0);
-            this->tableLayoutPanel9->Controls->Add(this->numericUpDown1, 1, 0);
+            this->tableLayoutPanel9->Controls->Add(this->id_numericUpDown, 0, 0);
+            this->tableLayoutPanel9->Controls->Add(this->year_numericUpDown, 1, 0);
             this->tableLayoutPanel9->Controls->Add(this->ID_label, 0, 0);
             this->tableLayoutPanel9->Controls->Add(this->flowLayoutPanel1, 3, 0);
             this->tableLayoutPanel9->Location = System::Drawing::Point(0, 0);
@@ -1836,37 +1877,37 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->tableLayoutPanel9->Size = System::Drawing::Size(1313, 50);
             this->tableLayoutPanel9->TabIndex = 4;
             // 
-            // numericUpDown2
+            // id_numericUpDown
             // 
-            this->numericUpDown2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+            this->id_numericUpDown->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
                 | System::Windows::Forms::AnchorStyles::Left)
                 | System::Windows::Forms::AnchorStyles::Right));
-            this->numericUpDown2->AutoSize = true;
-            this->numericUpDown2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->numericUpDown2->Location = System::Drawing::Point(240, 10);
-            this->numericUpDown2->Margin = System::Windows::Forms::Padding(3, 10, 3, 3);
-            this->numericUpDown2->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 10000, 0, 0, 0 });
-            this->numericUpDown2->Name = L"numericUpDown2";
-            this->numericUpDown2->Size = System::Drawing::Size(139, 29);
-            this->numericUpDown2->TabIndex = 1;
+            this->id_numericUpDown->AutoSize = true;
+            this->id_numericUpDown->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->id_numericUpDown->Location = System::Drawing::Point(240, 10);
+            this->id_numericUpDown->Margin = System::Windows::Forms::Padding(3, 10, 3, 3);
+            this->id_numericUpDown->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 10000, 0, 0, 0 });
+            this->id_numericUpDown->Name = L"id_numericUpDown";
+            this->id_numericUpDown->Size = System::Drawing::Size(139, 29);
+            this->id_numericUpDown->TabIndex = 1;
             // 
-            // numericUpDown1
+            // year_numericUpDown
             // 
-            this->numericUpDown1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+            this->year_numericUpDown->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
                 | System::Windows::Forms::AnchorStyles::Left)
                 | System::Windows::Forms::AnchorStyles::Right));
-            this->numericUpDown1->AutoSize = true;
-            this->numericUpDown1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->numericUpDown1->Location = System::Drawing::Point(385, 10);
-            this->numericUpDown1->Margin = System::Windows::Forms::Padding(3, 10, 3, 3);
-            this->numericUpDown1->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2100, 0, 0, 0 });
-            this->numericUpDown1->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2024, 0, 0, 0 });
-            this->numericUpDown1->Name = L"numericUpDown1";
-            this->numericUpDown1->Size = System::Drawing::Size(130, 29);
-            this->numericUpDown1->TabIndex = 2;
-            this->numericUpDown1->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2024, 0, 0, 0 });
+            this->year_numericUpDown->AutoSize = true;
+            this->year_numericUpDown->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->year_numericUpDown->Location = System::Drawing::Point(385, 10);
+            this->year_numericUpDown->Margin = System::Windows::Forms::Padding(3, 10, 3, 3);
+            this->year_numericUpDown->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2100, 0, 0, 0 });
+            this->year_numericUpDown->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2024, 0, 0, 0 });
+            this->year_numericUpDown->Name = L"year_numericUpDown";
+            this->year_numericUpDown->Size = System::Drawing::Size(130, 29);
+            this->year_numericUpDown->TabIndex = 2;
+            this->year_numericUpDown->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2024, 0, 0, 0 });
             // 
             // ID_label
             // 
@@ -1974,7 +2015,7 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             // 
             this->groupBox15->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
                 | System::Windows::Forms::AnchorStyles::Right));
-            this->groupBox15->Controls->Add(this->comboBox4);
+            this->groupBox15->Controls->Add(this->complications_comboBox);
             this->groupBox15->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox15->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
@@ -1983,20 +2024,24 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox15->Size = System::Drawing::Size(1291, 44);
             this->groupBox15->TabIndex = 10;
             this->groupBox15->TabStop = false;
-            this->groupBox15->Text = L"Сопутствующий 1*";
+            this->groupBox15->Text = L"Осложнение 1*";
             // 
-            // comboBox4
+            // complications_comboBox
             // 
-            this->comboBox4->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->comboBox4->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->comboBox4->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->comboBox4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->comboBox4->FormattingEnabled = true;
-            this->comboBox4->Location = System::Drawing::Point(3, 18);
-            this->comboBox4->Name = L"comboBox4";
-            this->comboBox4->Size = System::Drawing::Size(1285, 24);
-            this->comboBox4->TabIndex = 13;
+            this->complications_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->complications_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->complications_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->complications_comboBox->DropDownHeight = 150;
+            this->complications_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->complications_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->complications_comboBox->FormattingEnabled = true;
+            this->complications_comboBox->IntegralHeight = false;
+            this->complications_comboBox->Location = System::Drawing::Point(3, 18);
+            this->complications_comboBox->MaxDropDownItems = 10;
+            this->complications_comboBox->Name = L"complications_comboBox";
+            this->complications_comboBox->Size = System::Drawing::Size(1285, 24);
+            this->complications_comboBox->TabIndex = 13;
             // 
             // label9
             // 
@@ -2006,15 +2051,15 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
                 static_cast<System::Byte>(204)));
             this->label9->Location = System::Drawing::Point(9, 270);
             this->label9->Name = L"label9";
-            this->label9->Size = System::Drawing::Size(153, 24);
+            this->label9->Size = System::Drawing::Size(124, 24);
             this->label9->TabIndex = 9;
-            this->label9->Text = L"Сопутствующие";
+            this->label9->Text = L"Осложнения";
             // 
             // groupBox16
             // 
             this->groupBox16->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
                 | System::Windows::Forms::AnchorStyles::Right));
-            this->groupBox16->Controls->Add(this->comboBox3);
+            this->groupBox16->Controls->Add(this->related_comboBox);
             this->groupBox16->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox16->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
@@ -2025,18 +2070,22 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox16->TabStop = false;
             this->groupBox16->Text = L"Сопутствующий 1*";
             // 
-            // comboBox3
+            // related_comboBox
             // 
-            this->comboBox3->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->comboBox3->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->comboBox3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->comboBox3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->comboBox3->FormattingEnabled = true;
-            this->comboBox3->Location = System::Drawing::Point(3, 18);
-            this->comboBox3->Name = L"comboBox3";
-            this->comboBox3->Size = System::Drawing::Size(1285, 24);
-            this->comboBox3->TabIndex = 12;
+            this->related_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->related_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->related_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->related_comboBox->DropDownHeight = 150;
+            this->related_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->related_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->related_comboBox->FormattingEnabled = true;
+            this->related_comboBox->IntegralHeight = false;
+            this->related_comboBox->Location = System::Drawing::Point(3, 18);
+            this->related_comboBox->MaxDropDownItems = 10;
+            this->related_comboBox->Name = L"related_comboBox";
+            this->related_comboBox->Size = System::Drawing::Size(1285, 24);
+            this->related_comboBox->TabIndex = 12;
             // 
             // label7
             // 
@@ -2052,7 +2101,8 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             // 
             // MKB_groupBox
             // 
-            this->MKB_groupBox->Controls->Add(this->comboBox2);
+            this->MKB_groupBox->Controls->Add(this->mkb_comboBox);
+            this->MKB_groupBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->MKB_groupBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
             this->MKB_groupBox->Location = System::Drawing::Point(1183, 101);
@@ -2062,22 +2112,26 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->MKB_groupBox->TabStop = false;
             this->MKB_groupBox->Text = L"МКБ*";
             // 
-            // comboBox2
+            // mkb_comboBox
             // 
-            this->comboBox2->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->comboBox2->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->comboBox2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->comboBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->mkb_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->mkb_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->mkb_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->mkb_comboBox->DropDownHeight = 150;
+            this->mkb_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->mkb_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->comboBox2->FormattingEnabled = true;
-            this->comboBox2->Location = System::Drawing::Point(3, 18);
-            this->comboBox2->Name = L"comboBox2";
-            this->comboBox2->Size = System::Drawing::Size(109, 24);
-            this->comboBox2->TabIndex = 13;
+            this->mkb_comboBox->FormattingEnabled = true;
+            this->mkb_comboBox->IntegralHeight = false;
+            this->mkb_comboBox->Location = System::Drawing::Point(3, 18);
+            this->mkb_comboBox->MaxDropDownItems = 10;
+            this->mkb_comboBox->Name = L"mkb_comboBox";
+            this->mkb_comboBox->Size = System::Drawing::Size(109, 24);
+            this->mkb_comboBox->TabIndex = 13;
             // 
             // groupBox14
             // 
-            this->groupBox14->Controls->Add(this->Diagnoses_comboBox);
+            this->groupBox14->Controls->Add(this->epicrizdiagnoses_comboBox);
             this->groupBox14->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox14->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
@@ -2088,18 +2142,22 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox14->TabStop = false;
             this->groupBox14->Text = L"Диагноз 1*";
             // 
-            // Diagnoses_comboBox
+            // epicrizdiagnoses_comboBox
             // 
-            this->Diagnoses_comboBox->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->Diagnoses_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->Diagnoses_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->Diagnoses_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+            this->epicrizdiagnoses_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->epicrizdiagnoses_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->epicrizdiagnoses_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->epicrizdiagnoses_comboBox->DropDownHeight = 150;
+            this->epicrizdiagnoses_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->epicrizdiagnoses_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->Diagnoses_comboBox->FormattingEnabled = true;
-            this->Diagnoses_comboBox->Location = System::Drawing::Point(3, 18);
-            this->Diagnoses_comboBox->Name = L"Diagnoses_comboBox";
-            this->Diagnoses_comboBox->Size = System::Drawing::Size(1155, 24);
-            this->Diagnoses_comboBox->TabIndex = 11;
+            this->epicrizdiagnoses_comboBox->FormattingEnabled = true;
+            this->epicrizdiagnoses_comboBox->IntegralHeight = false;
+            this->epicrizdiagnoses_comboBox->Location = System::Drawing::Point(3, 18);
+            this->epicrizdiagnoses_comboBox->MaxDropDownItems = 10;
+            this->epicrizdiagnoses_comboBox->Name = L"epicrizdiagnoses_comboBox";
+            this->epicrizdiagnoses_comboBox->Size = System::Drawing::Size(1155, 24);
+            this->epicrizdiagnoses_comboBox->TabIndex = 11;
             // 
             // label4
             // 
@@ -2115,7 +2173,7 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             // 
             // groupBox13
             // 
-            this->groupBox13->Controls->Add(this->dateTimePicker2);
+            this->groupBox13->Controls->Add(this->outcome_dateTimePicker);
             this->groupBox13->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox13->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
@@ -2126,22 +2184,22 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox13->TabStop = false;
             this->groupBox13->Text = L"Дата выписки*";
             // 
-            // dateTimePicker2
+            // outcome_dateTimePicker
             // 
-            this->dateTimePicker2->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->dateTimePicker2->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->dateTimePicker2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->dateTimePicker2->Format = System::Windows::Forms::DateTimePickerFormat::Short;
-            this->dateTimePicker2->Location = System::Drawing::Point(3, 18);
-            this->dateTimePicker2->Name = L"dateTimePicker2";
-            this->dateTimePicker2->Size = System::Drawing::Size(209, 22);
-            this->dateTimePicker2->TabIndex = 10;
-            this->dateTimePicker2->Value = System::DateTime(2024, 8, 14, 18, 5, 34, 0);
+            this->outcome_dateTimePicker->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->outcome_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->outcome_dateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->outcome_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
+            this->outcome_dateTimePicker->Location = System::Drawing::Point(3, 18);
+            this->outcome_dateTimePicker->Name = L"outcome_dateTimePicker";
+            this->outcome_dateTimePicker->Size = System::Drawing::Size(209, 22);
+            this->outcome_dateTimePicker->TabIndex = 10;
+            this->outcome_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 34, 0);
             // 
             // groupBox12
             // 
-            this->groupBox12->Controls->Add(this->dateTimePicker1);
+            this->groupBox12->Controls->Add(this->income_dateTimePicker);
             this->groupBox12->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox12->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
@@ -2152,18 +2210,68 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox12->TabStop = false;
             this->groupBox12->Text = L"Дата поступления*";
             // 
-            // dateTimePicker1
+            // income_dateTimePicker
             // 
-            this->dateTimePicker1->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->dateTimePicker1->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->dateTimePicker1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->income_dateTimePicker->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->income_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->income_dateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->income_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
+            this->income_dateTimePicker->Location = System::Drawing::Point(3, 18);
+            this->income_dateTimePicker->Name = L"income_dateTimePicker";
+            this->income_dateTimePicker->Size = System::Drawing::Size(209, 22);
+            this->income_dateTimePicker->TabIndex = 9;
+            this->income_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 14, 0);
+            // 
+            // SideInfo_panel
+            // 
+            this->SideInfo_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
+            this->SideInfo_panel->Controls->Add(this->F7_button);
+            this->SideInfo_panel->Controls->Add(this->SideInfo_groupBox);
+            this->SideInfo_panel->Location = System::Drawing::Point(0, 159);
+            this->SideInfo_panel->Name = L"SideInfo_panel";
+            this->SideInfo_panel->Size = System::Drawing::Size(1313, 488);
+            this->SideInfo_panel->TabIndex = 4;
+            // 
+            // F7_button
+            // 
+            this->F7_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
+            this->F7_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->F7_button->FlatAppearance->BorderSize = 0;
+            this->F7_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->F7_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->dateTimePicker1->Format = System::Windows::Forms::DateTimePickerFormat::Short;
-            this->dateTimePicker1->Location = System::Drawing::Point(3, 18);
-            this->dateTimePicker1->Name = L"dateTimePicker1";
-            this->dateTimePicker1->Size = System::Drawing::Size(209, 22);
-            this->dateTimePicker1->TabIndex = 9;
-            this->dateTimePicker1->Value = System::DateTime(2024, 8, 14, 18, 5, 14, 0);
+            this->F7_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+                static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->F7_button->Location = System::Drawing::Point(569, 226);
+            this->F7_button->Name = L"F7_button";
+            this->F7_button->Size = System::Drawing::Size(173, 37);
+            this->F7_button->TabIndex = 16;
+            this->F7_button->Text = L"Продолжить";
+            this->F7_button->UseVisualStyleBackColor = true;
+            this->F7_button->Click += gcnew System::EventHandler(this, &MainWindow::F7_button_Click);
+            // 
+            // SideInfo_groupBox
+            // 
+            this->SideInfo_groupBox->Controls->Add(this->SideInfo_comboBox);
+            this->SideInfo_groupBox->Dock = System::Windows::Forms::DockStyle::Top;
+            this->SideInfo_groupBox->Location = System::Drawing::Point(0, 0);
+            this->SideInfo_groupBox->Name = L"SideInfo_groupBox";
+            this->SideInfo_groupBox->Size = System::Drawing::Size(1313, 47);
+            this->SideInfo_groupBox->TabIndex = 0;
+            this->SideInfo_groupBox->TabStop = false;
+            // 
+            // SideInfo_comboBox
+            // 
+            this->SideInfo_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->SideInfo_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->SideInfo_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->SideInfo_comboBox->FormattingEnabled = true;
+            this->SideInfo_comboBox->Location = System::Drawing::Point(3, 16);
+            this->SideInfo_comboBox->Name = L"SideInfo_comboBox";
+            this->SideInfo_comboBox->Size = System::Drawing::Size(1307, 24);
+            this->SideInfo_comboBox->TabIndex = 0;
             // 
             // Anamnesis_panel
             // 
@@ -3463,6 +3571,11 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->Stamp_panel->Size = System::Drawing::Size(200, 100);
             this->Stamp_panel->TabIndex = 0;
             // 
+            // DB_PathChanger_openFileDialog
+            // 
+            this->DB_PathChanger_openFileDialog->FileName = L"openFileDialog";
+            this->DB_PathChanger_openFileDialog->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &MainWindow::DB_PathChanger_openFileDialog_FileOk);
+            // 
             // MainWindow
             // 
             this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
@@ -3497,6 +3610,7 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox1->ResumeLayout(false);
             this->groupBox1->PerformLayout();
             this->tableLayoutPanel4->ResumeLayout(false);
+            this->DB_groupBox->ResumeLayout(false);
             this->DoctorsNotes_tableLayoutPanel->ResumeLayout(false);
             this->ReportDir_groupBox->ResumeLayout(false);
             this->ReportDir_groupBox->PerformLayout();
@@ -3515,12 +3629,10 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox8->ResumeLayout(false);
             this->groupBox7->ResumeLayout(false);
             this->groupBox6->ResumeLayout(false);
-            this->SideInfo_panel->ResumeLayout(false);
-            this->SideInfo_groupBox->ResumeLayout(false);
             this->tableLayoutPanel9->ResumeLayout(false);
             this->tableLayoutPanel9->PerformLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown2))->EndInit();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->id_numericUpDown))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->year_numericUpDown))->EndInit();
             this->flowLayoutPanel1->ResumeLayout(false);
             this->flowLayoutPanel1->PerformLayout();
             this->Ill_History_panel->ResumeLayout(false);
@@ -3531,6 +3643,8 @@ private: System::Windows::Forms::ComboBox^ Names_comboBox;
             this->groupBox14->ResumeLayout(false);
             this->groupBox13->ResumeLayout(false);
             this->groupBox12->ResumeLayout(false);
+            this->SideInfo_panel->ResumeLayout(false);
+            this->SideInfo_groupBox->ResumeLayout(false);
             this->Anamnesis_panel->ResumeLayout(false);
             this->tableLayoutPanel14->ResumeLayout(false);
             this->tableLayoutPanel14->PerformLayout();
@@ -3981,14 +4095,44 @@ private: System::Void F8_button_Click(System::Object^ sender, System::EventArgs^
     CleanEpicrisisTabLastLabel();
     SetTabMenuLabelBottomLine(UnworkableList_label);
 }
-private: Void FillComboBox(ComboBox^ box, List<String^>^ items) {
+private: Void FillComboBox(System::Windows::Forms::ComboBox^ box, List<String^>^ items) {
     box->Items->Clear();
     for each (String ^ item in items) {
         box->Items->Add(item);
     }
 }
+private: Void FillComboBox(ComboBoxEdit^ box, List<String^>^ items) {
+    box->Properties->Items->Clear();
+    for each (String ^ item in items) {
+        box->Properties->Items->Add(item);
+    }
+};
 private: Void InitializeData() {
+    dbPath = dbPath_label->Text;
+    //dbPath = "C:/Users/erik/develop/host/projects/unsaintedWinApp/prod.db";
+    dbHelper = gcnew DB_Helper(dbPath);
+    FillComboBox(Names_comboBox, dbHelper->GetColumnData("firstNames", "value", 1));
+    FillComboBox(Surname_comboBox, dbHelper->GetColumnData("lastNames", "value", 1));
+    FillComboBox(Patronymic_comboBox, dbHelper->GetColumnData("middleNames", "value", 1));
+    FillComboBox(rank_comboBox, dbHelper->GetColumnData("ranks", "value"));
+    FillComboBox(militaryUnit_comboBox, dbHelper->GetColumnData("militaryUnits", "value"));
+    FillComboBox(epicrizdiagnoses_comboBox, dbHelper->GetColumnData("epicrizDiagnoses", "title"));
+    FillComboBox(mkb_comboBox, dbHelper->GetColumnData("epicrizDiagnoses", "mkb"));
+    FillComboBox(related_comboBox, dbHelper->GetColumnData("relatedDiagnoses", "value"));
+    FillComboBox(complications_comboBox, dbHelper->GetColumnData("complications", "value"));
 
+}   
+private: System::Void comboBox_Click(System::Object^ sender, System::EventArgs^ e) {
+    //ComboBox^ box = reinterpret_cast<ComboBox^>(sender);
+}
+private: System::Void DB_change_button_Click(System::Object^ sender, System::EventArgs^ e) {
+    DB_PathChanger_openFileDialog->ShowDialog();
+}
+private: System::Void DB_PathChanger_openFileDialog_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
+    dbPath = DB_PathChanger_openFileDialog->FileName;
+    dbPath_label->Text = dbPath;
+    dbHelper->~DB_Helper();
+    InitializeData();
 }
 };
 }

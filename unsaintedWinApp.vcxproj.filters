@@ -44,5 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="prod.db" />
+    <None Include="licenses.licx" />
   </ItemGroup>
 </Project>

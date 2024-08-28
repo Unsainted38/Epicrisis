@@ -122,15 +122,63 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Data.Desktop.v24.1">
+      <HintPath>DevExpress.Data.Desktop.v24.1</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v24.1">
+      <HintPath>DevExpress.Data.v24.1</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Drawing.v24.1">
+      <HintPath>DevExpress.Drawing.v24.1</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v24.1.Core">
+      <HintPath>DevExpress.Printing.v24.1.Core</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Sparkline.v24.1.Core">
+      <HintPath>DevExpress.Sparkline.v24.1.Core</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v24.1">
+      <HintPath>DevExpress.Utils.v24.1</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraBars.v24.1">
+      <HintPath>DevExpress.XtraBars.v24.1</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraEditors.v24.1">
+      <HintPath>..\..\..\..\..\..\Program Files\DevExpress 24.1\Components\Bin\Framework\DevExpress.XtraEditors.v24.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraGrid.v24.1">
+      <HintPath>DevExpress.XtraGrid.v24.1</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v24.1">
+      <HintPath>DevExpress.XtraLayout.v24.1</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v24.1">
+      <HintPath>DevExpress.XtraPrinting.v24.1</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v24.1">
+      <HintPath>..\..\..\..\..\..\Program Files\DevExpress 24.1\Components\Bin\Framework\DevExpress.XtraScheduler.v24.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v24.1.Core">
+      <HintPath>DevExpress.XtraScheduler.v24.1.Core</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v24.1.Core.Desktop">
+      <HintPath>DevExpress.XtraScheduler.v24.1.Core.Desktop</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>libs\Newton.Json\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SQLite.Designer">
       <HintPath>libs\sqlite-netFx46-binary-x64-2015-1.0.118.0\SQLite.Designer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
-	<Reference Include="SQLite.Interop">
+    <Reference Include="SQLite.Interop">
       <HintPath>libs\sqlite-netFx46-binary-x64-2015-1.0.118.0\SQLite.Interop.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.SQLite">
       <HintPath>libs\sqlite-netFx46-binary-x64-2015-1.0.118.0\System.Data.SQLite.dll</HintPath>
     </Reference>
@@ -168,7 +216,19 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="licenses.licx" />
     <None Include="prod.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Interop.Word.8.7">
+      <VersionMinor>7</VersionMinor>
+      <VersionMajor>8</VersionMajor>
+      <Guid>00020905-0000-0000-c000-000000000046</Guid>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

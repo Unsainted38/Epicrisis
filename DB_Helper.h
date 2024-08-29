@@ -30,5 +30,7 @@ namespace unsaintedWinApp {
         List<String^>^ GetColumnData();
         List<String^>^ GetColumnData(String^ tableName, String^ columnName);
         List<String^>^ GetSortedColumnData(String^ tableName, String^ columnName, int sortType);
+
+        
     };
 }

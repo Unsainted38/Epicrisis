@@ -1,6 +1,7 @@
 #pragma once
 #include <vcclr.h>
 #include "DB_Helper.h"
+#include "Word_Helper.h"
 using namespace DevExpress;
 using namespace DevExpress::XtraEditors;
 
@@ -13,7 +14,13 @@ namespace unsaintedWinApp {
 	using namespace System::Drawing;
     using namespace System::Collections::Generic;
     
-
+    public enum class PathTypes {
+        DB = 0,
+        Templates = 1,
+        Epicriz = 2,
+        DocNotes = 3,
+        FirstList = 4
+    };
 
 	/// <summary>
 	/// Сводка для MainWindow
@@ -47,7 +54,10 @@ namespace unsaintedWinApp {
 		}
     private:
         String^ dbPath;
+        String^ templatesPath;
+        String^ epicrizPath;
         DB_Helper^ dbHelper;
+        Word_Helper^ wordHelper;
         
         
     public:    
@@ -76,8 +86,11 @@ namespace unsaintedWinApp {
         String^ Recommendations;
         String^ UnworkableList;
         // Поля для хранения значений для эпикриза
-
-
+        
+        
+        
+        
+        PathTypes PathType;
         String^ IllBeginingDate;
         String^ ResponseDate;
         String^ GospitalSentDate;
@@ -219,7 +232,8 @@ private: System::Windows::Forms::ComboBox^ Surname_comboBox;
     private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel7;
     private: System::Windows::Forms::GroupBox^ groupBox5;
     private: System::Windows::Forms::Label^ label8;
-    private: System::Windows::Forms::Button^ button2;
+private: System::Windows::Forms::Button^ epicrizPathChange_button;
+
     private: System::Windows::Forms::Label^ Epicrisis_label;
     private: System::Windows::Forms::GroupBox^ groupBox4;
     private: System::Windows::Forms::Label^ label6;
@@ -272,7 +286,8 @@ private: System::Windows::Forms::ComboBox^ Surname_comboBox;
     private: System::Windows::Forms::Button^ F4_button;
     private: System::Windows::Forms::Panel^ AnalysisResults_panel;
     private: System::Windows::Forms::GroupBox^ AnalysisResults_groupBox;
-    private: System::Windows::Forms::ComboBox^ comboBox10;
+private: System::Windows::Forms::ComboBox^ AnalyzesResults_comboBox;
+
     private: System::Windows::Forms::Panel^ AddingInfo_panel;
     private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel13;
     private: System::Windows::Forms::CheckBox^ Mouth_checkBox;
@@ -303,7 +318,8 @@ private: System::Windows::Forms::ComboBox^ Surname_comboBox;
     private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel17;
     private: System::Windows::Forms::Label^ label17;
     private: System::Windows::Forms::GroupBox^ groupBox21;
-    private: System::Windows::Forms::ComboBox^ comboBox12;
+
+
     private: System::Windows::Forms::Button^ button7;
     private: System::Windows::Forms::Button^ button8;
     private: System::Windows::Forms::RadioButton^ radioButton3;
@@ -313,10 +329,104 @@ private: System::Windows::Forms::ComboBox^ Surname_comboBox;
     private: System::Windows::Forms::Button^ F9_button;
     private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel19;
     private: System::Windows::Forms::Button^ F8_button;
-private: System::Windows::Forms::OpenFileDialog^ DB_PathChanger_openFileDialog;
+private: System::Windows::Forms::OpenFileDialog^ PathChanger_openFileDialog;
+
 private: System::Windows::Forms::Label^ dbPath_label;
 private: System::Windows::Forms::Label^ tamplatesPath_label;
 private: System::Windows::Forms::Label^ label18;
+private: System::Windows::Forms::Label^ epicrizPath_label;
+
+private: System::Windows::Forms::TextBox^ textBox5;
+private: System::Windows::Forms::Label^ label20;
+private: System::Windows::Forms::TextBox^ textBox4;
+private: System::Windows::Forms::CheckedListBox^ Recommendations_checkedListBox;
+private: System::Windows::Forms::Panel^ TextEditor_panel;
+private: System::Windows::Forms::SplitContainer^ splitContainer1;
+private: System::Windows::Forms::ToolStrip^ toolStrip1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -354,13 +464,16 @@ private: System::Windows::Forms::Label^ label18;
             this->tableLayoutPanel2 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->tableLayoutPanel7 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->groupBox5 = (gcnew System::Windows::Forms::GroupBox());
+            this->epicrizPath_label = (gcnew System::Windows::Forms::Label());
             this->label8 = (gcnew System::Windows::Forms::Label());
-            this->button2 = (gcnew System::Windows::Forms::Button());
+            this->epicrizPathChange_button = (gcnew System::Windows::Forms::Button());
             this->Epicrisis_label = (gcnew System::Windows::Forms::Label());
             this->groupBox4 = (gcnew System::Windows::Forms::GroupBox());
+            this->textBox5 = (gcnew System::Windows::Forms::TextBox());
             this->label6 = (gcnew System::Windows::Forms::Label());
             this->tableLayoutPanel6 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->groupBox3 = (gcnew System::Windows::Forms::GroupBox());
+            this->label20 = (gcnew System::Windows::Forms::Label());
             this->label5 = (gcnew System::Windows::Forms::Label());
             this->button1 = (gcnew System::Windows::Forms::Button());
             this->Settings_label = (gcnew System::Windows::Forms::Label());
@@ -377,10 +490,12 @@ private: System::Windows::Forms::Label^ label18;
             this->dbPath_label = (gcnew System::Windows::Forms::Label());
             this->DoctorsNotes_tableLayoutPanel = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->ReportDir_groupBox = (gcnew System::Windows::Forms::GroupBox());
+            this->label18 = (gcnew System::Windows::Forms::Label());
             this->label2 = (gcnew System::Windows::Forms::Label());
             this->ReportSave_button = (gcnew System::Windows::Forms::Button());
             this->tableLayoutPanel5 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
+            this->textBox4 = (gcnew System::Windows::Forms::TextBox());
             this->label3 = (gcnew System::Windows::Forms::Label());
             this->DoctorsNotes_label = (gcnew System::Windows::Forms::Label());
             this->FirstList_label = (gcnew System::Windows::Forms::Label());
@@ -428,24 +543,23 @@ private: System::Windows::Forms::Label^ label18;
             this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
             this->button3 = (gcnew System::Windows::Forms::Button());
             this->Clear_button = (gcnew System::Windows::Forms::Button());
-            this->Ill_History_panel = (gcnew System::Windows::Forms::Panel());
-            this->label18 = (gcnew System::Windows::Forms::Label());
-            this->F3_button = (gcnew System::Windows::Forms::Button());
-            this->groupBox15 = (gcnew System::Windows::Forms::GroupBox());
-            this->complications_comboBox = (gcnew System::Windows::Forms::ComboBox());
-            this->label9 = (gcnew System::Windows::Forms::Label());
-            this->groupBox16 = (gcnew System::Windows::Forms::GroupBox());
-            this->related_comboBox = (gcnew System::Windows::Forms::ComboBox());
-            this->label7 = (gcnew System::Windows::Forms::Label());
-            this->MKB_groupBox = (gcnew System::Windows::Forms::GroupBox());
-            this->mkb_comboBox = (gcnew System::Windows::Forms::ComboBox());
-            this->groupBox14 = (gcnew System::Windows::Forms::GroupBox());
-            this->epicrizdiagnoses_comboBox = (gcnew System::Windows::Forms::ComboBox());
-            this->label4 = (gcnew System::Windows::Forms::Label());
-            this->groupBox13 = (gcnew System::Windows::Forms::GroupBox());
-            this->outcome_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
-            this->groupBox12 = (gcnew System::Windows::Forms::GroupBox());
-            this->income_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
+            this->AnalysisResults_panel = (gcnew System::Windows::Forms::Panel());
+            this->F5_button = (gcnew System::Windows::Forms::Button());
+            this->AnalysisResults_groupBox = (gcnew System::Windows::Forms::GroupBox());
+            this->AnalyzesResults_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->Recomendations_panel = (gcnew System::Windows::Forms::Panel());
+            this->tableLayoutPanel19 = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->F8_button = (gcnew System::Windows::Forms::Button());
+            this->tableLayoutPanel17 = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->groupBox21 = (gcnew System::Windows::Forms::GroupBox());
+            this->Recommendations_checkedListBox = (gcnew System::Windows::Forms::CheckedListBox());
+            this->label17 = (gcnew System::Windows::Forms::Label());
+            this->button7 = (gcnew System::Windows::Forms::Button());
+            this->button8 = (gcnew System::Windows::Forms::Button());
+            this->tableLayoutPanel16 = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->button4 = (gcnew System::Windows::Forms::Button());
+            this->button6 = (gcnew System::Windows::Forms::Button());
+            this->button5 = (gcnew System::Windows::Forms::Button());
             this->SideInfo_panel = (gcnew System::Windows::Forms::Panel());
             this->F7_button = (gcnew System::Windows::Forms::Button());
             this->SideInfo_groupBox = (gcnew System::Windows::Forms::GroupBox());
@@ -499,10 +613,6 @@ private: System::Windows::Forms::Label^ label18;
             this->F4_button = (gcnew System::Windows::Forms::Button());
             this->groupBox20 = (gcnew System::Windows::Forms::GroupBox());
             this->Anamnesis_textBox = (gcnew System::Windows::Forms::TextBox());
-            this->AnalysisResults_panel = (gcnew System::Windows::Forms::Panel());
-            this->F5_button = (gcnew System::Windows::Forms::Button());
-            this->AnalysisResults_groupBox = (gcnew System::Windows::Forms::GroupBox());
-            this->comboBox10 = (gcnew System::Windows::Forms::ComboBox());
             this->AddingInfo_panel = (gcnew System::Windows::Forms::Panel());
             this->tableLayoutPanel15 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->groupBox = (gcnew System::Windows::Forms::GroupBox());
@@ -518,19 +628,23 @@ private: System::Windows::Forms::Label^ label18;
             this->textBox1 = (gcnew System::Windows::Forms::TextBox());
             this->groupBox22 = (gcnew System::Windows::Forms::GroupBox());
             this->comboBox11 = (gcnew System::Windows::Forms::ComboBox());
-            this->Recomendations_panel = (gcnew System::Windows::Forms::Panel());
-            this->tableLayoutPanel19 = (gcnew System::Windows::Forms::TableLayoutPanel());
-            this->F8_button = (gcnew System::Windows::Forms::Button());
-            this->tableLayoutPanel17 = (gcnew System::Windows::Forms::TableLayoutPanel());
-            this->groupBox21 = (gcnew System::Windows::Forms::GroupBox());
-            this->comboBox12 = (gcnew System::Windows::Forms::ComboBox());
-            this->label17 = (gcnew System::Windows::Forms::Label());
-            this->button7 = (gcnew System::Windows::Forms::Button());
-            this->button8 = (gcnew System::Windows::Forms::Button());
-            this->tableLayoutPanel16 = (gcnew System::Windows::Forms::TableLayoutPanel());
-            this->button4 = (gcnew System::Windows::Forms::Button());
-            this->button6 = (gcnew System::Windows::Forms::Button());
-            this->button5 = (gcnew System::Windows::Forms::Button());
+            this->Ill_History_panel = (gcnew System::Windows::Forms::Panel());
+            this->F3_button = (gcnew System::Windows::Forms::Button());
+            this->groupBox15 = (gcnew System::Windows::Forms::GroupBox());
+            this->complications_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->label9 = (gcnew System::Windows::Forms::Label());
+            this->groupBox16 = (gcnew System::Windows::Forms::GroupBox());
+            this->related_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->label7 = (gcnew System::Windows::Forms::Label());
+            this->MKB_groupBox = (gcnew System::Windows::Forms::GroupBox());
+            this->mkb_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->groupBox14 = (gcnew System::Windows::Forms::GroupBox());
+            this->epicrizdiagnoses_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->label4 = (gcnew System::Windows::Forms::Label());
+            this->groupBox13 = (gcnew System::Windows::Forms::GroupBox());
+            this->outcome_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
+            this->groupBox12 = (gcnew System::Windows::Forms::GroupBox());
+            this->income_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
             this->UnworkableList_panel = (gcnew System::Windows::Forms::Panel());
             this->tableLayoutPanel18 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->F9_button = (gcnew System::Windows::Forms::Button());
@@ -538,7 +652,10 @@ private: System::Windows::Forms::Label^ label18;
             this->radioButton3 = (gcnew System::Windows::Forms::RadioButton());
             this->radioButton2 = (gcnew System::Windows::Forms::RadioButton());
             this->Stamp_panel = (gcnew System::Windows::Forms::Panel());
-            this->DB_PathChanger_openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
+            this->PathChanger_openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
+            this->TextEditor_panel = (gcnew System::Windows::Forms::Panel());
+            this->splitContainer1 = (gcnew System::Windows::Forms::SplitContainer());
+            this->toolStrip1 = (gcnew System::Windows::Forms::ToolStrip());
             this->Home_panel->SuspendLayout();
             this->tableLayoutPanel12->SuspendLayout();
             this->tableLayoutPanel1->SuspendLayout();
@@ -570,13 +687,13 @@ private: System::Windows::Forms::Label^ label18;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->id_numericUpDown))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->year_numericUpDown))->BeginInit();
             this->flowLayoutPanel1->SuspendLayout();
-            this->Ill_History_panel->SuspendLayout();
-            this->groupBox15->SuspendLayout();
-            this->groupBox16->SuspendLayout();
-            this->MKB_groupBox->SuspendLayout();
-            this->groupBox14->SuspendLayout();
-            this->groupBox13->SuspendLayout();
-            this->groupBox12->SuspendLayout();
+            this->AnalysisResults_panel->SuspendLayout();
+            this->AnalysisResults_groupBox->SuspendLayout();
+            this->Recomendations_panel->SuspendLayout();
+            this->tableLayoutPanel19->SuspendLayout();
+            this->tableLayoutPanel17->SuspendLayout();
+            this->groupBox21->SuspendLayout();
+            this->tableLayoutPanel16->SuspendLayout();
             this->SideInfo_panel->SuspendLayout();
             this->SideInfo_groupBox->SuspendLayout();
             this->Anamnesis_panel->SuspendLayout();
@@ -597,8 +714,6 @@ private: System::Windows::Forms::Label^ label18;
             this->flowLayoutPanel2->SuspendLayout();
             this->panel2->SuspendLayout();
             this->groupBox20->SuspendLayout();
-            this->AnalysisResults_panel->SuspendLayout();
-            this->AnalysisResults_groupBox->SuspendLayout();
             this->AddingInfo_panel->SuspendLayout();
             this->tableLayoutPanel15->SuspendLayout();
             this->groupBox->SuspendLayout();
@@ -607,13 +722,20 @@ private: System::Windows::Forms::Label^ label18;
             this->DoctorLook_groupBox->SuspendLayout();
             this->Mouth_groupBox->SuspendLayout();
             this->groupBox22->SuspendLayout();
-            this->Recomendations_panel->SuspendLayout();
-            this->tableLayoutPanel19->SuspendLayout();
-            this->tableLayoutPanel17->SuspendLayout();
-            this->groupBox21->SuspendLayout();
-            this->tableLayoutPanel16->SuspendLayout();
+            this->Ill_History_panel->SuspendLayout();
+            this->groupBox15->SuspendLayout();
+            this->groupBox16->SuspendLayout();
+            this->MKB_groupBox->SuspendLayout();
+            this->groupBox14->SuspendLayout();
+            this->groupBox13->SuspendLayout();
+            this->groupBox12->SuspendLayout();
             this->UnworkableList_panel->SuspendLayout();
             this->tableLayoutPanel18->SuspendLayout();
+            this->Stamp_panel->SuspendLayout();
+            this->TextEditor_panel->SuspendLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer1))->BeginInit();
+            this->splitContainer1->Panel1->SuspendLayout();
+            this->splitContainer1->SuspendLayout();
             this->SuspendLayout();
             // 
             // history_button
@@ -839,7 +961,7 @@ private: System::Windows::Forms::Label^ label18;
             this->tableLayoutPanel7->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
                 126)));
             this->tableLayoutPanel7->Controls->Add(this->groupBox5, 0, 0);
-            this->tableLayoutPanel7->Controls->Add(this->button2, 1, 0);
+            this->tableLayoutPanel7->Controls->Add(this->epicrizPathChange_button, 1, 0);
             this->tableLayoutPanel7->Dock = System::Windows::Forms::DockStyle::Fill;
             this->tableLayoutPanel7->Location = System::Drawing::Point(3, 617);
             this->tableLayoutPanel7->Name = L"tableLayoutPanel7";
@@ -850,6 +972,7 @@ private: System::Windows::Forms::Label^ label18;
             // 
             // groupBox5
             // 
+            this->groupBox5->Controls->Add(this->epicrizPath_label);
             this->groupBox5->Controls->Add(this->label8);
             this->groupBox5->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox5->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -863,6 +986,19 @@ private: System::Windows::Forms::Label^ label18;
             this->groupBox5->TabStop = false;
             this->groupBox5->Text = L"Путь сохранения отчета";
             // 
+            // epicrizPath_label
+            // 
+            this->epicrizPath_label->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->epicrizPath_label->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->epicrizPath_label->ForeColor = System::Drawing::SystemColors::ControlText;
+            this->epicrizPath_label->Location = System::Drawing::Point(3, 18);
+            this->epicrizPath_label->Name = L"epicrizPath_label";
+            this->epicrizPath_label->Size = System::Drawing::Size(1146, 35);
+            this->epicrizPath_label->TabIndex = 3;
+            this->epicrizPath_label->Text = L"C:\\Users\\user\\Documents\\Записи лечащего врача";
+            this->epicrizPath_label->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+            // 
             // label8
             // 
             this->label8->AutoSize = true;
@@ -872,22 +1008,23 @@ private: System::Windows::Forms::Label^ label18;
             this->label8->Size = System::Drawing::Size(0, 16);
             this->label8->TabIndex = 0;
             // 
-            // button2
+            // epicrizPathChange_button
             // 
-            this->button2->BackColor = System::Drawing::Color::White;
-            this->button2->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->button2->Dock = System::Windows::Forms::DockStyle::Bottom;
-            this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->button2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
-                static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->button2->Location = System::Drawing::Point(1161, 10);
-            this->button2->Name = L"button2";
-            this->button2->Size = System::Drawing::Size(120, 49);
-            this->button2->TabIndex = 7;
-            this->button2->TabStop = false;
-            this->button2->Text = L"Изменить";
-            this->button2->UseVisualStyleBackColor = false;
+            this->epicrizPathChange_button->BackColor = System::Drawing::Color::White;
+            this->epicrizPathChange_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->epicrizPathChange_button->Dock = System::Windows::Forms::DockStyle::Bottom;
+            this->epicrizPathChange_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->epicrizPathChange_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)),
+                static_cast<System::Int32>(static_cast<System::Byte>(80)), static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->epicrizPathChange_button->Location = System::Drawing::Point(1161, 10);
+            this->epicrizPathChange_button->Name = L"epicrizPathChange_button";
+            this->epicrizPathChange_button->Size = System::Drawing::Size(120, 49);
+            this->epicrizPathChange_button->TabIndex = 7;
+            this->epicrizPathChange_button->TabStop = false;
+            this->epicrizPathChange_button->Text = L"Изменить";
+            this->epicrizPathChange_button->UseVisualStyleBackColor = false;
+            this->epicrizPathChange_button->Click += gcnew System::EventHandler(this, &MainWindow::epicrizPathChange_button_Click);
             // 
             // Epicrisis_label
             // 
@@ -904,6 +1041,7 @@ private: System::Windows::Forms::Label^ label18;
             // 
             // groupBox4
             // 
+            this->groupBox4->Controls->Add(this->textBox5);
             this->groupBox4->Controls->Add(this->label6);
             this->groupBox4->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
@@ -915,6 +1053,18 @@ private: System::Windows::Forms::Label^ label18;
             this->groupBox4->TabIndex = 10;
             this->groupBox4->TabStop = false;
             this->groupBox4->Text = L"Префикс имени файла отчета";
+            // 
+            // textBox5
+            // 
+            this->textBox5->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->textBox5->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->textBox5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->textBox5->Location = System::Drawing::Point(3, 18);
+            this->textBox5->Name = L"textBox5";
+            this->textBox5->Size = System::Drawing::Size(1278, 19);
+            this->textBox5->TabIndex = 2;
+            this->textBox5->Text = L"Первый лист";
             // 
             // label6
             // 
@@ -944,6 +1094,7 @@ private: System::Windows::Forms::Label^ label18;
             // 
             // groupBox3
             // 
+            this->groupBox3->Controls->Add(this->label20);
             this->groupBox3->Controls->Add(this->label5);
             this->groupBox3->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox3->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -956,6 +1107,19 @@ private: System::Windows::Forms::Label^ label18;
             this->groupBox3->TabIndex = 8;
             this->groupBox3->TabStop = false;
             this->groupBox3->Text = L"Путь сохранения отчета";
+            // 
+            // label20
+            // 
+            this->label20->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->label20->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->label20->ForeColor = System::Drawing::SystemColors::ControlText;
+            this->label20->Location = System::Drawing::Point(3, 18);
+            this->label20->Name = L"label20";
+            this->label20->Size = System::Drawing::Size(1146, 35);
+            this->label20->TabIndex = 3;
+            this->label20->Text = L"C:\\Users\\user\\Documents\\Записи лечащего врача";
+            this->label20->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
             // 
             // label5
             // 
@@ -1045,6 +1209,7 @@ private: System::Windows::Forms::Label^ label18;
             this->TemplatesChange_button->TabStop = false;
             this->TemplatesChange_button->Text = L"Изменить";
             this->TemplatesChange_button->UseVisualStyleBackColor = false;
+            this->TemplatesChange_button->Click += gcnew System::EventHandler(this, &MainWindow::TemplatesChange_button_Click);
             // 
             // groupBox1
             // 
@@ -1185,6 +1350,7 @@ private: System::Windows::Forms::Label^ label18;
             // 
             // ReportDir_groupBox
             // 
+            this->ReportDir_groupBox->Controls->Add(this->label18);
             this->ReportDir_groupBox->Controls->Add(this->label2);
             this->ReportDir_groupBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->ReportDir_groupBox->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -1197,6 +1363,19 @@ private: System::Windows::Forms::Label^ label18;
             this->ReportDir_groupBox->TabIndex = 8;
             this->ReportDir_groupBox->TabStop = false;
             this->ReportDir_groupBox->Text = L"Путь сохранения отчета";
+            // 
+            // label18
+            // 
+            this->label18->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->label18->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->label18->ForeColor = System::Drawing::SystemColors::ControlText;
+            this->label18->Location = System::Drawing::Point(3, 18);
+            this->label18->Name = L"label18";
+            this->label18->Size = System::Drawing::Size(1146, 35);
+            this->label18->TabIndex = 2;
+            this->label18->Text = L"C:\\Users\\user\\Documents\\Записи лечащего врача";
+            this->label18->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
             // 
             // label2
             // 
@@ -1240,6 +1419,7 @@ private: System::Windows::Forms::Label^ label18;
             // 
             // groupBox2
             // 
+            this->groupBox2->Controls->Add(this->textBox4);
             this->groupBox2->Controls->Add(this->label3);
             this->groupBox2->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox2->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -1252,6 +1432,18 @@ private: System::Windows::Forms::Label^ label18;
             this->groupBox2->TabIndex = 9;
             this->groupBox2->TabStop = false;
             this->groupBox2->Text = L"Префикс имени файла отчета";
+            // 
+            // textBox4
+            // 
+            this->textBox4->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->textBox4->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->textBox4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->textBox4->Location = System::Drawing::Point(3, 18);
+            this->textBox4->Name = L"textBox4";
+            this->textBox4->Size = System::Drawing::Size(1272, 19);
+            this->textBox4->TabIndex = 1;
+            this->textBox4->Text = L"Лист первичного осмотра";
             // 
             // label3
             // 
@@ -1361,14 +1553,14 @@ private: System::Windows::Forms::Label^ label18;
             this->Epicrisis_panel->Controls->Add(this->EpiricisisTabMenu_tableLayoutPanel);
             this->Epicrisis_panel->Controls->Add(this->tableLayoutPanel10);
             this->Epicrisis_panel->Controls->Add(this->tableLayoutPanel9);
-            this->Epicrisis_panel->Controls->Add(this->Ill_History_panel);
+            this->Epicrisis_panel->Controls->Add(this->Stamp_panel);
+            this->Epicrisis_panel->Controls->Add(this->Recomendations_panel);
+            this->Epicrisis_panel->Controls->Add(this->AnalysisResults_panel);
             this->Epicrisis_panel->Controls->Add(this->SideInfo_panel);
             this->Epicrisis_panel->Controls->Add(this->Anamnesis_panel);
-            this->Epicrisis_panel->Controls->Add(this->AnalysisResults_panel);
             this->Epicrisis_panel->Controls->Add(this->AddingInfo_panel);
-            this->Epicrisis_panel->Controls->Add(this->Recomendations_panel);
+            this->Epicrisis_panel->Controls->Add(this->Ill_History_panel);
             this->Epicrisis_panel->Controls->Add(this->UnworkableList_panel);
-            this->Epicrisis_panel->Controls->Add(this->Stamp_panel);
             this->Epicrisis_panel->Dock = System::Windows::Forms::DockStyle::Fill;
             this->Epicrisis_panel->Location = System::Drawing::Point(0, 0);
             this->Epicrisis_panel->Name = L"Epicrisis_panel";
@@ -1758,6 +1950,7 @@ private: System::Windows::Forms::Label^ label18;
             this->militaryUnit_comboBox->Name = L"militaryUnit_comboBox";
             this->militaryUnit_comboBox->Size = System::Drawing::Size(425, 24);
             this->militaryUnit_comboBox->TabIndex = 7;
+            this->militaryUnit_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
             this->militaryUnit_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
             this->militaryUnit_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::militaryUnit_comboBox_Leave);
             // 
@@ -1791,6 +1984,7 @@ private: System::Windows::Forms::Label^ label18;
             this->rank_comboBox->Name = L"rank_comboBox";
             this->rank_comboBox->Size = System::Drawing::Size(425, 24);
             this->rank_comboBox->TabIndex = 6;
+            this->rank_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
             this->rank_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
             this->rank_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::rank_comboBox_Leave);
             // 
@@ -1822,6 +2016,7 @@ private: System::Windows::Forms::Label^ label18;
             this->Patronymic_comboBox->Name = L"Patronymic_comboBox";
             this->Patronymic_comboBox->Size = System::Drawing::Size(427, 24);
             this->Patronymic_comboBox->TabIndex = 5;
+            this->Patronymic_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
             this->Patronymic_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
             this->Patronymic_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::Patronymic_comboBox_Leave);
             // 
@@ -1855,6 +2050,7 @@ private: System::Windows::Forms::Label^ label18;
             this->Names_comboBox->Name = L"Names_comboBox";
             this->Names_comboBox->Size = System::Drawing::Size(425, 24);
             this->Names_comboBox->TabIndex = 4;
+            this->Names_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
             this->Names_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
             this->Names_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::Names_comboBox_Leave);
             // 
@@ -2017,273 +2213,261 @@ private: System::Windows::Forms::Label^ label18;
             this->Clear_button->Text = L"Очистить";
             this->Clear_button->UseVisualStyleBackColor = false;
             // 
-            // Ill_History_panel
+            // AnalysisResults_panel
             // 
-            this->Ill_History_panel->AutoScroll = true;
-            this->Ill_History_panel->AutoSize = true;
-            this->Ill_History_panel->Controls->Add(this->label18);
-            this->Ill_History_panel->Controls->Add(this->F3_button);
-            this->Ill_History_panel->Controls->Add(this->groupBox15);
-            this->Ill_History_panel->Controls->Add(this->label9);
-            this->Ill_History_panel->Controls->Add(this->groupBox16);
-            this->Ill_History_panel->Controls->Add(this->label7);
-            this->Ill_History_panel->Controls->Add(this->MKB_groupBox);
-            this->Ill_History_panel->Controls->Add(this->groupBox14);
-            this->Ill_History_panel->Controls->Add(this->label4);
-            this->Ill_History_panel->Controls->Add(this->groupBox13);
-            this->Ill_History_panel->Controls->Add(this->groupBox12);
-            this->Ill_History_panel->Location = System::Drawing::Point(0, 159);
-            this->Ill_History_panel->Name = L"Ill_History_panel";
-            this->Ill_History_panel->Size = System::Drawing::Size(1371, 500);
-            this->Ill_History_panel->TabIndex = 7;
+            this->AnalysisResults_panel->AutoSize = true;
+            this->AnalysisResults_panel->Controls->Add(this->F5_button);
+            this->AnalysisResults_panel->Controls->Add(this->AnalysisResults_groupBox);
+            this->AnalysisResults_panel->Location = System::Drawing::Point(2, 159);
+            this->AnalysisResults_panel->Name = L"AnalysisResults_panel";
+            this->AnalysisResults_panel->Size = System::Drawing::Size(1308, 354);
+            this->AnalysisResults_panel->TabIndex = 8;
+            this->AnalysisResults_panel->Visible = false;
             // 
-            // label18
+            // F5_button
             // 
-            this->label18->AutoSize = true;
-            this->label18->Location = System::Drawing::Point(66, 409);
-            this->label18->Name = L"label18";
-            this->label18->Size = System::Drawing::Size(41, 13);
-            this->label18->TabIndex = 15;
-            this->label18->Text = L"label18";
-            // 
-            // F3_button
-            // 
-            this->F3_button->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->F3_button->FlatAppearance->BorderSize = 0;
-            this->F3_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->F3_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->F5_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
+            this->F5_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->F5_button->FlatAppearance->BorderSize = 0;
+            this->F5_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->F5_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->F3_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+            this->F5_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F3_button->Location = System::Drawing::Point(570, 381);
-            this->F3_button->Name = L"F3_button";
-            this->F3_button->Size = System::Drawing::Size(173, 37);
-            this->F3_button->TabIndex = 14;
-            this->F3_button->Text = L"Продолжить";
-            this->F3_button->UseVisualStyleBackColor = true;
-            this->F3_button->Click += gcnew System::EventHandler(this, &MainWindow::F2_button_Click);
+            this->F5_button->Location = System::Drawing::Point(569, 79);
+            this->F5_button->Name = L"F5_button";
+            this->F5_button->Size = System::Drawing::Size(173, 37);
+            this->F5_button->TabIndex = 16;
+            this->F5_button->Text = L"Продолжить";
+            this->F5_button->UseVisualStyleBackColor = true;
+            this->F5_button->Click += gcnew System::EventHandler(this, &MainWindow::F5_button_Click);
             // 
-            // groupBox15
+            // AnalysisResults_groupBox
             // 
-            this->groupBox15->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+            this->AnalysisResults_groupBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
                 | System::Windows::Forms::AnchorStyles::Right));
-            this->groupBox15->Controls->Add(this->complications_comboBox);
-            this->groupBox15->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->groupBox15->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->groupBox15->Location = System::Drawing::Point(14, 307);
-            this->groupBox15->Name = L"groupBox15";
-            this->groupBox15->Size = System::Drawing::Size(1291, 44);
-            this->groupBox15->TabIndex = 10;
-            this->groupBox15->TabStop = false;
-            this->groupBox15->Text = L"Осложнение 1*";
+            this->AnalysisResults_groupBox->AutoSize = true;
+            this->AnalysisResults_groupBox->Controls->Add(this->AnalyzesResults_comboBox);
+            this->AnalysisResults_groupBox->Location = System::Drawing::Point(5, 6);
+            this->AnalysisResults_groupBox->Name = L"AnalysisResults_groupBox";
+            this->AnalysisResults_groupBox->Size = System::Drawing::Size(1240, 46);
+            this->AnalysisResults_groupBox->TabIndex = 1;
+            this->AnalysisResults_groupBox->TabStop = false;
             // 
-            // complications_comboBox
+            // AnalyzesResults_comboBox
             // 
-            this->complications_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
-            this->complications_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->complications_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->complications_comboBox->DropDownHeight = 150;
-            this->complications_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->complications_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+            this->AnalyzesResults_comboBox->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->AnalyzesResults_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->AnalyzesResults_comboBox->DropDownHeight = 400;
+            this->AnalyzesResults_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->AnalyzesResults_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->complications_comboBox->FormattingEnabled = true;
-            this->complications_comboBox->IntegralHeight = false;
-            this->complications_comboBox->Location = System::Drawing::Point(3, 18);
-            this->complications_comboBox->MaxDropDownItems = 10;
-            this->complications_comboBox->Name = L"complications_comboBox";
-            this->complications_comboBox->Size = System::Drawing::Size(1285, 24);
-            this->complications_comboBox->TabIndex = 13;
-            this->complications_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
-            this->complications_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::complications_comboBox_Leave);
+            this->AnalyzesResults_comboBox->FormattingEnabled = true;
+            this->AnalyzesResults_comboBox->ItemHeight = 20;
+            this->AnalyzesResults_comboBox->Location = System::Drawing::Point(3, 16);
+            this->AnalyzesResults_comboBox->Name = L"AnalyzesResults_comboBox";
+            this->AnalyzesResults_comboBox->Size = System::Drawing::Size(1234, 28);
+            this->AnalyzesResults_comboBox->TabIndex = 0;
+            this->AnalyzesResults_comboBox->TabStop = false;
+            this->AnalyzesResults_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
+            this->AnalyzesResults_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->AnalyzesResults_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::AnalyzesResults_comboBox_Leave);
             // 
-            // label9
+            // Recomendations_panel
             // 
-            this->label9->AutoSize = true;
-            this->label9->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->Recomendations_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
+            this->Recomendations_panel->Controls->Add(this->tableLayoutPanel19);
+            this->Recomendations_panel->Controls->Add(this->tableLayoutPanel17);
+            this->Recomendations_panel->Controls->Add(this->tableLayoutPanel16);
+            this->Recomendations_panel->Location = System::Drawing::Point(0, 159);
+            this->Recomendations_panel->Name = L"Recomendations_panel";
+            this->Recomendations_panel->Size = System::Drawing::Size(1313, 500);
+            this->Recomendations_panel->TabIndex = 0;
+            // 
+            // tableLayoutPanel19
+            // 
+            this->tableLayoutPanel19->AutoSize = true;
+            this->tableLayoutPanel19->ColumnCount = 1;
+            this->tableLayoutPanel19->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+                100)));
+            this->tableLayoutPanel19->Controls->Add(this->F8_button, 0, 1);
+            this->tableLayoutPanel19->Location = System::Drawing::Point(337, 0);
+            this->tableLayoutPanel19->Name = L"tableLayoutPanel19";
+            this->tableLayoutPanel19->RowCount = 2;
+            this->tableLayoutPanel19->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
+                100)));
+            this->tableLayoutPanel19->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel19->Size = System::Drawing::Size(976, 143);
+            this->tableLayoutPanel19->TabIndex = 18;
+            // 
+            // F8_button
+            // 
+            this->F8_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
+            this->F8_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->F8_button->FlatAppearance->BorderSize = 0;
+            this->F8_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->F8_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->label9->Location = System::Drawing::Point(9, 270);
-            this->label9->Name = L"label9";
-            this->label9->Size = System::Drawing::Size(124, 24);
-            this->label9->TabIndex = 9;
-            this->label9->Text = L"Осложнения";
+            this->F8_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+                static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->F8_button->Location = System::Drawing::Point(401, 103);
+            this->F8_button->Name = L"F8_button";
+            this->F8_button->Size = System::Drawing::Size(173, 37);
+            this->F8_button->TabIndex = 17;
+            this->F8_button->Text = L"Продолжить";
+            this->F8_button->UseVisualStyleBackColor = true;
+            this->F8_button->Click += gcnew System::EventHandler(this, &MainWindow::F8_button_Click);
             // 
-            // groupBox16
+            // tableLayoutPanel17
             // 
-            this->groupBox16->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-                | System::Windows::Forms::AnchorStyles::Right));
-            this->groupBox16->Controls->Add(this->related_comboBox);
-            this->groupBox16->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->groupBox16->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->groupBox16->Location = System::Drawing::Point(13, 201);
-            this->groupBox16->Name = L"groupBox16";
-            this->groupBox16->Size = System::Drawing::Size(1291, 44);
-            this->groupBox16->TabIndex = 8;
-            this->groupBox16->TabStop = false;
-            this->groupBox16->Text = L"Сопутствующий 1*";
+            this->tableLayoutPanel17->AutoSize = true;
+            this->tableLayoutPanel17->ColumnCount = 1;
+            this->tableLayoutPanel17->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+                100)));
+            this->tableLayoutPanel17->Controls->Add(this->groupBox21, 0, 1);
+            this->tableLayoutPanel17->Controls->Add(this->label17, 0, 0);
+            this->tableLayoutPanel17->Controls->Add(this->button7, 0, 2);
+            this->tableLayoutPanel17->Controls->Add(this->button8, 0, 3);
+            this->tableLayoutPanel17->Location = System::Drawing::Point(5, 158);
+            this->tableLayoutPanel17->Name = L"tableLayoutPanel17";
+            this->tableLayoutPanel17->RowCount = 4;
+            this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel17->Size = System::Drawing::Size(307, 194);
+            this->tableLayoutPanel17->TabIndex = 4;
             // 
-            // related_comboBox
+            // groupBox21
             // 
-            this->related_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
-            this->related_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->related_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->related_comboBox->DropDownHeight = 150;
-            this->related_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->related_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+            this->groupBox21->AutoSize = true;
+            this->groupBox21->Controls->Add(this->Recommendations_checkedListBox);
+            this->groupBox21->Location = System::Drawing::Point(3, 23);
+            this->groupBox21->Name = L"groupBox21";
+            this->groupBox21->Size = System::Drawing::Size(301, 96);
+            this->groupBox21->TabIndex = 5;
+            this->groupBox21->TabStop = false;
+            this->groupBox21->Text = L"Рекомендации";
+            // 
+            // Recommendations_checkedListBox
+            // 
+            this->Recommendations_checkedListBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->Recommendations_checkedListBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->related_comboBox->FormattingEnabled = true;
-            this->related_comboBox->IntegralHeight = false;
-            this->related_comboBox->Location = System::Drawing::Point(3, 18);
-            this->related_comboBox->MaxDropDownItems = 10;
-            this->related_comboBox->Name = L"related_comboBox";
-            this->related_comboBox->Size = System::Drawing::Size(1285, 24);
-            this->related_comboBox->TabIndex = 12;
-            this->related_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
-            this->related_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::related_comboBox_Leave);
+            this->Recommendations_checkedListBox->FormattingEnabled = true;
+            this->Recommendations_checkedListBox->Items->AddRange(gcnew cli::array< System::Object^  >(1) { L"Cd" });
+            this->Recommendations_checkedListBox->Location = System::Drawing::Point(6, 14);
+            this->Recommendations_checkedListBox->Name = L"Recommendations_checkedListBox";
+            this->Recommendations_checkedListBox->Size = System::Drawing::Size(289, 63);
+            this->Recommendations_checkedListBox->TabIndex = 0;
             // 
-            // label7
+            // label17
             // 
-            this->label7->AutoSize = true;
-            this->label7->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->label7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->label17->AutoSize = true;
+            this->label17->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->label17->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->label7->Location = System::Drawing::Point(9, 164);
-            this->label7->Name = L"label7";
-            this->label7->Size = System::Drawing::Size(153, 24);
-            this->label7->TabIndex = 7;
-            this->label7->Text = L"Сопутствующие";
+            this->label17->Location = System::Drawing::Point(3, 0);
+            this->label17->Name = L"label17";
+            this->label17->Size = System::Drawing::Size(301, 20);
+            this->label17->TabIndex = 0;
+            this->label17->Text = L"Или";
+            this->label17->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
             // 
-            // MKB_groupBox
+            // button7
             // 
-            this->MKB_groupBox->Controls->Add(this->mkb_comboBox);
-            this->MKB_groupBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->MKB_groupBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->button7->AutoSize = true;
+            this->button7->FlatAppearance->BorderSize = 0;
+            this->button7->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->MKB_groupBox->Location = System::Drawing::Point(1183, 101);
-            this->MKB_groupBox->Name = L"MKB_groupBox";
-            this->MKB_groupBox->Size = System::Drawing::Size(115, 44);
-            this->MKB_groupBox->TabIndex = 6;
-            this->MKB_groupBox->TabStop = false;
-            this->MKB_groupBox->Text = L"МКБ*";
+            this->button7->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+                static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->button7->Location = System::Drawing::Point(3, 125);
+            this->button7->Name = L"button7";
+            this->button7->Size = System::Drawing::Size(299, 30);
+            this->button7->TabIndex = 6;
+            this->button7->Text = L"Редактировать";
+            this->button7->UseVisualStyleBackColor = true;
             // 
-            // mkb_comboBox
+            // button8
             // 
-            this->mkb_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
-            this->mkb_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->mkb_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->mkb_comboBox->DropDownHeight = 150;
-            this->mkb_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->mkb_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->button8->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+            this->button8->FlatAppearance->BorderSize = 0;
+            this->button8->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->mkb_comboBox->FormattingEnabled = true;
-            this->mkb_comboBox->IntegralHeight = false;
-            this->mkb_comboBox->Location = System::Drawing::Point(3, 18);
-            this->mkb_comboBox->MaxDropDownItems = 10;
-            this->mkb_comboBox->Name = L"mkb_comboBox";
-            this->mkb_comboBox->Size = System::Drawing::Size(109, 24);
-            this->mkb_comboBox->TabIndex = 13;
-            this->mkb_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
-            this->mkb_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::mkb_comboBox_Leave);
+            this->button8->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+                static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->button8->Location = System::Drawing::Point(3, 161);
+            this->button8->Name = L"button8";
+            this->button8->Size = System::Drawing::Size(299, 30);
+            this->button8->TabIndex = 7;
+            this->button8->Text = L"Вставить";
+            this->button8->UseVisualStyleBackColor = true;
             // 
-            // groupBox14
+            // tableLayoutPanel16
             // 
-            this->groupBox14->Controls->Add(this->epicrizdiagnoses_comboBox);
-            this->groupBox14->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->groupBox14->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->tableLayoutPanel16->AutoSize = true;
+            this->tableLayoutPanel16->ColumnCount = 1;
+            this->tableLayoutPanel16->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+                100)));
+            this->tableLayoutPanel16->Controls->Add(this->button4, 0, 0);
+            this->tableLayoutPanel16->Controls->Add(this->button6, 0, 2);
+            this->tableLayoutPanel16->Controls->Add(this->button5, 0, 1);
+            this->tableLayoutPanel16->Location = System::Drawing::Point(5, 6);
+            this->tableLayoutPanel16->Name = L"tableLayoutPanel16";
+            this->tableLayoutPanel16->RowCount = 3;
+            this->tableLayoutPanel16->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel16->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel16->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel16->Size = System::Drawing::Size(307, 120);
+            this->tableLayoutPanel16->TabIndex = 3;
+            // 
+            // button4
+            // 
+            this->button4->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->button4->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->button4->FlatAppearance->BorderSize = 0;
+            this->button4->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->groupBox14->Location = System::Drawing::Point(13, 101);
-            this->groupBox14->Name = L"groupBox14";
-            this->groupBox14->Size = System::Drawing::Size(1161, 44);
-            this->groupBox14->TabIndex = 5;
-            this->groupBox14->TabStop = false;
-            this->groupBox14->Text = L"Диагноз 1*";
+            this->button4->Location = System::Drawing::Point(3, 3);
+            this->button4->Name = L"button4";
+            this->button4->Size = System::Drawing::Size(301, 34);
+            this->button4->TabIndex = 0;
+            this->button4->Text = L"Астения";
+            this->button4->UseVisualStyleBackColor = true;
             // 
-            // epicrizdiagnoses_comboBox
+            // button6
             // 
-            this->epicrizdiagnoses_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
-            this->epicrizdiagnoses_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->epicrizdiagnoses_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->epicrizdiagnoses_comboBox->DropDownHeight = 150;
-            this->epicrizdiagnoses_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->epicrizdiagnoses_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->epicrizdiagnoses_comboBox->FormattingEnabled = true;
-            this->epicrizdiagnoses_comboBox->IntegralHeight = false;
-            this->epicrizdiagnoses_comboBox->Location = System::Drawing::Point(3, 18);
-            this->epicrizdiagnoses_comboBox->MaxDropDownItems = 10;
-            this->epicrizdiagnoses_comboBox->Name = L"epicrizdiagnoses_comboBox";
-            this->epicrizdiagnoses_comboBox->Size = System::Drawing::Size(1155, 24);
-            this->epicrizdiagnoses_comboBox->TabIndex = 11;
-            this->epicrizdiagnoses_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
-            this->epicrizdiagnoses_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::epicrizdiagnoses_comboBox_Leave);
-            // 
-            // label4
-            // 
-            this->label4->AutoSize = true;
-            this->label4->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->button6->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->button6->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->button6->FlatAppearance->BorderSize = 0;
+            this->button6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->label4->Location = System::Drawing::Point(9, 64);
-            this->label4->Name = L"label4";
-            this->label4->Size = System::Drawing::Size(86, 24);
-            this->label4->TabIndex = 4;
-            this->label4->Text = L"Диагноз";
+            this->button6->Location = System::Drawing::Point(3, 83);
+            this->button6->Name = L"button6";
+            this->button6->Size = System::Drawing::Size(301, 34);
+            this->button6->TabIndex = 2;
+            this->button6->Text = L"Пневмония";
+            this->button6->UseVisualStyleBackColor = true;
             // 
-            // groupBox13
+            // button5
             // 
-            this->groupBox13->Controls->Add(this->outcome_dateTimePicker);
-            this->groupBox13->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->groupBox13->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->button5->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->button5->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->button5->FlatAppearance->BorderSize = 0;
+            this->button5->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->groupBox13->Location = System::Drawing::Point(224, 3);
-            this->groupBox13->Name = L"groupBox13";
-            this->groupBox13->Size = System::Drawing::Size(215, 44);
-            this->groupBox13->TabIndex = 3;
-            this->groupBox13->TabStop = false;
-            this->groupBox13->Text = L"Дата выписки*";
-            // 
-            // outcome_dateTimePicker
-            // 
-            this->outcome_dateTimePicker->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->outcome_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->outcome_dateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->outcome_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
-            this->outcome_dateTimePicker->Location = System::Drawing::Point(3, 18);
-            this->outcome_dateTimePicker->Name = L"outcome_dateTimePicker";
-            this->outcome_dateTimePicker->Size = System::Drawing::Size(209, 22);
-            this->outcome_dateTimePicker->TabIndex = 10;
-            this->outcome_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 34, 0);
-            this->outcome_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::outcome_dateTimePicker_Leave);
-            // 
-            // groupBox12
-            // 
-            this->groupBox12->Controls->Add(this->income_dateTimePicker);
-            this->groupBox12->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->groupBox12->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->groupBox12->Location = System::Drawing::Point(3, 3);
-            this->groupBox12->Name = L"groupBox12";
-            this->groupBox12->Size = System::Drawing::Size(215, 44);
-            this->groupBox12->TabIndex = 2;
-            this->groupBox12->TabStop = false;
-            this->groupBox12->Text = L"Дата поступления*";
-            // 
-            // income_dateTimePicker
-            // 
-            this->income_dateTimePicker->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->income_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->income_dateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->income_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
-            this->income_dateTimePicker->Location = System::Drawing::Point(3, 18);
-            this->income_dateTimePicker->Name = L"income_dateTimePicker";
-            this->income_dateTimePicker->Size = System::Drawing::Size(209, 22);
-            this->income_dateTimePicker->TabIndex = 9;
-            this->income_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 14, 0);
-            this->income_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::income_dateTimePicker_Leave);
+            this->button5->Location = System::Drawing::Point(3, 43);
+            this->button5->Name = L"button5";
+            this->button5->Size = System::Drawing::Size(301, 34);
+            this->button5->TabIndex = 1;
+            this->button5->Text = L"Бронхит";
+            this->button5->UseVisualStyleBackColor = true;
             // 
             // SideInfo_panel
             // 
@@ -3067,58 +3251,6 @@ private: System::Windows::Forms::Label^ label18;
             this->Anamnesis_textBox->TabIndex = 1;
             this->Anamnesis_textBox->Text = L"\r\n";
             // 
-            // AnalysisResults_panel
-            // 
-            this->AnalysisResults_panel->AutoSize = true;
-            this->AnalysisResults_panel->Controls->Add(this->F5_button);
-            this->AnalysisResults_panel->Controls->Add(this->AnalysisResults_groupBox);
-            this->AnalysisResults_panel->Location = System::Drawing::Point(2, 159);
-            this->AnalysisResults_panel->Name = L"AnalysisResults_panel";
-            this->AnalysisResults_panel->Size = System::Drawing::Size(1308, 354);
-            this->AnalysisResults_panel->TabIndex = 8;
-            this->AnalysisResults_panel->Visible = false;
-            // 
-            // F5_button
-            // 
-            this->F5_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
-            this->F5_button->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->F5_button->FlatAppearance->BorderSize = 0;
-            this->F5_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->F5_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->F5_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
-                static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F5_button->Location = System::Drawing::Point(569, 79);
-            this->F5_button->Name = L"F5_button";
-            this->F5_button->Size = System::Drawing::Size(173, 37);
-            this->F5_button->TabIndex = 16;
-            this->F5_button->Text = L"Продолжить";
-            this->F5_button->UseVisualStyleBackColor = true;
-            this->F5_button->Click += gcnew System::EventHandler(this, &MainWindow::F5_button_Click);
-            // 
-            // AnalysisResults_groupBox
-            // 
-            this->AnalysisResults_groupBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-                | System::Windows::Forms::AnchorStyles::Right));
-            this->AnalysisResults_groupBox->AutoSize = true;
-            this->AnalysisResults_groupBox->Controls->Add(this->comboBox10);
-            this->AnalysisResults_groupBox->Location = System::Drawing::Point(5, 6);
-            this->AnalysisResults_groupBox->Name = L"AnalysisResults_groupBox";
-            this->AnalysisResults_groupBox->Size = System::Drawing::Size(1240, 46);
-            this->AnalysisResults_groupBox->TabIndex = 1;
-            this->AnalysisResults_groupBox->TabStop = false;
-            // 
-            // comboBox10
-            // 
-            this->comboBox10->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->comboBox10->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->comboBox10->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->comboBox10->FormattingEnabled = true;
-            this->comboBox10->Location = System::Drawing::Point(3, 16);
-            this->comboBox10->Name = L"comboBox10";
-            this->comboBox10->Size = System::Drawing::Size(1234, 21);
-            this->comboBox10->TabIndex = 0;
-            // 
             // AddingInfo_panel
             // 
             this->AddingInfo_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
@@ -3335,203 +3467,266 @@ private: System::Windows::Forms::Label^ label18;
             this->comboBox11->Size = System::Drawing::Size(657, 24);
             this->comboBox11->TabIndex = 0;
             // 
-            // Recomendations_panel
+            // Ill_History_panel
             // 
-            this->Recomendations_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
-            this->Recomendations_panel->Controls->Add(this->tableLayoutPanel19);
-            this->Recomendations_panel->Controls->Add(this->tableLayoutPanel17);
-            this->Recomendations_panel->Controls->Add(this->tableLayoutPanel16);
-            this->Recomendations_panel->Location = System::Drawing::Point(0, 159);
-            this->Recomendations_panel->Name = L"Recomendations_panel";
-            this->Recomendations_panel->Size = System::Drawing::Size(1313, 500);
-            this->Recomendations_panel->TabIndex = 0;
+            this->Ill_History_panel->AutoScroll = true;
+            this->Ill_History_panel->AutoSize = true;
+            this->Ill_History_panel->Controls->Add(this->F3_button);
+            this->Ill_History_panel->Controls->Add(this->groupBox15);
+            this->Ill_History_panel->Controls->Add(this->label9);
+            this->Ill_History_panel->Controls->Add(this->groupBox16);
+            this->Ill_History_panel->Controls->Add(this->label7);
+            this->Ill_History_panel->Controls->Add(this->MKB_groupBox);
+            this->Ill_History_panel->Controls->Add(this->groupBox14);
+            this->Ill_History_panel->Controls->Add(this->label4);
+            this->Ill_History_panel->Controls->Add(this->groupBox13);
+            this->Ill_History_panel->Controls->Add(this->groupBox12);
+            this->Ill_History_panel->Location = System::Drawing::Point(0, 159);
+            this->Ill_History_panel->Name = L"Ill_History_panel";
+            this->Ill_History_panel->Size = System::Drawing::Size(1371, 500);
+            this->Ill_History_panel->TabIndex = 7;
             // 
-            // tableLayoutPanel19
+            // F3_button
             // 
-            this->tableLayoutPanel19->AutoSize = true;
-            this->tableLayoutPanel19->ColumnCount = 1;
-            this->tableLayoutPanel19->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-                100)));
-            this->tableLayoutPanel19->Controls->Add(this->F8_button, 0, 1);
-            this->tableLayoutPanel19->Location = System::Drawing::Point(337, 0);
-            this->tableLayoutPanel19->Name = L"tableLayoutPanel19";
-            this->tableLayoutPanel19->RowCount = 2;
-            this->tableLayoutPanel19->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
-                100)));
-            this->tableLayoutPanel19->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel19->Size = System::Drawing::Size(976, 143);
-            this->tableLayoutPanel19->TabIndex = 18;
-            // 
-            // F8_button
-            // 
-            this->F8_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
-            this->F8_button->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->F8_button->FlatAppearance->BorderSize = 0;
-            this->F8_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->F8_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->F3_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->F3_button->FlatAppearance->BorderSize = 0;
+            this->F3_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->F3_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->F8_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+            this->F3_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F8_button->Location = System::Drawing::Point(401, 103);
-            this->F8_button->Name = L"F8_button";
-            this->F8_button->Size = System::Drawing::Size(173, 37);
-            this->F8_button->TabIndex = 17;
-            this->F8_button->Text = L"Продолжить";
-            this->F8_button->UseVisualStyleBackColor = true;
-            this->F8_button->Click += gcnew System::EventHandler(this, &MainWindow::F8_button_Click);
+            this->F3_button->Location = System::Drawing::Point(570, 381);
+            this->F3_button->Name = L"F3_button";
+            this->F3_button->Size = System::Drawing::Size(173, 37);
+            this->F3_button->TabIndex = 14;
+            this->F3_button->Text = L"Продолжить";
+            this->F3_button->UseVisualStyleBackColor = true;
+            this->F3_button->Click += gcnew System::EventHandler(this, &MainWindow::F2_button_Click);
             // 
-            // tableLayoutPanel17
+            // groupBox15
             // 
-            this->tableLayoutPanel17->AutoSize = true;
-            this->tableLayoutPanel17->ColumnCount = 1;
-            this->tableLayoutPanel17->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-                100)));
-            this->tableLayoutPanel17->Controls->Add(this->groupBox21, 0, 1);
-            this->tableLayoutPanel17->Controls->Add(this->label17, 0, 0);
-            this->tableLayoutPanel17->Controls->Add(this->button7, 0, 2);
-            this->tableLayoutPanel17->Controls->Add(this->button8, 0, 3);
-            this->tableLayoutPanel17->Location = System::Drawing::Point(5, 132);
-            this->tableLayoutPanel17->Name = L"tableLayoutPanel17";
-            this->tableLayoutPanel17->RowCount = 4;
-            this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
-                36)));
-            this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
-                20)));
-            this->tableLayoutPanel17->Size = System::Drawing::Size(305, 140);
-            this->tableLayoutPanel17->TabIndex = 4;
-            // 
-            // groupBox21
-            // 
-            this->groupBox21->Controls->Add(this->comboBox12);
-            this->groupBox21->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->groupBox21->Location = System::Drawing::Point(3, 23);
-            this->groupBox21->Name = L"groupBox21";
-            this->groupBox21->Size = System::Drawing::Size(299, 42);
-            this->groupBox21->TabIndex = 5;
-            this->groupBox21->TabStop = false;
-            this->groupBox21->Text = L"Рекомендации";
-            // 
-            // comboBox12
-            // 
-            this->comboBox12->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->comboBox12->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->comboBox12->FormattingEnabled = true;
-            this->comboBox12->Location = System::Drawing::Point(3, 16);
-            this->comboBox12->Name = L"comboBox12";
-            this->comboBox12->Size = System::Drawing::Size(293, 21);
-            this->comboBox12->TabIndex = 1;
-            // 
-            // label17
-            // 
-            this->label17->AutoSize = true;
-            this->label17->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->label17->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->groupBox15->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->groupBox15->Controls->Add(this->complications_comboBox);
+            this->groupBox15->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox15->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->label17->Location = System::Drawing::Point(3, 0);
-            this->label17->Name = L"label17";
-            this->label17->Size = System::Drawing::Size(299, 20);
-            this->label17->TabIndex = 0;
-            this->label17->Text = L"Или";
-            this->label17->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
+            this->groupBox15->Location = System::Drawing::Point(14, 307);
+            this->groupBox15->Name = L"groupBox15";
+            this->groupBox15->Size = System::Drawing::Size(1291, 44);
+            this->groupBox15->TabIndex = 10;
+            this->groupBox15->TabStop = false;
+            this->groupBox15->Text = L"Осложнение 1*";
             // 
-            // button7
+            // complications_comboBox
             // 
-            this->button7->AutoSize = true;
-            this->button7->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->button7->FlatAppearance->BorderSize = 0;
-            this->button7->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->button7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->complications_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->complications_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->complications_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->complications_comboBox->DropDownHeight = 150;
+            this->complications_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->complications_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->complications_comboBox->FormattingEnabled = true;
+            this->complications_comboBox->IntegralHeight = false;
+            this->complications_comboBox->Location = System::Drawing::Point(3, 18);
+            this->complications_comboBox->MaxDropDownItems = 10;
+            this->complications_comboBox->Name = L"complications_comboBox";
+            this->complications_comboBox->Size = System::Drawing::Size(1285, 24);
+            this->complications_comboBox->TabIndex = 13;
+            this->complications_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
+            this->complications_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->complications_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::complications_comboBox_Leave);
+            // 
+            // label9
+            // 
+            this->label9->AutoSize = true;
+            this->label9->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->button7->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
-                static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->button7->Location = System::Drawing::Point(3, 71);
-            this->button7->Name = L"button7";
-            this->button7->Size = System::Drawing::Size(299, 30);
-            this->button7->TabIndex = 6;
-            this->button7->Text = L"Редактировать";
-            this->button7->UseVisualStyleBackColor = true;
+            this->label9->Location = System::Drawing::Point(9, 270);
+            this->label9->Name = L"label9";
+            this->label9->Size = System::Drawing::Size(124, 24);
+            this->label9->TabIndex = 9;
+            this->label9->Text = L"Осложнения";
             // 
-            // button8
+            // groupBox16
             // 
-            this->button8->AutoSize = true;
-            this->button8->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->button8->FlatAppearance->BorderSize = 0;
-            this->button8->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->button8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->groupBox16->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->groupBox16->Controls->Add(this->related_comboBox);
+            this->groupBox16->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox16->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->button8->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
-                static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->button8->Location = System::Drawing::Point(3, 107);
-            this->button8->Name = L"button8";
-            this->button8->Size = System::Drawing::Size(299, 30);
-            this->button8->TabIndex = 7;
-            this->button8->Text = L"Вставить";
-            this->button8->UseVisualStyleBackColor = true;
+            this->groupBox16->Location = System::Drawing::Point(13, 201);
+            this->groupBox16->Name = L"groupBox16";
+            this->groupBox16->Size = System::Drawing::Size(1291, 44);
+            this->groupBox16->TabIndex = 8;
+            this->groupBox16->TabStop = false;
+            this->groupBox16->Text = L"Сопутствующий 1*";
             // 
-            // tableLayoutPanel16
+            // related_comboBox
             // 
-            this->tableLayoutPanel16->AutoSize = true;
-            this->tableLayoutPanel16->ColumnCount = 1;
-            this->tableLayoutPanel16->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-                100)));
-            this->tableLayoutPanel16->Controls->Add(this->button4, 0, 0);
-            this->tableLayoutPanel16->Controls->Add(this->button6, 0, 2);
-            this->tableLayoutPanel16->Controls->Add(this->button5, 0, 1);
-            this->tableLayoutPanel16->Location = System::Drawing::Point(5, 6);
-            this->tableLayoutPanel16->Name = L"tableLayoutPanel16";
-            this->tableLayoutPanel16->RowCount = 3;
-            this->tableLayoutPanel16->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel16->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel16->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel16->Size = System::Drawing::Size(200, 120);
-            this->tableLayoutPanel16->TabIndex = 3;
+            this->related_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->related_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->related_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->related_comboBox->DropDownHeight = 150;
+            this->related_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->related_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->related_comboBox->FormattingEnabled = true;
+            this->related_comboBox->IntegralHeight = false;
+            this->related_comboBox->Location = System::Drawing::Point(3, 18);
+            this->related_comboBox->MaxDropDownItems = 10;
+            this->related_comboBox->Name = L"related_comboBox";
+            this->related_comboBox->Size = System::Drawing::Size(1285, 24);
+            this->related_comboBox->TabIndex = 12;
+            this->related_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
+            this->related_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->related_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::related_comboBox_Leave);
             // 
-            // button4
+            // label7
             // 
-            this->button4->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->button4->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->button4->FlatAppearance->BorderSize = 0;
-            this->button4->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->button4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->label7->AutoSize = true;
+            this->label7->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->label7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->button4->Location = System::Drawing::Point(3, 3);
-            this->button4->Name = L"button4";
-            this->button4->Size = System::Drawing::Size(194, 34);
-            this->button4->TabIndex = 0;
-            this->button4->Text = L"Астения";
-            this->button4->UseVisualStyleBackColor = true;
+            this->label7->Location = System::Drawing::Point(9, 164);
+            this->label7->Name = L"label7";
+            this->label7->Size = System::Drawing::Size(153, 24);
+            this->label7->TabIndex = 7;
+            this->label7->Text = L"Сопутствующие";
             // 
-            // button6
+            // MKB_groupBox
             // 
-            this->button6->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->button6->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->button6->FlatAppearance->BorderSize = 0;
-            this->button6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->button6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->MKB_groupBox->Controls->Add(this->mkb_comboBox);
+            this->MKB_groupBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->MKB_groupBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->button6->Location = System::Drawing::Point(3, 83);
-            this->button6->Name = L"button6";
-            this->button6->Size = System::Drawing::Size(194, 34);
-            this->button6->TabIndex = 2;
-            this->button6->Text = L"Пневмония";
-            this->button6->UseVisualStyleBackColor = true;
+            this->MKB_groupBox->Location = System::Drawing::Point(1182, 101);
+            this->MKB_groupBox->Name = L"MKB_groupBox";
+            this->MKB_groupBox->Size = System::Drawing::Size(122, 44);
+            this->MKB_groupBox->TabIndex = 6;
+            this->MKB_groupBox->TabStop = false;
+            this->MKB_groupBox->Text = L"МКБ*";
             // 
-            // button5
+            // mkb_comboBox
             // 
-            this->button5->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->button5->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->button5->FlatAppearance->BorderSize = 0;
-            this->button5->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->button5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->mkb_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->mkb_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->mkb_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->mkb_comboBox->DropDownHeight = 150;
+            this->mkb_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->mkb_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->button5->Location = System::Drawing::Point(3, 43);
-            this->button5->Name = L"button5";
-            this->button5->Size = System::Drawing::Size(194, 34);
-            this->button5->TabIndex = 1;
-            this->button5->Text = L"Бронхит";
-            this->button5->UseVisualStyleBackColor = true;
+            this->mkb_comboBox->FormattingEnabled = true;
+            this->mkb_comboBox->IntegralHeight = false;
+            this->mkb_comboBox->Location = System::Drawing::Point(3, 18);
+            this->mkb_comboBox->MaxDropDownItems = 10;
+            this->mkb_comboBox->Name = L"mkb_comboBox";
+            this->mkb_comboBox->Size = System::Drawing::Size(116, 24);
+            this->mkb_comboBox->TabIndex = 13;
+            this->mkb_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->mkb_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::mkb_comboBox_Leave);
+            // 
+            // groupBox14
+            // 
+            this->groupBox14->Controls->Add(this->epicrizdiagnoses_comboBox);
+            this->groupBox14->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox14->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->groupBox14->Location = System::Drawing::Point(13, 101);
+            this->groupBox14->Name = L"groupBox14";
+            this->groupBox14->Size = System::Drawing::Size(1161, 44);
+            this->groupBox14->TabIndex = 5;
+            this->groupBox14->TabStop = false;
+            this->groupBox14->Text = L"Диагноз 1*";
+            // 
+            // epicrizdiagnoses_comboBox
+            // 
+            this->epicrizdiagnoses_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->epicrizdiagnoses_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->epicrizdiagnoses_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->epicrizdiagnoses_comboBox->DropDownHeight = 150;
+            this->epicrizdiagnoses_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->epicrizdiagnoses_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->epicrizdiagnoses_comboBox->FormattingEnabled = true;
+            this->epicrizdiagnoses_comboBox->IntegralHeight = false;
+            this->epicrizdiagnoses_comboBox->Location = System::Drawing::Point(3, 18);
+            this->epicrizdiagnoses_comboBox->MaxDropDownItems = 10;
+            this->epicrizdiagnoses_comboBox->Name = L"epicrizdiagnoses_comboBox";
+            this->epicrizdiagnoses_comboBox->Size = System::Drawing::Size(1155, 24);
+            this->epicrizdiagnoses_comboBox->TabIndex = 11;
+            this->epicrizdiagnoses_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
+            this->epicrizdiagnoses_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->epicrizdiagnoses_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::epicrizdiagnoses_comboBox_Leave);
+            // 
+            // label4
+            // 
+            this->label4->AutoSize = true;
+            this->label4->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->label4->Location = System::Drawing::Point(9, 64);
+            this->label4->Name = L"label4";
+            this->label4->Size = System::Drawing::Size(86, 24);
+            this->label4->TabIndex = 4;
+            this->label4->Text = L"Диагноз";
+            // 
+            // groupBox13
+            // 
+            this->groupBox13->Controls->Add(this->outcome_dateTimePicker);
+            this->groupBox13->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox13->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->groupBox13->Location = System::Drawing::Point(224, 3);
+            this->groupBox13->Name = L"groupBox13";
+            this->groupBox13->Size = System::Drawing::Size(215, 44);
+            this->groupBox13->TabIndex = 3;
+            this->groupBox13->TabStop = false;
+            this->groupBox13->Text = L"Дата выписки*";
+            // 
+            // outcome_dateTimePicker
+            // 
+            this->outcome_dateTimePicker->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->outcome_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->outcome_dateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->outcome_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
+            this->outcome_dateTimePicker->Location = System::Drawing::Point(3, 18);
+            this->outcome_dateTimePicker->Name = L"outcome_dateTimePicker";
+            this->outcome_dateTimePicker->Size = System::Drawing::Size(209, 22);
+            this->outcome_dateTimePicker->TabIndex = 10;
+            this->outcome_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 34, 0);
+            this->outcome_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::outcome_dateTimePicker_Leave);
+            // 
+            // groupBox12
+            // 
+            this->groupBox12->Controls->Add(this->income_dateTimePicker);
+            this->groupBox12->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox12->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->groupBox12->Location = System::Drawing::Point(3, 3);
+            this->groupBox12->Name = L"groupBox12";
+            this->groupBox12->Size = System::Drawing::Size(215, 44);
+            this->groupBox12->TabIndex = 2;
+            this->groupBox12->TabStop = false;
+            this->groupBox12->Text = L"Дата поступления*";
+            // 
+            // income_dateTimePicker
+            // 
+            this->income_dateTimePicker->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->income_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->income_dateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->income_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
+            this->income_dateTimePicker->Location = System::Drawing::Point(3, 18);
+            this->income_dateTimePicker->Name = L"income_dateTimePicker";
+            this->income_dateTimePicker->Size = System::Drawing::Size(209, 22);
+            this->income_dateTimePicker->TabIndex = 9;
+            this->income_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 14, 0);
+            this->income_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::income_dateTimePicker_Leave);
             // 
             // UnworkableList_panel
             // 
@@ -3628,15 +3823,49 @@ private: System::Windows::Forms::Label^ label18;
             // 
             // Stamp_panel
             // 
-            this->Stamp_panel->Location = System::Drawing::Point(600, 79);
+            this->Stamp_panel->Controls->Add(this->TextEditor_panel);
+            this->Stamp_panel->Location = System::Drawing::Point(0, 156);
             this->Stamp_panel->Name = L"Stamp_panel";
-            this->Stamp_panel->Size = System::Drawing::Size(200, 100);
+            this->Stamp_panel->Size = System::Drawing::Size(1313, 503);
             this->Stamp_panel->TabIndex = 0;
             // 
-            // DB_PathChanger_openFileDialog
+            // PathChanger_openFileDialog
             // 
-            this->DB_PathChanger_openFileDialog->FileName = L"openFileDialog";
-            this->DB_PathChanger_openFileDialog->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &MainWindow::DB_PathChanger_openFileDialog_FileOk);
+            this->PathChanger_openFileDialog->FileName = L"openFileDialog";
+            this->PathChanger_openFileDialog->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &MainWindow::PathChanger_openFileDialog_FileOk);
+            // 
+            // TextEditor_panel
+            // 
+            this->TextEditor_panel->Controls->Add(this->splitContainer1);
+            this->TextEditor_panel->Location = System::Drawing::Point(246, 114);
+            this->TextEditor_panel->Name = L"TextEditor_panel";
+            this->TextEditor_panel->Size = System::Drawing::Size(625, 262);
+            this->TextEditor_panel->TabIndex = 0;
+            // 
+            // splitContainer1
+            // 
+            this->splitContainer1->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->splitContainer1->FixedPanel = System::Windows::Forms::FixedPanel::Panel1;
+            this->splitContainer1->Location = System::Drawing::Point(0, 0);
+            this->splitContainer1->Name = L"splitContainer1";
+            this->splitContainer1->Orientation = System::Windows::Forms::Orientation::Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this->splitContainer1->Panel1->Controls->Add(this->toolStrip1);
+            this->splitContainer1->Size = System::Drawing::Size(625, 262);
+            this->splitContainer1->SplitterDistance = 61;
+            this->splitContainer1->TabIndex = 0;
+            // 
+            // toolStrip1
+            // 
+            this->toolStrip1->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->toolStrip1->GripStyle = System::Windows::Forms::ToolStripGripStyle::Hidden;
+            this->toolStrip1->Location = System::Drawing::Point(0, 0);
+            this->toolStrip1->Name = L"toolStrip1";
+            this->toolStrip1->Size = System::Drawing::Size(625, 61);
+            this->toolStrip1->TabIndex = 0;
+            this->toolStrip1->Text = L"toolStrip1";
             // 
             // MainWindow
             // 
@@ -3697,14 +3926,16 @@ private: System::Windows::Forms::Label^ label18;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->year_numericUpDown))->EndInit();
             this->flowLayoutPanel1->ResumeLayout(false);
             this->flowLayoutPanel1->PerformLayout();
-            this->Ill_History_panel->ResumeLayout(false);
-            this->Ill_History_panel->PerformLayout();
-            this->groupBox15->ResumeLayout(false);
-            this->groupBox16->ResumeLayout(false);
-            this->MKB_groupBox->ResumeLayout(false);
-            this->groupBox14->ResumeLayout(false);
-            this->groupBox13->ResumeLayout(false);
-            this->groupBox12->ResumeLayout(false);
+            this->AnalysisResults_panel->ResumeLayout(false);
+            this->AnalysisResults_panel->PerformLayout();
+            this->AnalysisResults_groupBox->ResumeLayout(false);
+            this->Recomendations_panel->ResumeLayout(false);
+            this->Recomendations_panel->PerformLayout();
+            this->tableLayoutPanel19->ResumeLayout(false);
+            this->tableLayoutPanel17->ResumeLayout(false);
+            this->tableLayoutPanel17->PerformLayout();
+            this->groupBox21->ResumeLayout(false);
+            this->tableLayoutPanel16->ResumeLayout(false);
             this->SideInfo_panel->ResumeLayout(false);
             this->SideInfo_groupBox->ResumeLayout(false);
             this->Anamnesis_panel->ResumeLayout(false);
@@ -3737,9 +3968,6 @@ private: System::Windows::Forms::Label^ label18;
             this->panel2->ResumeLayout(false);
             this->groupBox20->ResumeLayout(false);
             this->groupBox20->PerformLayout();
-            this->AnalysisResults_panel->ResumeLayout(false);
-            this->AnalysisResults_panel->PerformLayout();
-            this->AnalysisResults_groupBox->ResumeLayout(false);
             this->AddingInfo_panel->ResumeLayout(false);
             this->AddingInfo_panel->PerformLayout();
             this->tableLayoutPanel15->ResumeLayout(false);
@@ -3754,16 +3982,23 @@ private: System::Windows::Forms::Label^ label18;
             this->Mouth_groupBox->ResumeLayout(false);
             this->Mouth_groupBox->PerformLayout();
             this->groupBox22->ResumeLayout(false);
-            this->Recomendations_panel->ResumeLayout(false);
-            this->Recomendations_panel->PerformLayout();
-            this->tableLayoutPanel19->ResumeLayout(false);
-            this->tableLayoutPanel17->ResumeLayout(false);
-            this->tableLayoutPanel17->PerformLayout();
-            this->groupBox21->ResumeLayout(false);
-            this->tableLayoutPanel16->ResumeLayout(false);
+            this->Ill_History_panel->ResumeLayout(false);
+            this->Ill_History_panel->PerformLayout();
+            this->groupBox15->ResumeLayout(false);
+            this->groupBox16->ResumeLayout(false);
+            this->MKB_groupBox->ResumeLayout(false);
+            this->groupBox14->ResumeLayout(false);
+            this->groupBox13->ResumeLayout(false);
+            this->groupBox12->ResumeLayout(false);
             this->UnworkableList_panel->ResumeLayout(false);
             this->UnworkableList_panel->PerformLayout();
             this->tableLayoutPanel18->ResumeLayout(false);
+            this->Stamp_panel->ResumeLayout(false);
+            this->TextEditor_panel->ResumeLayout(false);
+            this->splitContainer1->Panel1->ResumeLayout(false);
+            this->splitContainer1->Panel1->PerformLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer1))->EndInit();
+            this->splitContainer1->ResumeLayout(false);
             this->ResumeLayout(false);
             this->PerformLayout();
 
@@ -3839,6 +4074,7 @@ private: System::Void Anamnesis_button_Click(System::Object^ sender, System::Eve
     }
 }
 private: System::Void AnalysisResults_button_Click(System::Object^ sender, System::EventArgs^ e) {
+    AnamnesisText = Anamnesis_textBox->Text;
     ShowPanel(AnalysisResults_panel);
     CleanEpicrisisTabLastLabel();
     SetTabMenuLabelBottomLine(AnalysisResults_label);
@@ -4098,6 +4334,9 @@ private: System::Void RepeatCheck_dateTimePicker_ValueChanged(System::Object^ se
     AnamnesisTextBox();
 }
 private: System::Void F3_button_Click(System::Object^ sender, System::EventArgs^ e) {
+    AnalyzesResults_comboBox->TabStop = true;
+    AnalyzesResults_comboBox->TabIndex = 0;
+    AnamnesisText = Anamnesis_textBox->Text;
     ShowPanel(AnalysisResults_panel);
     CleanEpicrisisTabLastLabel();
     SetTabMenuLabelBottomLine(AnalysisResults_label);
@@ -4163,15 +4402,22 @@ private: Void FillComboBox(System::Windows::Forms::ComboBox^ box, List<String^>^
         box->Items->Add(item);
     }
 }
+private: Void FillCheckBoxList(CheckedListBox^ checklist, List<String^>^ items) {
+    checklist->Items->Clear();
+    for each (String ^ item in  items) {
+        checklist->Items->Add(item);
+        checklist->SetItemChecked(checklist->Items->IndexOf(item), (dbHelper->SetQueryByCondition("recommendations", "selectedByDefault", "title", item)[0]->Contains(item)));
+    }
+}
 private: Void FillComboBox(ComboBoxEdit^ box, List<String^>^ items) {
     box->Properties->Items->Clear();
     for each (String ^ item in items) {
         box->Properties->Items->Add(item);
     }
+        
 };
 private: Void InitializeData() {
     dbPath = dbPath_label->Text;
-    //dbPath = "C:/Users/erik/develop/host/projects/unsaintedWinApp/prod.db";
     dbHelper = gcnew DB_Helper(dbPath);
     FillComboBox(Names_comboBox, dbHelper->GetSortedColumnData("firstNames", "value", 1));
     FillComboBox(Surname_comboBox, dbHelper->GetSortedColumnData("lastNames", "value", 1));
@@ -4182,23 +4428,67 @@ private: Void InitializeData() {
     FillComboBox(mkb_comboBox, dbHelper->GetColumnData("epicrizDiagnoses", "mkb"));
     FillComboBox(related_comboBox, dbHelper->GetColumnData("relatedDiagnoses", "value"));
     FillComboBox(complications_comboBox, dbHelper->GetColumnData("complications", "value"));
+    FillComboBox(AnalyzesResults_comboBox, dbHelper->GetColumnData("analyzes", "title"));
+    FillComboBox(SideInfo_comboBox, dbHelper->GetColumnData("additionalInfos", "title"));
+    FillCheckBoxList(Recommendations_checkedListBox, dbHelper->GetColumnData("recommndations", "title"));
 
 }   
 private: System::Void comboBox_Click(System::Object^ sender, System::EventArgs^ e) {
     System::Windows::Forms::ComboBox^ box = safe_cast<System::Windows::Forms::ComboBox^>(sender);
-    if (box->DroppedDown) {
-        box->DroppedDown = false;
+    if (box->Focus()) {
+        if (!box->DroppedDown) {
+            box->DroppedDown = true;
+        }
+        else box->DroppedDown = false;
     }
-    else box->DroppedDown = true;
 }
 private: System::Void DB_change_button_Click(System::Object^ sender, System::EventArgs^ e) {
-    DB_PathChanger_openFileDialog->ShowDialog();
+    PathType = PathTypes::DB;
+    PathChanger_openFileDialog->InitialDirectory = Application::CommonAppDataPath;
+    PathChanger_openFileDialog->FileName = "prod.db";
+    PathChanger_openFileDialog->ShowDialog();
 }
-private: System::Void DB_PathChanger_openFileDialog_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
-    dbPath = DB_PathChanger_openFileDialog->FileName;
-    dbPath_label->Text = dbPath;
-    dbHelper->~DB_Helper();
-    InitializeData();
+private: System::Void epicrizPathChange_button_Click(System::Object^ sender, System::EventArgs^ e) {
+    PathType = PathTypes::Epicriz;
+    PathChanger_openFileDialog->InitialDirectory = Application::CommonAppDataPath;
+    PathChanger_openFileDialog->FileName = "Эпикризы";
+    PathChanger_openFileDialog->ShowDialog();
+}
+private: System::Void TemplatesChange_button_Click(System::Object^ sender, System::EventArgs^ e) {
+    PathType = PathTypes::Templates;
+    PathChanger_openFileDialog->InitialDirectory = Application::CommonAppDataPath;
+    PathChanger_openFileDialog->FileName = "Templates";
+    PathChanger_openFileDialog->Filter = "Папки (*./)|*./";
+    PathChanger_openFileDialog->ShowDialog();
+}
+private: System::Void PathChanger_openFileDialog_FileOk(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {
+    switch (PathType)
+    {
+    case PathTypes::DB:
+        dbPath = PathChanger_openFileDialog->FileName;
+        dbPath_label->Text = dbPath;
+        dbHelper->~DB_Helper();
+        InitializeData();
+        break;
+    case PathTypes::Templates:
+        templatesPath = PathChanger_openFileDialog->FileName;
+        tamplatesPath_label->Text = templatesPath;
+        break;
+    case PathTypes::Epicriz:
+        epicrizPath = PathChanger_openFileDialog->FileName;
+        epicrizPath_label->Text = epicrizPath;
+        break;
+    case PathTypes::DocNotes:
+        break;
+    case PathTypes::FirstList:       
+        break;
+    default:
+        break;
+    }
+    
+}
+private: System::Void AnalyzesResults_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
+    
 }
 private: System::Void Surname_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
     Surname = Surname_comboBox->Text;
@@ -4260,8 +4550,12 @@ private: System::Void year_numericUpDown_Leave(System::Object^ sender, System::E
 }
 private: System::Void comboBox_Enter(System::Object^ sender, System::EventArgs^ e) {
     System::Windows::Forms::ComboBox^ box = safe_cast<System::Windows::Forms::ComboBox^>(sender);
+    if (!box->DroppedDown) { 
         box->DroppedDown = true;
+    }
+    else {
+        box->DroppedDown = false;
+    }
 }
-
 };
 }

@@ -31,6 +31,12 @@ namespace unsaintedWinApp {
     // Возвращает полученные значения в виде списка строк 
     List<String^>^ DB_Helper::SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue)
     {
+        if (table == "" || column == "" || conditionColumn == "" || conditionValue == "") {
+            List<String^>^ result = gcnew List<String^>();
+            result->Add("");
+            return result;
+
+        }
         tmp_column = column;
         tmp_table = table;
         tmp_query = " SELECT DISTINCT " + column +

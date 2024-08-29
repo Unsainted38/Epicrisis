@@ -23,9 +23,12 @@ namespace unsaintedWinApp {
         ~DB_Helper();
 
         String^ SetQueryById(String^ table, String^ column, int id);
+        String^ SetQueryByTitle(String^ talble, String^ column, String^ title);
+        List<String^>^ SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue);
         String^ GetJsonString();
 
+        List<String^>^ GetColumnData();
         List<String^>^ GetColumnData(String^ tableName, String^ columnName);
-        List<String^>^ GetColumnData(String^ tableName, String^ columnName, int sortType);
+        List<String^>^ GetSortedColumnData(String^ tableName, String^ columnName, int sortType);
     };
 }

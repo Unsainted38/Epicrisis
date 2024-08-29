@@ -17,6 +17,27 @@ namespace unsaintedWinApp {
         
         return tmp_query;
     }
+    // Функция создает строку sql запроса с условием подходящего title таблицы 
+    String^ DB_Helper::SetQueryByTitle(String^ table, String^ column, String^ title)
+    {
+        tmp_column = column;
+        tmp_table = table;
+        tmp_query = " SELECT DISTINCT " + column +
+            " FROM " + table + " WHERE title = " + title;
+
+        return tmp_query;
+    }
+    // Функция создает строку sql запроса с условием подходящего значения выбранного столбца и выполняет его
+    // Возвращает полученные значения в виде списка строк 
+    List<String^>^ DB_Helper::SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue)
+    {
+        tmp_column = column;
+        tmp_table = table;
+        tmp_query = " SELECT DISTINCT " + column +
+            " FROM " + table + " WHERE " + conditionColumn + " = " + "'" + conditionValue + "'";
+        
+        return GetColumnData();
+    }
     // Функция извлекает строку в формате json из таблицы
     String^ DB_Helper::GetJsonString()
     {
@@ -39,7 +60,43 @@ namespace unsaintedWinApp {
         finally {
             connection->Close();
         }
+        tmp_column = "";
+        tmp_query = "";
+        tmp_table = "";
         return jsonData;
+    }
+    List<String^>^ DB_Helper::GetColumnData()
+    {
+        List<String^>^ results = gcnew List<String^>();
+
+        SQLiteConnection^ connection = gcnew SQLiteConnection(connectionString);
+        try
+        {
+            connection->Open();
+
+
+            SQLiteCommand^ command = gcnew SQLiteCommand(tmp_query, connection);
+            SQLiteDataReader^ reader = command->ExecuteReader();
+
+            while (reader->Read())
+            {
+                results->Add(reader[tmp_column]->ToString());
+            }
+
+            reader->Close();
+        }
+        catch (Exception^ ex)
+        {
+            Console::WriteLine("Error: " + ex->Message);
+        }
+        finally
+        {
+            connection->Close();
+        }
+        tmp_column = "";
+        tmp_query = "";
+        tmp_table = "";
+        return results;
     }
     // Функция извлекает данные из столбца(columnName) таблицы(tableName) и возвращает список строк.
     List<String^>^ DB_Helper::GetColumnData(String^ tableName, String^ columnName)
@@ -73,10 +130,12 @@ namespace unsaintedWinApp {
         {
             connection->Close();
         }
-
+        tmp_column = "";
+        tmp_query = "";
+        tmp_table = "";
         return results;
     }
-    List<String^>^ DB_Helper::GetColumnData(String^ tableName, String^ columnName, int sortOrder)
+    List<String^>^ DB_Helper::GetSortedColumnData(String^ tableName, String^ columnName, int sortOrder)
     {
         List<String^>^ results = gcnew List<String^>();
 
@@ -123,7 +182,9 @@ namespace unsaintedWinApp {
         {
             connection->Close();
         }
-
+        tmp_column = "";
+        tmp_query = "";
+        tmp_table = "";
         return results;
     }
 };

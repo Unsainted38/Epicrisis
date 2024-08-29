@@ -1,7 +1,8 @@
 #pragma once
 #include <vcclr.h>
 #include "DB_Helper.h"
-
+using namespace DevExpress;
+using namespace DevExpress::XtraEditors;
 
 namespace unsaintedWinApp {
     using namespace System;
@@ -11,8 +12,7 @@ namespace unsaintedWinApp {
 	using namespace System::Data;
 	using namespace System::Drawing;
     using namespace System::Collections::Generic;
-    using namespace DevExpress;
-    using namespace DevExpress::XtraEditors;
+    
 
 
 	/// <summary>
@@ -50,7 +50,34 @@ namespace unsaintedWinApp {
         DB_Helper^ dbHelper;
         
         
-    public:       
+    public:    
+        // Поля для хранения значений для эпикриза
+        String^ HistoryNumber;
+        String^ HistoryYear;
+        String^ Name;
+        String^ Surname;
+        String^ Patronymic;
+        String^ Rank;
+        String^ MilitaryUnit;
+        String^ Birthday;
+        String^ IncomeDate;
+        String^ OutcomeDate;
+        String^ Mkb;
+        String^ Diagnosis;
+        String^ RelatedDiagnosis;
+        String^ Complications;
+        String^ AnamnesisJson;
+        String^ AnamnesisText;
+        String^ Analyzes;
+        String^ AdditionalData;
+        String^ Therapy;
+        String^ DoctorsLooked;
+        String^ SideData;
+        String^ Recommendations;
+        String^ UnworkableList;
+        // Поля для хранения значений для эпикриза
+
+
         String^ IllBeginingDate;
         String^ ResponseDate;
         String^ GospitalSentDate;
@@ -289,6 +316,7 @@ private: System::Windows::Forms::ComboBox^ Surname_comboBox;
 private: System::Windows::Forms::OpenFileDialog^ DB_PathChanger_openFileDialog;
 private: System::Windows::Forms::Label^ dbPath_label;
 private: System::Windows::Forms::Label^ tamplatesPath_label;
+private: System::Windows::Forms::Label^ label18;
 
 
 
@@ -401,6 +429,7 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->button3 = (gcnew System::Windows::Forms::Button());
             this->Clear_button = (gcnew System::Windows::Forms::Button());
             this->Ill_History_panel = (gcnew System::Windows::Forms::Panel());
+            this->label18 = (gcnew System::Windows::Forms::Label());
             this->F3_button = (gcnew System::Windows::Forms::Button());
             this->groupBox15 = (gcnew System::Windows::Forms::GroupBox());
             this->complications_comboBox = (gcnew System::Windows::Forms::ComboBox());
@@ -1697,6 +1726,7 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->birthday_dateTimePicker->Name = L"birthday_dateTimePicker";
             this->birthday_dateTimePicker->Size = System::Drawing::Size(427, 20);
             this->birthday_dateTimePicker->TabIndex = 8;
+            this->birthday_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::birthday_dateTimePicker_Leave);
             // 
             // groupBox10
             // 
@@ -1728,6 +1758,8 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->militaryUnit_comboBox->Name = L"militaryUnit_comboBox";
             this->militaryUnit_comboBox->Size = System::Drawing::Size(425, 24);
             this->militaryUnit_comboBox->TabIndex = 7;
+            this->militaryUnit_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->militaryUnit_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::militaryUnit_comboBox_Leave);
             // 
             // groupBox9
             // 
@@ -1759,6 +1791,8 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->rank_comboBox->Name = L"rank_comboBox";
             this->rank_comboBox->Size = System::Drawing::Size(425, 24);
             this->rank_comboBox->TabIndex = 6;
+            this->rank_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->rank_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::rank_comboBox_Leave);
             // 
             // groupBox8
             // 
@@ -1788,6 +1822,8 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->Patronymic_comboBox->Name = L"Patronymic_comboBox";
             this->Patronymic_comboBox->Size = System::Drawing::Size(427, 24);
             this->Patronymic_comboBox->TabIndex = 5;
+            this->Patronymic_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->Patronymic_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::Patronymic_comboBox_Leave);
             // 
             // groupBox7
             // 
@@ -1819,6 +1855,8 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->Names_comboBox->Name = L"Names_comboBox";
             this->Names_comboBox->Size = System::Drawing::Size(425, 24);
             this->Names_comboBox->TabIndex = 4;
+            this->Names_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->Names_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::Names_comboBox_Leave);
             // 
             // groupBox6
             // 
@@ -1851,6 +1889,8 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->Surname_comboBox->Size = System::Drawing::Size(425, 24);
             this->Surname_comboBox->TabIndex = 3;
             this->Surname_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
+            this->Surname_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->Surname_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::Surname_comboBox_Leave);
             // 
             // tableLayoutPanel9
             // 
@@ -1891,6 +1931,7 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->id_numericUpDown->Name = L"id_numericUpDown";
             this->id_numericUpDown->Size = System::Drawing::Size(139, 29);
             this->id_numericUpDown->TabIndex = 1;
+            this->id_numericUpDown->Leave += gcnew System::EventHandler(this, &MainWindow::id_numericUpDown_Leave);
             // 
             // year_numericUpDown
             // 
@@ -1908,6 +1949,7 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->year_numericUpDown->Size = System::Drawing::Size(130, 29);
             this->year_numericUpDown->TabIndex = 2;
             this->year_numericUpDown->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2024, 0, 0, 0 });
+            this->year_numericUpDown->Leave += gcnew System::EventHandler(this, &MainWindow::year_numericUpDown_Leave);
             // 
             // ID_label
             // 
@@ -1979,6 +2021,7 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             // 
             this->Ill_History_panel->AutoScroll = true;
             this->Ill_History_panel->AutoSize = true;
+            this->Ill_History_panel->Controls->Add(this->label18);
             this->Ill_History_panel->Controls->Add(this->F3_button);
             this->Ill_History_panel->Controls->Add(this->groupBox15);
             this->Ill_History_panel->Controls->Add(this->label9);
@@ -1993,6 +2036,15 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->Ill_History_panel->Name = L"Ill_History_panel";
             this->Ill_History_panel->Size = System::Drawing::Size(1371, 500);
             this->Ill_History_panel->TabIndex = 7;
+            // 
+            // label18
+            // 
+            this->label18->AutoSize = true;
+            this->label18->Location = System::Drawing::Point(66, 409);
+            this->label18->Name = L"label18";
+            this->label18->Size = System::Drawing::Size(41, 13);
+            this->label18->TabIndex = 15;
+            this->label18->Text = L"label18";
             // 
             // F3_button
             // 
@@ -2042,6 +2094,8 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->complications_comboBox->Name = L"complications_comboBox";
             this->complications_comboBox->Size = System::Drawing::Size(1285, 24);
             this->complications_comboBox->TabIndex = 13;
+            this->complications_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->complications_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::complications_comboBox_Leave);
             // 
             // label9
             // 
@@ -2086,6 +2140,8 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->related_comboBox->Name = L"related_comboBox";
             this->related_comboBox->Size = System::Drawing::Size(1285, 24);
             this->related_comboBox->TabIndex = 12;
+            this->related_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->related_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::related_comboBox_Leave);
             // 
             // label7
             // 
@@ -2128,6 +2184,8 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->mkb_comboBox->Name = L"mkb_comboBox";
             this->mkb_comboBox->Size = System::Drawing::Size(109, 24);
             this->mkb_comboBox->TabIndex = 13;
+            this->mkb_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->mkb_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::mkb_comboBox_Leave);
             // 
             // groupBox14
             // 
@@ -2158,6 +2216,8 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->epicrizdiagnoses_comboBox->Name = L"epicrizdiagnoses_comboBox";
             this->epicrizdiagnoses_comboBox->Size = System::Drawing::Size(1155, 24);
             this->epicrizdiagnoses_comboBox->TabIndex = 11;
+            this->epicrizdiagnoses_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->epicrizdiagnoses_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::epicrizdiagnoses_comboBox_Leave);
             // 
             // label4
             // 
@@ -2196,6 +2256,7 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->outcome_dateTimePicker->Size = System::Drawing::Size(209, 22);
             this->outcome_dateTimePicker->TabIndex = 10;
             this->outcome_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 34, 0);
+            this->outcome_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::outcome_dateTimePicker_Leave);
             // 
             // groupBox12
             // 
@@ -2222,6 +2283,7 @@ private: System::Windows::Forms::Label^ tamplatesPath_label;
             this->income_dateTimePicker->Size = System::Drawing::Size(209, 22);
             this->income_dateTimePicker->TabIndex = 9;
             this->income_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 14, 0);
+            this->income_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::income_dateTimePicker_Leave);
             // 
             // SideInfo_panel
             // 
@@ -4111,9 +4173,9 @@ private: Void InitializeData() {
     dbPath = dbPath_label->Text;
     //dbPath = "C:/Users/erik/develop/host/projects/unsaintedWinApp/prod.db";
     dbHelper = gcnew DB_Helper(dbPath);
-    FillComboBox(Names_comboBox, dbHelper->GetColumnData("firstNames", "value", 1));
-    FillComboBox(Surname_comboBox, dbHelper->GetColumnData("lastNames", "value", 1));
-    FillComboBox(Patronymic_comboBox, dbHelper->GetColumnData("middleNames", "value", 1));
+    FillComboBox(Names_comboBox, dbHelper->GetSortedColumnData("firstNames", "value", 1));
+    FillComboBox(Surname_comboBox, dbHelper->GetSortedColumnData("lastNames", "value", 1));
+    FillComboBox(Patronymic_comboBox, dbHelper->GetSortedColumnData("middleNames", "value", 1));
     FillComboBox(rank_comboBox, dbHelper->GetColumnData("ranks", "value"));
     FillComboBox(militaryUnit_comboBox, dbHelper->GetColumnData("militaryUnits", "value"));
     FillComboBox(epicrizdiagnoses_comboBox, dbHelper->GetColumnData("epicrizDiagnoses", "title"));
@@ -4123,7 +4185,11 @@ private: Void InitializeData() {
 
 }   
 private: System::Void comboBox_Click(System::Object^ sender, System::EventArgs^ e) {
-    //ComboBox^ box = reinterpret_cast<ComboBox^>(sender);
+    System::Windows::Forms::ComboBox^ box = safe_cast<System::Windows::Forms::ComboBox^>(sender);
+    if (box->DroppedDown) {
+        box->DroppedDown = false;
+    }
+    else box->DroppedDown = true;
 }
 private: System::Void DB_change_button_Click(System::Object^ sender, System::EventArgs^ e) {
     DB_PathChanger_openFileDialog->ShowDialog();
@@ -4134,5 +4200,68 @@ private: System::Void DB_PathChanger_openFileDialog_FileOk(System::Object^ sende
     dbHelper->~DB_Helper();
     InitializeData();
 }
+private: System::Void Surname_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
+    Surname = Surname_comboBox->Text;
+    Surname_comboBox->Text = Surname;
+}
+private: System::Void Names_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
+    Name = Names_comboBox->Text;
+    Names_comboBox->Text = Name;
+}
+private: System::Void Patronymic_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
+    Patronymic = Patronymic_comboBox->Text;
+    Patronymic_comboBox->Text = Patronymic;
+}
+private: System::Void rank_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
+    Rank = rank_comboBox->Text;
+    rank_comboBox->Text = Rank;
+}
+private: System::Void militaryUnit_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
+    MilitaryUnit = militaryUnit_comboBox->Text;
+    militaryUnit_comboBox->Text = MilitaryUnit;
+}
+private: System::Void birthday_dateTimePicker_Leave(System::Object^ sender, System::EventArgs^ e) {
+    Birthday = birthday_dateTimePicker->Text;
+    birthday_dateTimePicker->Text = Birthday;
+}
+private: System::Void income_dateTimePicker_Leave(System::Object^ sender, System::EventArgs^ e) {
+    IncomeDate = income_dateTimePicker->Text;
+    income_dateTimePicker->Text = IncomeDate;
+}
+private: System::Void outcome_dateTimePicker_Leave(System::Object^ sender, System::EventArgs^ e) {
+    OutcomeDate = outcome_dateTimePicker->Text;
+    outcome_dateTimePicker->Text = OutcomeDate;
+}
+private: System::Void epicrizdiagnoses_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
+    Diagnosis = epicrizdiagnoses_comboBox->Text;
+    epicrizdiagnoses_comboBox->Text = Diagnosis;
+    mkb_comboBox->Text = dbHelper->SetQueryByCondition("epicrizDiagnoses", "mkb", "title", Diagnosis)[0];
+}
+private: System::Void related_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
+    RelatedDiagnosis = related_comboBox->Text;
+    related_comboBox->Text = RelatedDiagnosis;
+}
+private: System::Void complications_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
+    Complications = complications_comboBox->Text;
+    complications_comboBox->Text = Complications;
+}
+private: System::Void mkb_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
+    Mkb = mkb_comboBox->Text;
+    mkb_comboBox->Text;
+    epicrizdiagnoses_comboBox->Text = dbHelper->SetQueryByCondition("epicrizDiagnoses", "title", "mkb", Mkb)[0];
+}
+private: System::Void id_numericUpDown_Leave(System::Object^ sender, System::EventArgs^ e) {
+    HistoryNumber = id_numericUpDown->Text;
+    id_numericUpDown->Text = HistoryNumber;
+}
+private: System::Void year_numericUpDown_Leave(System::Object^ sender, System::EventArgs^ e) {
+    HistoryYear = year_numericUpDown->Text;
+    year_numericUpDown->Text = HistoryYear; 
+}
+private: System::Void comboBox_Enter(System::Object^ sender, System::EventArgs^ e) {
+    System::Windows::Forms::ComboBox^ box = safe_cast<System::Windows::Forms::ComboBox^>(sender);
+        box->DroppedDown = true;
+}
+
 };
 }

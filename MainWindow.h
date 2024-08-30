@@ -2,6 +2,9 @@
 #include <vcclr.h>
 #include "DB_Helper.h"
 #include "Word_Helper.h"
+#include "RtfTableCreator.h"
+#include "RtfTest.h"
+
 using namespace DevExpress;
 using namespace DevExpress::XtraEditors;
 
@@ -35,6 +38,7 @@ namespace unsaintedWinApp {
             
             InitializeData();
 
+            
 			//
 			//TODO: добавьте код конструктора
 			//           
@@ -58,6 +62,7 @@ namespace unsaintedWinApp {
         String^ epicrizPath;
         DB_Helper^ dbHelper;
         Word_Helper^ wordHelper;
+
         
         
     public:    
@@ -341,8 +346,51 @@ private: System::Windows::Forms::Label^ label20;
 private: System::Windows::Forms::TextBox^ textBox4;
 private: System::Windows::Forms::CheckedListBox^ Recommendations_checkedListBox;
 private: System::Windows::Forms::Panel^ TextEditor_panel;
-private: System::Windows::Forms::SplitContainer^ splitContainer1;
-private: System::Windows::Forms::ToolStrip^ toolStrip1;
+
+
+
+private: System::Windows::Forms::Button^ Test_button;
+
+private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel20;
+private: System::Windows::Forms::RichTextBox^ richTextBox;
+
+private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel4;
+private: System::Windows::Forms::NumericUpDown^ numericUpDown1;
+private: DevExpress::XtraEditors::SeparatorControl^ separatorControl1;
+private: System::Windows::Forms::Button^ button2;
+private: System::Windows::Forms::Button^ button9;
+private: System::Windows::Forms::Button^ button10;
+private: System::Windows::Forms::Button^ button11;
+private: System::Windows::Forms::Button^ button12;
+private: System::Windows::Forms::Button^ button13;
+private: System::Windows::Forms::Button^ button14;
+private: System::Windows::Forms::Button^ button15;
+private: System::Windows::Forms::Button^ button16;
+private: DevExpress::XtraEditors::SeparatorControl^ separatorControl2;
+private: System::Windows::Forms::Button^ button17;
+private: System::Windows::Forms::Button^ button18;
+private: System::Windows::Forms::Button^ button19;
+private: System::Windows::Forms::Button^ button20;
+private: DevExpress::XtraEditors::SeparatorControl^ separatorControl3;
+private: System::Windows::Forms::Button^ button21;
+private: System::Windows::Forms::Button^ button22;
+private: System::Windows::Forms::Button^ button23;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -543,10 +591,32 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
             this->button3 = (gcnew System::Windows::Forms::Button());
             this->Clear_button = (gcnew System::Windows::Forms::Button());
-            this->AnalysisResults_panel = (gcnew System::Windows::Forms::Panel());
-            this->F5_button = (gcnew System::Windows::Forms::Button());
-            this->AnalysisResults_groupBox = (gcnew System::Windows::Forms::GroupBox());
-            this->AnalyzesResults_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->Stamp_panel = (gcnew System::Windows::Forms::Panel());
+            this->Test_button = (gcnew System::Windows::Forms::Button());
+            this->TextEditor_panel = (gcnew System::Windows::Forms::Panel());
+            this->tableLayoutPanel20 = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->richTextBox = (gcnew System::Windows::Forms::RichTextBox());
+            this->flowLayoutPanel4 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+            this->numericUpDown1 = (gcnew System::Windows::Forms::NumericUpDown());
+            this->separatorControl1 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->button2 = (gcnew System::Windows::Forms::Button());
+            this->button9 = (gcnew System::Windows::Forms::Button());
+            this->button10 = (gcnew System::Windows::Forms::Button());
+            this->button11 = (gcnew System::Windows::Forms::Button());
+            this->button12 = (gcnew System::Windows::Forms::Button());
+            this->button13 = (gcnew System::Windows::Forms::Button());
+            this->button14 = (gcnew System::Windows::Forms::Button());
+            this->button15 = (gcnew System::Windows::Forms::Button());
+            this->button16 = (gcnew System::Windows::Forms::Button());
+            this->separatorControl2 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->button17 = (gcnew System::Windows::Forms::Button());
+            this->button18 = (gcnew System::Windows::Forms::Button());
+            this->button19 = (gcnew System::Windows::Forms::Button());
+            this->button20 = (gcnew System::Windows::Forms::Button());
+            this->separatorControl3 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->button21 = (gcnew System::Windows::Forms::Button());
+            this->button22 = (gcnew System::Windows::Forms::Button());
+            this->button23 = (gcnew System::Windows::Forms::Button());
             this->Recomendations_panel = (gcnew System::Windows::Forms::Panel());
             this->tableLayoutPanel19 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->F8_button = (gcnew System::Windows::Forms::Button());
@@ -560,6 +630,10 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->button4 = (gcnew System::Windows::Forms::Button());
             this->button6 = (gcnew System::Windows::Forms::Button());
             this->button5 = (gcnew System::Windows::Forms::Button());
+            this->AnalysisResults_panel = (gcnew System::Windows::Forms::Panel());
+            this->F5_button = (gcnew System::Windows::Forms::Button());
+            this->AnalysisResults_groupBox = (gcnew System::Windows::Forms::GroupBox());
+            this->AnalyzesResults_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->SideInfo_panel = (gcnew System::Windows::Forms::Panel());
             this->F7_button = (gcnew System::Windows::Forms::Button());
             this->SideInfo_groupBox = (gcnew System::Windows::Forms::GroupBox());
@@ -651,11 +725,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->radioButton1 = (gcnew System::Windows::Forms::RadioButton());
             this->radioButton3 = (gcnew System::Windows::Forms::RadioButton());
             this->radioButton2 = (gcnew System::Windows::Forms::RadioButton());
-            this->Stamp_panel = (gcnew System::Windows::Forms::Panel());
             this->PathChanger_openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
-            this->TextEditor_panel = (gcnew System::Windows::Forms::Panel());
-            this->splitContainer1 = (gcnew System::Windows::Forms::SplitContainer());
-            this->toolStrip1 = (gcnew System::Windows::Forms::ToolStrip());
             this->Home_panel->SuspendLayout();
             this->tableLayoutPanel12->SuspendLayout();
             this->tableLayoutPanel1->SuspendLayout();
@@ -687,13 +757,21 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->id_numericUpDown))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->year_numericUpDown))->BeginInit();
             this->flowLayoutPanel1->SuspendLayout();
-            this->AnalysisResults_panel->SuspendLayout();
-            this->AnalysisResults_groupBox->SuspendLayout();
+            this->Stamp_panel->SuspendLayout();
+            this->TextEditor_panel->SuspendLayout();
+            this->tableLayoutPanel20->SuspendLayout();
+            this->flowLayoutPanel4->SuspendLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl1))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl2))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl3))->BeginInit();
             this->Recomendations_panel->SuspendLayout();
             this->tableLayoutPanel19->SuspendLayout();
             this->tableLayoutPanel17->SuspendLayout();
             this->groupBox21->SuspendLayout();
             this->tableLayoutPanel16->SuspendLayout();
+            this->AnalysisResults_panel->SuspendLayout();
+            this->AnalysisResults_groupBox->SuspendLayout();
             this->SideInfo_panel->SuspendLayout();
             this->SideInfo_groupBox->SuspendLayout();
             this->Anamnesis_panel->SuspendLayout();
@@ -731,11 +809,6 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->groupBox12->SuspendLayout();
             this->UnworkableList_panel->SuspendLayout();
             this->tableLayoutPanel18->SuspendLayout();
-            this->Stamp_panel->SuspendLayout();
-            this->TextEditor_panel->SuspendLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer1))->BeginInit();
-            this->splitContainer1->Panel1->SuspendLayout();
-            this->splitContainer1->SuspendLayout();
             this->SuspendLayout();
             // 
             // history_button
@@ -1044,6 +1117,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->groupBox4->Controls->Add(this->textBox5);
             this->groupBox4->Controls->Add(this->label6);
             this->groupBox4->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox4->Dock = System::Windows::Forms::DockStyle::Fill;
             this->groupBox4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
             this->groupBox4->ForeColor = System::Drawing::SystemColors::WindowText;
@@ -1888,14 +1962,14 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->tableLayoutPanel10->Controls->Add(this->groupBox8, 2, 0);
             this->tableLayoutPanel10->Controls->Add(this->groupBox7, 1, 0);
             this->tableLayoutPanel10->Controls->Add(this->groupBox6, 0, 0);
-            this->tableLayoutPanel10->Location = System::Drawing::Point(0, 53);
+            this->tableLayoutPanel10->Location = System::Drawing::Point(0, 86);
             this->tableLayoutPanel10->Name = L"tableLayoutPanel10";
             this->tableLayoutPanel10->RowCount = 2;
             this->tableLayoutPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
                 50)));
             this->tableLayoutPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
                 50)));
-            this->tableLayoutPanel10->Size = System::Drawing::Size(1313, 100);
+            this->tableLayoutPanel10->Size = System::Drawing::Size(1339, 100);
             this->tableLayoutPanel10->TabIndex = 5;
             // 
             // groupBox11
@@ -1903,9 +1977,9 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->groupBox11->Controls->Add(this->birthday_dateTimePicker);
             this->groupBox11->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox11->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->groupBox11->Location = System::Drawing::Point(877, 53);
+            this->groupBox11->Location = System::Drawing::Point(895, 53);
             this->groupBox11->Name = L"groupBox11";
-            this->groupBox11->Size = System::Drawing::Size(433, 44);
+            this->groupBox11->Size = System::Drawing::Size(441, 44);
             this->groupBox11->TabIndex = 5;
             this->groupBox11->TabStop = false;
             this->groupBox11->Text = L"Дата рождения*";
@@ -1916,7 +1990,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->birthday_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
             this->birthday_dateTimePicker->Location = System::Drawing::Point(3, 16);
             this->birthday_dateTimePicker->Name = L"birthday_dateTimePicker";
-            this->birthday_dateTimePicker->Size = System::Drawing::Size(427, 20);
+            this->birthday_dateTimePicker->Size = System::Drawing::Size(435, 20);
             this->birthday_dateTimePicker->TabIndex = 8;
             this->birthday_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::birthday_dateTimePicker_Leave);
             // 
@@ -1927,9 +2001,9 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->groupBox10->Dock = System::Windows::Forms::DockStyle::Fill;
             this->groupBox10->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->groupBox10->Location = System::Drawing::Point(440, 53);
+            this->groupBox10->Location = System::Drawing::Point(449, 53);
             this->groupBox10->Name = L"groupBox10";
-            this->groupBox10->Size = System::Drawing::Size(431, 44);
+            this->groupBox10->Size = System::Drawing::Size(440, 44);
             this->groupBox10->TabIndex = 4;
             this->groupBox10->TabStop = false;
             this->groupBox10->Text = L"Воинская часть*";
@@ -1948,7 +2022,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->militaryUnit_comboBox->Location = System::Drawing::Point(3, 16);
             this->militaryUnit_comboBox->MaxDropDownItems = 10;
             this->militaryUnit_comboBox->Name = L"militaryUnit_comboBox";
-            this->militaryUnit_comboBox->Size = System::Drawing::Size(425, 24);
+            this->militaryUnit_comboBox->Size = System::Drawing::Size(434, 24);
             this->militaryUnit_comboBox->TabIndex = 7;
             this->militaryUnit_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
             this->militaryUnit_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
@@ -1963,7 +2037,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
                 static_cast<System::Byte>(204)));
             this->groupBox9->Location = System::Drawing::Point(3, 53);
             this->groupBox9->Name = L"groupBox9";
-            this->groupBox9->Size = System::Drawing::Size(431, 44);
+            this->groupBox9->Size = System::Drawing::Size(440, 44);
             this->groupBox9->TabIndex = 3;
             this->groupBox9->TabStop = false;
             this->groupBox9->Text = L"Звание*";
@@ -1982,7 +2056,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->rank_comboBox->Location = System::Drawing::Point(3, 16);
             this->rank_comboBox->MaxDropDownItems = 10;
             this->rank_comboBox->Name = L"rank_comboBox";
-            this->rank_comboBox->Size = System::Drawing::Size(425, 24);
+            this->rank_comboBox->Size = System::Drawing::Size(434, 24);
             this->rank_comboBox->TabIndex = 6;
             this->rank_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
             this->rank_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
@@ -1993,9 +2067,9 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->groupBox8->Controls->Add(this->Patronymic_comboBox);
             this->groupBox8->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox8->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->groupBox8->Location = System::Drawing::Point(877, 3);
+            this->groupBox8->Location = System::Drawing::Point(895, 3);
             this->groupBox8->Name = L"groupBox8";
-            this->groupBox8->Size = System::Drawing::Size(433, 44);
+            this->groupBox8->Size = System::Drawing::Size(441, 44);
             this->groupBox8->TabIndex = 2;
             this->groupBox8->TabStop = false;
             this->groupBox8->Text = L"Отчество";
@@ -2014,7 +2088,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->Patronymic_comboBox->Location = System::Drawing::Point(3, 16);
             this->Patronymic_comboBox->MaxDropDownItems = 10;
             this->Patronymic_comboBox->Name = L"Patronymic_comboBox";
-            this->Patronymic_comboBox->Size = System::Drawing::Size(427, 24);
+            this->Patronymic_comboBox->Size = System::Drawing::Size(435, 24);
             this->Patronymic_comboBox->TabIndex = 5;
             this->Patronymic_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
             this->Patronymic_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
@@ -2027,9 +2101,9 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->groupBox7->Dock = System::Windows::Forms::DockStyle::Fill;
             this->groupBox7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->groupBox7->Location = System::Drawing::Point(440, 3);
+            this->groupBox7->Location = System::Drawing::Point(449, 3);
             this->groupBox7->Name = L"groupBox7";
-            this->groupBox7->Size = System::Drawing::Size(431, 44);
+            this->groupBox7->Size = System::Drawing::Size(440, 44);
             this->groupBox7->TabIndex = 1;
             this->groupBox7->TabStop = false;
             this->groupBox7->Text = L"Имя";
@@ -2048,7 +2122,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->Names_comboBox->Location = System::Drawing::Point(3, 16);
             this->Names_comboBox->MaxDropDownItems = 10;
             this->Names_comboBox->Name = L"Names_comboBox";
-            this->Names_comboBox->Size = System::Drawing::Size(425, 24);
+            this->Names_comboBox->Size = System::Drawing::Size(434, 24);
             this->Names_comboBox->TabIndex = 4;
             this->Names_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
             this->Names_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
@@ -2063,7 +2137,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
                 static_cast<System::Byte>(204)));
             this->groupBox6->Location = System::Drawing::Point(3, 3);
             this->groupBox6->Name = L"groupBox6";
-            this->groupBox6->Size = System::Drawing::Size(431, 44);
+            this->groupBox6->Size = System::Drawing::Size(440, 44);
             this->groupBox6->TabIndex = 0;
             this->groupBox6->TabStop = false;
             this->groupBox6->Text = L"Фамилия";
@@ -2082,7 +2156,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->Surname_comboBox->Location = System::Drawing::Point(3, 16);
             this->Surname_comboBox->MaxDropDownItems = 10;
             this->Surname_comboBox->Name = L"Surname_comboBox";
-            this->Surname_comboBox->Size = System::Drawing::Size(425, 24);
+            this->Surname_comboBox->Size = System::Drawing::Size(434, 24);
             this->Surname_comboBox->TabIndex = 3;
             this->Surname_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
             this->Surname_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
@@ -2110,7 +2184,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->tableLayoutPanel9->Name = L"tableLayoutPanel9";
             this->tableLayoutPanel9->RowCount = 1;
             this->tableLayoutPanel9->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 50)));
-            this->tableLayoutPanel9->Size = System::Drawing::Size(1313, 50);
+            this->tableLayoutPanel9->Size = System::Drawing::Size(1339, 50);
             this->tableLayoutPanel9->TabIndex = 4;
             // 
             // id_numericUpDown
@@ -2169,7 +2243,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->flowLayoutPanel1->Location = System::Drawing::Point(521, 1);
             this->flowLayoutPanel1->Margin = System::Windows::Forms::Padding(3, 1, 3, 3);
             this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
-            this->flowLayoutPanel1->Size = System::Drawing::Size(789, 46);
+            this->flowLayoutPanel1->Size = System::Drawing::Size(815, 46);
             this->flowLayoutPanel1->TabIndex = 7;
             // 
             // button3
@@ -2184,7 +2258,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
             this->button3->ForeColor = System::Drawing::Color::White;
-            this->button3->Location = System::Drawing::Point(662, 1);
+            this->button3->Location = System::Drawing::Point(688, 1);
             this->button3->Margin = System::Windows::Forms::Padding(3, 1, 3, 3);
             this->button3->Name = L"button3";
             this->button3->Size = System::Drawing::Size(124, 37);
@@ -2204,7 +2278,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->Clear_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
             this->Clear_button->ForeColor = System::Drawing::Color::Red;
-            this->Clear_button->Location = System::Drawing::Point(532, 1);
+            this->Clear_button->Location = System::Drawing::Point(558, 1);
             this->Clear_button->Margin = System::Windows::Forms::Padding(0, 1, 3, 3);
             this->Clear_button->Name = L"Clear_button";
             this->Clear_button->Size = System::Drawing::Size(124, 37);
@@ -2213,65 +2287,449 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->Clear_button->Text = L"Очистить";
             this->Clear_button->UseVisualStyleBackColor = false;
             // 
-            // AnalysisResults_panel
+            // Stamp_panel
             // 
-            this->AnalysisResults_panel->AutoSize = true;
-            this->AnalysisResults_panel->Controls->Add(this->F5_button);
-            this->AnalysisResults_panel->Controls->Add(this->AnalysisResults_groupBox);
-            this->AnalysisResults_panel->Location = System::Drawing::Point(2, 159);
-            this->AnalysisResults_panel->Name = L"AnalysisResults_panel";
-            this->AnalysisResults_panel->Size = System::Drawing::Size(1308, 354);
-            this->AnalysisResults_panel->TabIndex = 8;
-            this->AnalysisResults_panel->Visible = false;
+            this->Stamp_panel->Controls->Add(this->Test_button);
+            this->Stamp_panel->Controls->Add(this->TextEditor_panel);
+            this->Stamp_panel->Location = System::Drawing::Point(0, 156);
+            this->Stamp_panel->Name = L"Stamp_panel";
+            this->Stamp_panel->Size = System::Drawing::Size(1313, 503);
+            this->Stamp_panel->TabIndex = 0;
             // 
-            // F5_button
+            // Test_button
             // 
-            this->F5_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
-            this->F5_button->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->F5_button->FlatAppearance->BorderSize = 0;
-            this->F5_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->F5_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+            this->Test_button->Location = System::Drawing::Point(70, 96);
+            this->Test_button->Name = L"Test_button";
+            this->Test_button->Size = System::Drawing::Size(128, 85);
+            this->Test_button->TabIndex = 1;
+            this->Test_button->Text = L"Test";
+            this->Test_button->UseVisualStyleBackColor = true;
+            this->Test_button->Click += gcnew System::EventHandler(this, &MainWindow::Test_button_Click);
+            // 
+            // TextEditor_panel
+            // 
+            this->TextEditor_panel->Controls->Add(this->tableLayoutPanel20);
+            this->TextEditor_panel->Location = System::Drawing::Point(246, 58);
+            this->TextEditor_panel->Name = L"TextEditor_panel";
+            this->TextEditor_panel->Size = System::Drawing::Size(831, 354);
+            this->TextEditor_panel->TabIndex = 0;
+            // 
+            // tableLayoutPanel20
+            // 
+            this->tableLayoutPanel20->AutoSize = true;
+            this->tableLayoutPanel20->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::Single;
+            this->tableLayoutPanel20->ColumnCount = 1;
+            this->tableLayoutPanel20->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+                100)));
+            this->tableLayoutPanel20->Controls->Add(this->richTextBox, 0, 1);
+            this->tableLayoutPanel20->Controls->Add(this->flowLayoutPanel4, 0, 0);
+            this->tableLayoutPanel20->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->tableLayoutPanel20->Location = System::Drawing::Point(0, 0);
+            this->tableLayoutPanel20->Name = L"tableLayoutPanel20";
+            this->tableLayoutPanel20->RowCount = 2;
+            this->tableLayoutPanel20->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel20->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel20->Size = System::Drawing::Size(831, 354);
+            this->tableLayoutPanel20->TabIndex = 0;
+            // 
+            // richTextBox
+            // 
+            this->richTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->richTextBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->richTextBox->Location = System::Drawing::Point(4, 53);
+            this->richTextBox->Name = L"richTextBox";
+            this->richTextBox->Size = System::Drawing::Size(823, 297);
+            this->richTextBox->TabIndex = 0;
+            this->richTextBox->Text = L"";
+            // 
+            // flowLayoutPanel4
+            // 
+            this->flowLayoutPanel4->AutoSize = true;
+            this->flowLayoutPanel4->Controls->Add(this->numericUpDown1);
+            this->flowLayoutPanel4->Controls->Add(this->separatorControl1);
+            this->flowLayoutPanel4->Controls->Add(this->button2);
+            this->flowLayoutPanel4->Controls->Add(this->button9);
+            this->flowLayoutPanel4->Controls->Add(this->button10);
+            this->flowLayoutPanel4->Controls->Add(this->button11);
+            this->flowLayoutPanel4->Controls->Add(this->button12);
+            this->flowLayoutPanel4->Controls->Add(this->button13);
+            this->flowLayoutPanel4->Controls->Add(this->button14);
+            this->flowLayoutPanel4->Controls->Add(this->button15);
+            this->flowLayoutPanel4->Controls->Add(this->button16);
+            this->flowLayoutPanel4->Controls->Add(this->separatorControl2);
+            this->flowLayoutPanel4->Controls->Add(this->button17);
+            this->flowLayoutPanel4->Controls->Add(this->button18);
+            this->flowLayoutPanel4->Controls->Add(this->button19);
+            this->flowLayoutPanel4->Controls->Add(this->button20);
+            this->flowLayoutPanel4->Controls->Add(this->separatorControl3);
+            this->flowLayoutPanel4->Controls->Add(this->button21);
+            this->flowLayoutPanel4->Controls->Add(this->button22);
+            this->flowLayoutPanel4->Controls->Add(this->button23);
+            this->flowLayoutPanel4->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->flowLayoutPanel4->Location = System::Drawing::Point(1, 1);
+            this->flowLayoutPanel4->Margin = System::Windows::Forms::Padding(0);
+            this->flowLayoutPanel4->Name = L"flowLayoutPanel4";
+            this->flowLayoutPanel4->Size = System::Drawing::Size(829, 48);
+            this->flowLayoutPanel4->TabIndex = 1;
+            // 
+            // numericUpDown1
+            // 
+            this->numericUpDown1->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->numericUpDown1->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->numericUpDown1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->F5_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
-                static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F5_button->Location = System::Drawing::Point(569, 79);
-            this->F5_button->Name = L"F5_button";
-            this->F5_button->Size = System::Drawing::Size(173, 37);
-            this->F5_button->TabIndex = 16;
-            this->F5_button->Text = L"Продолжить";
-            this->F5_button->UseVisualStyleBackColor = true;
-            this->F5_button->Click += gcnew System::EventHandler(this, &MainWindow::F5_button_Click);
+            this->numericUpDown1->Location = System::Drawing::Point(6, 10);
+            this->numericUpDown1->Margin = System::Windows::Forms::Padding(6, 10, 3, 0);
+            this->numericUpDown1->Name = L"numericUpDown1";
+            this->numericUpDown1->Size = System::Drawing::Size(48, 27);
+            this->numericUpDown1->TabIndex = 0;
+            this->numericUpDown1->ValueChanged += gcnew System::EventHandler(this, &MainWindow::numericUpDown1_ValueChanged);
             // 
-            // AnalysisResults_groupBox
+            // separatorControl1
             // 
-            this->AnalysisResults_groupBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-                | System::Windows::Forms::AnchorStyles::Right));
-            this->AnalysisResults_groupBox->AutoSize = true;
-            this->AnalysisResults_groupBox->Controls->Add(this->AnalyzesResults_comboBox);
-            this->AnalysisResults_groupBox->Location = System::Drawing::Point(5, 6);
-            this->AnalysisResults_groupBox->Name = L"AnalysisResults_groupBox";
-            this->AnalysisResults_groupBox->Size = System::Drawing::Size(1240, 46);
-            this->AnalysisResults_groupBox->TabIndex = 1;
-            this->AnalysisResults_groupBox->TabStop = false;
+            this->separatorControl1->AutoSizeMode = true;
+            this->separatorControl1->Dock = System::Windows::Forms::DockStyle::Left;
+            this->separatorControl1->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl1->LineThickness = 2;
+            this->separatorControl1->Location = System::Drawing::Point(57, 0);
+            this->separatorControl1->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl1->Name = L"separatorControl1";
+            this->separatorControl1->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl1->Size = System::Drawing::Size(2, 48);
+            this->separatorControl1->TabIndex = 1;
             // 
-            // AnalyzesResults_comboBox
+            // button2
             // 
-            this->AnalyzesResults_comboBox->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->AnalyzesResults_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->AnalyzesResults_comboBox->DropDownHeight = 400;
-            this->AnalyzesResults_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->AnalyzesResults_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+            this->button2->AutoSize = true;
+            this->button2->BackColor = System::Drawing::SystemColors::ControlLightLight;
+            this->button2->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button2->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button2->FlatAppearance->BorderSize = 0;
+            this->button2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button2->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(0)));
+            this->button2->ForeColor = System::Drawing::Color::Black;
+            this->button2->Location = System::Drawing::Point(62, 6);
+            this->button2->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button2->Name = L"button2";
+            this->button2->Size = System::Drawing::Size(36, 36);
+            this->button2->TabIndex = 2;
+            this->button2->TabStop = false;
+            this->button2->Text = L"B";
+            this->button2->UseVisualStyleBackColor = false;
+            this->button2->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button9
+            // 
+            this->button9->AutoSize = true;
+            this->button9->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button9->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button9->FlatAppearance->BorderSize = 0;
+            this->button9->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button9->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->AnalyzesResults_comboBox->FormattingEnabled = true;
-            this->AnalyzesResults_comboBox->ItemHeight = 20;
-            this->AnalyzesResults_comboBox->Location = System::Drawing::Point(3, 16);
-            this->AnalyzesResults_comboBox->Name = L"AnalyzesResults_comboBox";
-            this->AnalyzesResults_comboBox->Size = System::Drawing::Size(1234, 28);
-            this->AnalyzesResults_comboBox->TabIndex = 0;
-            this->AnalyzesResults_comboBox->TabStop = false;
-            this->AnalyzesResults_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
-            this->AnalyzesResults_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
-            this->AnalyzesResults_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::AnalyzesResults_comboBox_Leave);
+            this->button9->Location = System::Drawing::Point(104, 6);
+            this->button9->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button9->Name = L"button9";
+            this->button9->Size = System::Drawing::Size(36, 36);
+            this->button9->TabIndex = 3;
+            this->button9->TabStop = false;
+            this->button9->Text = L"I";
+            this->button9->UseVisualStyleBackColor = true;
+            this->button9->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button10
+            // 
+            this->button10->AutoSize = true;
+            this->button10->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button10->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button10->FlatAppearance->BorderSize = 0;
+            this->button10->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button10->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Underline)),
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->button10->Location = System::Drawing::Point(146, 6);
+            this->button10->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button10->Name = L"button10";
+            this->button10->Size = System::Drawing::Size(36, 36);
+            this->button10->TabIndex = 4;
+            this->button10->TabStop = false;
+            this->button10->Text = L"U";
+            this->button10->UseVisualStyleBackColor = true;
+            this->button10->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button11
+            // 
+            this->button11->AutoSize = true;
+            this->button11->BackColor = System::Drawing::SystemColors::ControlLightLight;
+            this->button11->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button11->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button11->FlatAppearance->BorderSize = 0;
+            this->button11->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button11->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button11->Location = System::Drawing::Point(188, 6);
+            this->button11->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button11->Name = L"button11";
+            this->button11->Size = System::Drawing::Size(36, 36);
+            this->button11->TabIndex = 5;
+            this->button11->TabStop = false;
+            this->button11->Text = L"X";
+            this->button11->UseVisualStyleBackColor = false;
+            this->button11->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button12
+            // 
+            this->button12->AutoSize = true;
+            this->button12->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button12->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button12->FlatAppearance->BorderSize = 0;
+            this->button12->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button12->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button12->Location = System::Drawing::Point(230, 6);
+            this->button12->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button12->Name = L"button12";
+            this->button12->Size = System::Drawing::Size(36, 36);
+            this->button12->TabIndex = 6;
+            this->button12->TabStop = false;
+            this->button12->Text = L"X";
+            this->button12->UseVisualStyleBackColor = true;
+            this->button12->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button13
+            // 
+            this->button13->AutoSize = true;
+            this->button13->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button13->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button13->FlatAppearance->BorderSize = 0;
+            this->button13->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button13->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button13->Location = System::Drawing::Point(272, 6);
+            this->button13->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button13->Name = L"button13";
+            this->button13->Size = System::Drawing::Size(36, 36);
+            this->button13->TabIndex = 7;
+            this->button13->TabStop = false;
+            this->button13->Text = L"B";
+            this->button13->UseVisualStyleBackColor = true;
+            this->button13->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button14
+            // 
+            this->button14->AutoSize = true;
+            this->button14->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button14->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button14->FlatAppearance->BorderSize = 0;
+            this->button14->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button14->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button14->Location = System::Drawing::Point(314, 6);
+            this->button14->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button14->Name = L"button14";
+            this->button14->Size = System::Drawing::Size(36, 36);
+            this->button14->TabIndex = 8;
+            this->button14->TabStop = false;
+            this->button14->Text = L"B";
+            this->button14->UseVisualStyleBackColor = true;
+            this->button14->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button15
+            // 
+            this->button15->AutoSize = true;
+            this->button15->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button15->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button15->FlatAppearance->BorderSize = 0;
+            this->button15->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button15->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button15->Location = System::Drawing::Point(356, 6);
+            this->button15->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button15->Name = L"button15";
+            this->button15->Size = System::Drawing::Size(36, 36);
+            this->button15->TabIndex = 9;
+            this->button15->TabStop = false;
+            this->button15->Text = L"B";
+            this->button15->UseVisualStyleBackColor = true;
+            this->button15->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button16
+            // 
+            this->button16->AutoSize = true;
+            this->button16->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button16->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button16->FlatAppearance->BorderSize = 0;
+            this->button16->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button16->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button16->Location = System::Drawing::Point(398, 6);
+            this->button16->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button16->Name = L"button16";
+            this->button16->Size = System::Drawing::Size(36, 36);
+            this->button16->TabIndex = 10;
+            this->button16->TabStop = false;
+            this->button16->Text = L"B";
+            this->button16->UseVisualStyleBackColor = true;
+            this->button16->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // separatorControl2
+            // 
+            this->separatorControl2->AutoSizeMode = true;
+            this->separatorControl2->Dock = System::Windows::Forms::DockStyle::Left;
+            this->separatorControl2->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl2->LineThickness = 2;
+            this->separatorControl2->Location = System::Drawing::Point(437, 0);
+            this->separatorControl2->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl2->Name = L"separatorControl2";
+            this->separatorControl2->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl2->Size = System::Drawing::Size(2, 48);
+            this->separatorControl2->TabIndex = 11;
+            // 
+            // button17
+            // 
+            this->button17->AutoSize = true;
+            this->button17->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button17->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button17->FlatAppearance->BorderSize = 0;
+            this->button17->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button17->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button17->Location = System::Drawing::Point(442, 6);
+            this->button17->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button17->Name = L"button17";
+            this->button17->Size = System::Drawing::Size(36, 36);
+            this->button17->TabIndex = 12;
+            this->button17->TabStop = false;
+            this->button17->Text = L"B";
+            this->button17->UseVisualStyleBackColor = true;
+            this->button17->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button18
+            // 
+            this->button18->AutoSize = true;
+            this->button18->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button18->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button18->FlatAppearance->BorderSize = 0;
+            this->button18->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button18->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button18->Location = System::Drawing::Point(484, 6);
+            this->button18->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button18->Name = L"button18";
+            this->button18->Size = System::Drawing::Size(36, 36);
+            this->button18->TabIndex = 13;
+            this->button18->TabStop = false;
+            this->button18->Text = L"B";
+            this->button18->UseVisualStyleBackColor = true;
+            this->button18->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button19
+            // 
+            this->button19->AutoSize = true;
+            this->button19->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button19->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button19->FlatAppearance->BorderSize = 0;
+            this->button19->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button19->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button19->Location = System::Drawing::Point(526, 6);
+            this->button19->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button19->Name = L"button19";
+            this->button19->Size = System::Drawing::Size(36, 36);
+            this->button19->TabIndex = 14;
+            this->button19->TabStop = false;
+            this->button19->Text = L"B";
+            this->button19->UseVisualStyleBackColor = true;
+            this->button19->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button20
+            // 
+            this->button20->AutoSize = true;
+            this->button20->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button20->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button20->FlatAppearance->BorderSize = 0;
+            this->button20->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button20->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button20->Location = System::Drawing::Point(568, 6);
+            this->button20->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button20->Name = L"button20";
+            this->button20->Size = System::Drawing::Size(36, 36);
+            this->button20->TabIndex = 15;
+            this->button20->TabStop = false;
+            this->button20->Text = L"B";
+            this->button20->UseVisualStyleBackColor = true;
+            this->button20->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // separatorControl3
+            // 
+            this->separatorControl3->AutoSizeMode = true;
+            this->separatorControl3->Dock = System::Windows::Forms::DockStyle::Left;
+            this->separatorControl3->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl3->LineThickness = 2;
+            this->separatorControl3->Location = System::Drawing::Point(607, 0);
+            this->separatorControl3->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl3->Name = L"separatorControl3";
+            this->separatorControl3->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl3->Size = System::Drawing::Size(2, 48);
+            this->separatorControl3->TabIndex = 16;
+            // 
+            // button21
+            // 
+            this->button21->AutoSize = true;
+            this->button21->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button21->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button21->FlatAppearance->BorderSize = 0;
+            this->button21->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button21->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button21->Location = System::Drawing::Point(612, 6);
+            this->button21->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button21->Name = L"button21";
+            this->button21->Size = System::Drawing::Size(36, 36);
+            this->button21->TabIndex = 17;
+            this->button21->TabStop = false;
+            this->button21->Text = L"B";
+            this->button21->UseVisualStyleBackColor = true;
+            this->button21->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button22
+            // 
+            this->button22->AutoSize = true;
+            this->button22->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button22->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button22->FlatAppearance->BorderSize = 0;
+            this->button22->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button22->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button22->Location = System::Drawing::Point(654, 6);
+            this->button22->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button22->Name = L"button22";
+            this->button22->Size = System::Drawing::Size(36, 36);
+            this->button22->TabIndex = 18;
+            this->button22->TabStop = false;
+            this->button22->Text = L"B";
+            this->button22->UseVisualStyleBackColor = true;
+            this->button22->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
+            // 
+            // button23
+            // 
+            this->button23->AutoSize = true;
+            this->button23->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button23->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button23->FlatAppearance->BorderSize = 0;
+            this->button23->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button23->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button23->Location = System::Drawing::Point(696, 6);
+            this->button23->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button23->Name = L"button23";
+            this->button23->Size = System::Drawing::Size(36, 36);
+            this->button23->TabIndex = 19;
+            this->button23->TabStop = false;
+            this->button23->Text = L"B";
+            this->button23->UseVisualStyleBackColor = true;
+            this->button23->Click += gcnew System::EventHandler(this, &MainWindow::Toolbar_button_Click);
             // 
             // Recomendations_panel
             // 
@@ -2279,9 +2737,9 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->Recomendations_panel->Controls->Add(this->tableLayoutPanel19);
             this->Recomendations_panel->Controls->Add(this->tableLayoutPanel17);
             this->Recomendations_panel->Controls->Add(this->tableLayoutPanel16);
-            this->Recomendations_panel->Location = System::Drawing::Point(0, 159);
+            this->Recomendations_panel->Location = System::Drawing::Point(0, 192);
             this->Recomendations_panel->Name = L"Recomendations_panel";
-            this->Recomendations_panel->Size = System::Drawing::Size(1313, 500);
+            this->Recomendations_panel->Size = System::Drawing::Size(1339, 500);
             this->Recomendations_panel->TabIndex = 0;
             // 
             // tableLayoutPanel19
@@ -2469,14 +2927,75 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->button5->Text = L"Бронхит";
             this->button5->UseVisualStyleBackColor = true;
             // 
+            // AnalysisResults_panel
+            // 
+            this->AnalysisResults_panel->AutoSize = true;
+            this->AnalysisResults_panel->Controls->Add(this->F5_button);
+            this->AnalysisResults_panel->Controls->Add(this->AnalysisResults_groupBox);
+            this->AnalysisResults_panel->Location = System::Drawing::Point(2, 159);
+            this->AnalysisResults_panel->Name = L"AnalysisResults_panel";
+            this->AnalysisResults_panel->Size = System::Drawing::Size(1308, 354);
+            this->AnalysisResults_panel->TabIndex = 8;
+            this->AnalysisResults_panel->Visible = false;
+            // 
+            // F5_button
+            // 
+            this->F5_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
+            this->F5_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->F5_button->FlatAppearance->BorderSize = 0;
+            this->F5_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->F5_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->F5_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+                static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->F5_button->Location = System::Drawing::Point(569, 79);
+            this->F5_button->Name = L"F5_button";
+            this->F5_button->Size = System::Drawing::Size(173, 37);
+            this->F5_button->TabIndex = 16;
+            this->F5_button->Text = L"Продолжить";
+            this->F5_button->UseVisualStyleBackColor = true;
+            this->F5_button->Click += gcnew System::EventHandler(this, &MainWindow::F5_button_Click);
+            // 
+            // AnalysisResults_groupBox
+            // 
+            this->AnalysisResults_groupBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->AnalysisResults_groupBox->AutoSize = true;
+            this->AnalysisResults_groupBox->Controls->Add(this->AnalyzesResults_comboBox);
+            this->AnalysisResults_groupBox->Location = System::Drawing::Point(5, 6);
+            this->AnalysisResults_groupBox->Name = L"AnalysisResults_groupBox";
+            this->AnalysisResults_groupBox->Size = System::Drawing::Size(1240, 46);
+            this->AnalysisResults_groupBox->TabIndex = 1;
+            this->AnalysisResults_groupBox->TabStop = false;
+            // 
+            // AnalyzesResults_comboBox
+            // 
+            this->AnalyzesResults_comboBox->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->AnalyzesResults_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->AnalyzesResults_comboBox->DropDownHeight = 400;
+            this->AnalyzesResults_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->AnalyzesResults_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->AnalyzesResults_comboBox->FormattingEnabled = true;
+            this->AnalyzesResults_comboBox->IntegralHeight = false;
+            this->AnalyzesResults_comboBox->ItemHeight = 20;
+            this->AnalyzesResults_comboBox->Location = System::Drawing::Point(3, 16);
+            this->AnalyzesResults_comboBox->Name = L"AnalyzesResults_comboBox";
+            this->AnalyzesResults_comboBox->Size = System::Drawing::Size(1234, 28);
+            this->AnalyzesResults_comboBox->TabIndex = 0;
+            this->AnalyzesResults_comboBox->TabStop = false;
+            this->AnalyzesResults_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
+            this->AnalyzesResults_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->AnalyzesResults_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::AnalyzesResults_comboBox_Leave);
+            // 
             // SideInfo_panel
             // 
             this->SideInfo_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
             this->SideInfo_panel->Controls->Add(this->F7_button);
             this->SideInfo_panel->Controls->Add(this->SideInfo_groupBox);
-            this->SideInfo_panel->Location = System::Drawing::Point(0, 159);
+            this->SideInfo_panel->Location = System::Drawing::Point(0, 192);
             this->SideInfo_panel->Name = L"SideInfo_panel";
-            this->SideInfo_panel->Size = System::Drawing::Size(1313, 488);
+            this->SideInfo_panel->Size = System::Drawing::Size(1339, 488);
             this->SideInfo_panel->TabIndex = 4;
             // 
             // F7_button
@@ -2489,7 +3008,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
                 static_cast<System::Byte>(204)));
             this->F7_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F7_button->Location = System::Drawing::Point(569, 226);
+            this->F7_button->Location = System::Drawing::Point(595, 226);
             this->F7_button->Name = L"F7_button";
             this->F7_button->Size = System::Drawing::Size(173, 37);
             this->F7_button->TabIndex = 16;
@@ -2503,7 +3022,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->SideInfo_groupBox->Dock = System::Windows::Forms::DockStyle::Top;
             this->SideInfo_groupBox->Location = System::Drawing::Point(0, 0);
             this->SideInfo_groupBox->Name = L"SideInfo_groupBox";
-            this->SideInfo_groupBox->Size = System::Drawing::Size(1313, 47);
+            this->SideInfo_groupBox->Size = System::Drawing::Size(1339, 47);
             this->SideInfo_groupBox->TabIndex = 0;
             this->SideInfo_groupBox->TabStop = false;
             // 
@@ -2516,7 +3035,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->SideInfo_comboBox->FormattingEnabled = true;
             this->SideInfo_comboBox->Location = System::Drawing::Point(3, 16);
             this->SideInfo_comboBox->Name = L"SideInfo_comboBox";
-            this->SideInfo_comboBox->Size = System::Drawing::Size(1307, 24);
+            this->SideInfo_comboBox->Size = System::Drawing::Size(1333, 24);
             this->SideInfo_comboBox->TabIndex = 0;
             // 
             // Anamnesis_panel
@@ -3257,9 +3776,9 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->AddingInfo_panel->AutoSize = true;
             this->AddingInfo_panel->Controls->Add(this->tableLayoutPanel15);
             this->AddingInfo_panel->Controls->Add(this->tableLayoutPanel13);
-            this->AddingInfo_panel->Location = System::Drawing::Point(2, 161);
+            this->AddingInfo_panel->Location = System::Drawing::Point(2, 194);
             this->AddingInfo_panel->Name = L"AddingInfo_panel";
-            this->AddingInfo_panel->Size = System::Drawing::Size(1311, 331);
+            this->AddingInfo_panel->Size = System::Drawing::Size(1337, 331);
             this->AddingInfo_panel->TabIndex = 9;
             // 
             // tableLayoutPanel15
@@ -3278,7 +3797,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->tableLayoutPanel15->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel15->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
                 20)));
-            this->tableLayoutPanel15->Size = System::Drawing::Size(642, 331);
+            this->tableLayoutPanel15->Size = System::Drawing::Size(668, 331);
             this->tableLayoutPanel15->TabIndex = 4;
             // 
             // groupBox
@@ -3289,7 +3808,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->groupBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->groupBox->Location = System::Drawing::Point(4, 3);
+            this->groupBox->Location = System::Drawing::Point(17, 3);
             this->groupBox->MinimumSize = System::Drawing::Size(633, 39);
             this->groupBox->Name = L"groupBox";
             this->groupBox->Size = System::Drawing::Size(633, 72);
@@ -3316,7 +3835,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->groupBox23->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox23->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->groupBox23->Location = System::Drawing::Point(4, 81);
+            this->groupBox23->Location = System::Drawing::Point(17, 81);
             this->groupBox23->MinimumSize = System::Drawing::Size(633, 39);
             this->groupBox23->Name = L"groupBox23";
             this->groupBox23->Size = System::Drawing::Size(633, 76);
@@ -3735,9 +4254,9 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->UnworkableList_panel->Controls->Add(this->radioButton1);
             this->UnworkableList_panel->Controls->Add(this->radioButton3);
             this->UnworkableList_panel->Controls->Add(this->radioButton2);
-            this->UnworkableList_panel->Location = System::Drawing::Point(0, 161);
+            this->UnworkableList_panel->Location = System::Drawing::Point(0, 194);
             this->UnworkableList_panel->Name = L"UnworkableList_panel";
-            this->UnworkableList_panel->Size = System::Drawing::Size(1313, 498);
+            this->UnworkableList_panel->Size = System::Drawing::Size(1339, 498);
             this->UnworkableList_panel->TabIndex = 0;
             // 
             // tableLayoutPanel18
@@ -3752,7 +4271,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->tableLayoutPanel18->RowCount = 2;
             this->tableLayoutPanel18->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel18->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel18->Size = System::Drawing::Size(1313, 115);
+            this->tableLayoutPanel18->Size = System::Drawing::Size(1365, 115);
             this->tableLayoutPanel18->TabIndex = 17;
             // 
             // F9_button
@@ -3765,7 +4284,7 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
                 static_cast<System::Byte>(204)));
             this->F9_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F9_button->Location = System::Drawing::Point(570, 3);
+            this->F9_button->Location = System::Drawing::Point(596, 3);
             this->F9_button->Name = L"F9_button";
             this->F9_button->Size = System::Drawing::Size(173, 37);
             this->F9_button->TabIndex = 16;
@@ -3821,51 +4340,10 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->radioButton2->Text = L"Выдан лист нетрудоспособности";
             this->radioButton2->UseVisualStyleBackColor = true;
             // 
-            // Stamp_panel
-            // 
-            this->Stamp_panel->Controls->Add(this->TextEditor_panel);
-            this->Stamp_panel->Location = System::Drawing::Point(0, 156);
-            this->Stamp_panel->Name = L"Stamp_panel";
-            this->Stamp_panel->Size = System::Drawing::Size(1313, 503);
-            this->Stamp_panel->TabIndex = 0;
-            // 
             // PathChanger_openFileDialog
             // 
             this->PathChanger_openFileDialog->FileName = L"openFileDialog";
             this->PathChanger_openFileDialog->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &MainWindow::PathChanger_openFileDialog_FileOk);
-            // 
-            // TextEditor_panel
-            // 
-            this->TextEditor_panel->Controls->Add(this->splitContainer1);
-            this->TextEditor_panel->Location = System::Drawing::Point(246, 114);
-            this->TextEditor_panel->Name = L"TextEditor_panel";
-            this->TextEditor_panel->Size = System::Drawing::Size(625, 262);
-            this->TextEditor_panel->TabIndex = 0;
-            // 
-            // splitContainer1
-            // 
-            this->splitContainer1->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->splitContainer1->FixedPanel = System::Windows::Forms::FixedPanel::Panel1;
-            this->splitContainer1->Location = System::Drawing::Point(0, 0);
-            this->splitContainer1->Name = L"splitContainer1";
-            this->splitContainer1->Orientation = System::Windows::Forms::Orientation::Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this->splitContainer1->Panel1->Controls->Add(this->toolStrip1);
-            this->splitContainer1->Size = System::Drawing::Size(625, 262);
-            this->splitContainer1->SplitterDistance = 61;
-            this->splitContainer1->TabIndex = 0;
-            // 
-            // toolStrip1
-            // 
-            this->toolStrip1->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->toolStrip1->GripStyle = System::Windows::Forms::ToolStripGripStyle::Hidden;
-            this->toolStrip1->Location = System::Drawing::Point(0, 0);
-            this->toolStrip1->Name = L"toolStrip1";
-            this->toolStrip1->Size = System::Drawing::Size(625, 61);
-            this->toolStrip1->TabIndex = 0;
-            this->toolStrip1->Text = L"toolStrip1";
             // 
             // MainWindow
             // 
@@ -3874,8 +4352,8 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->BackColor = System::Drawing::SystemColors::ControlLightLight;
             this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
             this->ClientSize = System::Drawing::Size(1313, 742);
-            this->Controls->Add(this->Epicrisis_panel);
             this->Controls->Add(this->Home_panel);
+            this->Controls->Add(this->Epicrisis_panel);
             this->HelpButton = true;
             this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
             this->Name = L"MainWindow";
@@ -3926,9 +4404,17 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->year_numericUpDown))->EndInit();
             this->flowLayoutPanel1->ResumeLayout(false);
             this->flowLayoutPanel1->PerformLayout();
-            this->AnalysisResults_panel->ResumeLayout(false);
-            this->AnalysisResults_panel->PerformLayout();
-            this->AnalysisResults_groupBox->ResumeLayout(false);
+            this->Stamp_panel->ResumeLayout(false);
+            this->TextEditor_panel->ResumeLayout(false);
+            this->TextEditor_panel->PerformLayout();
+            this->tableLayoutPanel20->ResumeLayout(false);
+            this->tableLayoutPanel20->PerformLayout();
+            this->flowLayoutPanel4->ResumeLayout(false);
+            this->flowLayoutPanel4->PerformLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl1))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl2))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl3))->EndInit();
             this->Recomendations_panel->ResumeLayout(false);
             this->Recomendations_panel->PerformLayout();
             this->tableLayoutPanel19->ResumeLayout(false);
@@ -3936,6 +4422,9 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->tableLayoutPanel17->PerformLayout();
             this->groupBox21->ResumeLayout(false);
             this->tableLayoutPanel16->ResumeLayout(false);
+            this->AnalysisResults_panel->ResumeLayout(false);
+            this->AnalysisResults_panel->PerformLayout();
+            this->AnalysisResults_groupBox->ResumeLayout(false);
             this->SideInfo_panel->ResumeLayout(false);
             this->SideInfo_groupBox->ResumeLayout(false);
             this->Anamnesis_panel->ResumeLayout(false);
@@ -3993,12 +4482,6 @@ private: System::Windows::Forms::ToolStrip^ toolStrip1;
             this->UnworkableList_panel->ResumeLayout(false);
             this->UnworkableList_panel->PerformLayout();
             this->tableLayoutPanel18->ResumeLayout(false);
-            this->Stamp_panel->ResumeLayout(false);
-            this->TextEditor_panel->ResumeLayout(false);
-            this->splitContainer1->Panel1->ResumeLayout(false);
-            this->splitContainer1->Panel1->PerformLayout();
-            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->splitContainer1))->EndInit();
-            this->splitContainer1->ResumeLayout(false);
             this->ResumeLayout(false);
             this->PerformLayout();
 
@@ -4446,12 +4929,14 @@ private: System::Void DB_change_button_Click(System::Object^ sender, System::Eve
     PathType = PathTypes::DB;
     PathChanger_openFileDialog->InitialDirectory = Application::CommonAppDataPath;
     PathChanger_openFileDialog->FileName = "prod.db";
+    PathChanger_openFileDialog->Filter = "SQlite DB (*.db)|*.db";
     PathChanger_openFileDialog->ShowDialog();
 }
 private: System::Void epicrizPathChange_button_Click(System::Object^ sender, System::EventArgs^ e) {
     PathType = PathTypes::Epicriz;
     PathChanger_openFileDialog->InitialDirectory = Application::CommonAppDataPath;
     PathChanger_openFileDialog->FileName = "Эпикризы";
+    PathChanger_openFileDialog->Filter = "Папки (*./)|*./";
     PathChanger_openFileDialog->ShowDialog();
 }
 private: System::Void TemplatesChange_button_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -4556,6 +5041,36 @@ private: System::Void comboBox_Enter(System::Object^ sender, System::EventArgs^ 
     else {
         box->DroppedDown = false;
     }
+}
+private: System::Void Test_button_Click(System::Object^ sender, System::EventArgs^ e) {
+    //GenerateRTFAndDisplay(R"([{"type":"paragraph","children":[{"text":"МОРФОЛОГИЧЕСКИЕ ИССЛЕДОВАНИЯ КРОВИ","bold":true,"underline":true}],"align":"center"},{"type":"table","columns":[{"type":"date","title":"Дата"},{"type":"text","title":"Нв г / л"},{"type":"text","title":"Эр.х10 ^ 12 / л"},{"type":"text","title":"ЦП"},{"type":"text","title":"Л х10 ^ 9 / л"},{"type":"text","title":"СОЭ Мм / ч"},{"type":"text","title":"Ht % "},{"type":"text","title":"Тр х10 ^ 9 / л"},{"type":"text","title":"Ре % "},{"type":"text","title":"t сверт."},{"type":"text","title":"t кров."},{"type":"text","title":"Млц"},{"type":"text","title":"Мтм"},{"type":"text","title":"Пя"},{"type":"text","title":"Ся"},{"type":"text","title":"Эоз"},{"type":"text","title":"Баз"},{"type":"text","title":"Мон"},{"type":"text","title":"Лиф"},{"type":"text","title":"Плз"},{"type":"text","title":"Анз"},{"type":"text","title":"Пйкл"},{"type":"text","title":"Гпхр"},{"type":"text","title":"ТЗН"}],"children":[{"type":"tableRow","children":[{"type":"tableHeaderCell","children":[{"text":"Да"},{"text":"та","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Нв г / л","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Эр.х10 ^ 12 / л","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"ЦП","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Л х10 ^ 9 / л","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"СОЭ Мм / ч","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Ht % ","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Тр х10 ^ 9 / л","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Ре % ","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"t сверт.","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"t кров.","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Млц","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Мтм","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Пя","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Ся","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Эоз","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Баз","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Мон","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Лиф","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Плз","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Анз","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Пйкл","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Гпхр","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"ТЗН","fontSize":8}]}]},{"type":"tableRow","children":[{"type":"tableDataCell","columnType":"date","children":[{"type":"dateInput","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]}]}]},{"type":"paragraph","children":[{"text":""}]}])", richTextBox1);
+    //CreateTableInRichTextBox(richTextBox1);
+    // Пример JSON
+    String^ json = R"({
+      "columns": [
+        {"width": 2000},
+        {"width": 2000},
+        {"width": 2000}
+      ],
+      "rows": [
+        ["A1", "B1", "C1"],
+        ["A2", "B2", "C2"],
+        ["A3", "B3", "C3"]
+      ]
+    })";
+
+    // Создаем таблицу в RichTextBox по JSON шаблону
+    CreateTableInRichTextBox(richTextBox, json);
+}
+private: System::Void numericUpDown1_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void Toolbar_button_Click(System::Object^ sender, System::EventArgs^ e) {
+    Button^ button = safe_cast<Button^>(sender);
+    if (button->BackColor != Color::FromKnownColor(KnownColor::AppWorkspace))
+        button->BackColor = Color::FromKnownColor(KnownColor::AppWorkspace);
+    else
+        button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
+   
 }
 };
 }

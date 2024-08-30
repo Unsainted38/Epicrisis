@@ -208,6 +208,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Text.Json">
+      <HintPath>libs\system.text.json.8.0.4\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -216,6 +219,8 @@
     <ClCompile Include="DB_Helper.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MyMarshallingClass.cpp" />
+    <ClCompile Include="RtfTableCreator.cpp" />
+    <ClCompile Include="RtfTest.cpp" />
     <ClCompile Include="Word_Helper.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +229,8 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MyMarshallingClass.h" />
+    <ClInclude Include="RtfTableCreator.h" />
+    <ClInclude Include="RtfTest.h" />
     <ClInclude Include="Word_Helper.h" />
   </ItemGroup>
   <ItemGroup>

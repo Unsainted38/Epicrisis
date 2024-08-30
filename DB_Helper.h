@@ -8,6 +8,11 @@ using namespace System::Data;
 using namespace System::Data::SQLite;
 
 namespace unsaintedWinApp {
+    enum class DataFormat {
+        JSON,
+        String,
+        ListStr,
+    };
 
     public ref class DB_Helper {
 
@@ -18,12 +23,15 @@ namespace unsaintedWinApp {
         String^ tmp_column;
         
     public:
+        
 
         DB_Helper(String^ dbPath);
         ~DB_Helper();
 
         String^ SetQueryById(String^ table, String^ column, int id);
         String^ SetQueryByTitle(String^ talble, String^ column, String^ title);
+        String^ SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue, DataFormat format);
+        //Void SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue, DataFormat format);
         List<String^>^ SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue);
         String^ GetJsonString();
 

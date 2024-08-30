@@ -27,6 +27,33 @@ namespace unsaintedWinApp {
 
         return tmp_query;
     }
+    String^ DB_Helper::SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue, DataFormat format)
+    {
+        String^ result = gcnew String("");
+        if (table == "" || column == "" || conditionColumn == "" || conditionValue == "") {
+            
+            return result;
+
+        }
+        tmp_column = column;
+        tmp_table = table;
+        tmp_query = " SELECT DISTINCT " + column +
+            " FROM " + table + " WHERE " + conditionColumn + " = " + "'" + conditionValue + "'";
+        switch (format)
+        {
+        case DataFormat::JSON:
+            return GetJsonString();
+            break;
+        case DataFormat::String:
+            
+            break;
+        case DataFormat::ListStr:
+            break;
+        default:
+            break;
+        }
+        return result;
+    }
     // Функция создает строку sql запроса с условием подходящего значения выбранного столбца и выполняет его
     // Возвращает полученные значения в виде списка строк 
     List<String^>^ DB_Helper::SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue)

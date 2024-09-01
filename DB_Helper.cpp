@@ -27,13 +27,12 @@ namespace unsaintedWinApp {
 
         return tmp_query;
     }
+    // Функция 
     String^ DB_Helper::SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue, DataFormat format)
     {
         String^ result = gcnew String("");
         if (table == "" || column == "" || conditionColumn == "" || conditionValue == "") {
-            
             return result;
-
         }
         tmp_column = column;
         tmp_table = table;
@@ -98,6 +97,24 @@ namespace unsaintedWinApp {
         tmp_table = "";
         return jsonData;
     }
+    // Функция создает tmp_query типа "SELECT DISTINCT column FROM table WHERE conditionalColumn LIKE 'conditionValue%'"
+    List<String^>^ DB_Helper::SetQueryByConditionLike(String^ table, String^ column, String^ conditionColumn, String^ conditionValue)
+    {
+        List<String^>^ result;
+        if (table == "" || column == "" || conditionColumn == "" || conditionValue == "") {
+            result = gcnew List<String^>();
+            result->Add("");
+            return result;
+        }
+        tmp_column = column;
+        tmp_table = table;
+        tmp_query = " SELECT DISTINCT " + column +
+            " FROM " + table + " WHERE " + conditionColumn + " LIKE " + "'" + conditionValue + "%" + "'";
+
+        return GetColumnData();
+    }
+    // Функция выполняет sql запрос tmp_query, которую надо предварительно инициализировать
+    // Возвращает список строк из колонки таблицы
     List<String^>^ DB_Helper::GetColumnData()
     {
         List<String^>^ results = gcnew List<String^>();
@@ -129,6 +146,7 @@ namespace unsaintedWinApp {
         tmp_column = "";
         tmp_query = "";
         tmp_table = "";
+        if (results->Count == 0) results->Add("");
         return results;
     }
     // Функция извлекает данные из столбца(columnName) таблицы(tableName) и возвращает список строк.

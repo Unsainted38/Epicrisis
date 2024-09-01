@@ -31,6 +31,7 @@ namespace unsaintedWinApp {
         String^ SetQueryById(String^ table, String^ column, int id);
         String^ SetQueryByTitle(String^ talble, String^ column, String^ title);
         String^ SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue, DataFormat format);
+        List<String^>^ SetQueryByConditionLike(String^ table, String^ column, String^ conditionColumn, String^ conditionValue);
         //Void SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue, DataFormat format);
         List<String^>^ SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue);
         String^ GetJsonString();

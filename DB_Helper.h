@@ -8,10 +8,15 @@ using namespace System::Data;
 using namespace System::Data::SQLite;
 
 namespace unsaintedWinApp {
-    enum class DataFormat {
+    public enum class DataFormat {
         JSON,
         String,
         ListStr,
+    };
+
+    public enum class MinMax {
+        Min,
+        Max,
     };
 
     public ref class DB_Helper {
@@ -35,6 +40,7 @@ namespace unsaintedWinApp {
         //Void SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue, DataFormat format);
         List<String^>^ SetQueryByCondition(String^ table, String^ column, String^ conditionColumn, String^ conditionValue);
         String^ GetJsonString();
+        String^ GetMinMaxColumnData(String^ table, String^ column, MinMax min_max);
 
         List<String^>^ GetColumnData();
         List<String^>^ GetColumnData(String^ tableName, String^ columnName);

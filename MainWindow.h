@@ -5,8 +5,7 @@
 #include "RtfTableCreator.h"
 #include "RtfTest.h"
 
-using namespace DevExpress;
-using namespace DevExpress::XtraEditors;
+
 
 namespace unsaintedWinApp {
     using namespace System;
@@ -17,6 +16,9 @@ namespace unsaintedWinApp {
 	using namespace System::Drawing;
     using namespace System::Collections::Generic;
     
+    namespace DevExp = DevExpress;
+    namespace XtraEditors = DevExp::XtraEditors;
+
     public enum class PathTypes {
         DB = 0,
         Templates = 1,
@@ -24,7 +26,7 @@ namespace unsaintedWinApp {
         DocNotes = 3,
         FirstList = 4
     };
-    public enum class TabIndexedControls {
+    public enum class TabIndexedComboBoxes {
         HistoryNumber,
         HistoryYear,
         Surname,
@@ -54,7 +56,9 @@ namespace unsaintedWinApp {
             
             InitializeData();
 
-            
+            InitializeComboBox();
+
+            InitializeInterface();
 			//
 			//TODO: добавьте код конструктора
 			//           
@@ -107,10 +111,12 @@ namespace unsaintedWinApp {
         String^ Recommendations;
         String^ UnworkableList;
         // Поля для хранения значений для эпикриза
-        
-        
-        
-        
+
+        ComboBox^ previousComboBox;
+        ComboBox^ currentComboBox;
+        List<ComboBox^>^ ComboBoxList;
+        List<String^>^ epicrizDiagnosesList;
+        TabIndexedComboBoxes comboBox;
         PathTypes PathType;
         String^ IllBeginingDate;
         String^ ResponseDate;
@@ -637,6 +643,31 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
             this->button3 = (gcnew System::Windows::Forms::Button());
             this->Clear_button = (gcnew System::Windows::Forms::Button());
+            this->Ill_History_panel = (gcnew System::Windows::Forms::Panel());
+            this->F3_button = (gcnew System::Windows::Forms::Button());
+            this->groupBox15 = (gcnew System::Windows::Forms::GroupBox());
+            this->complications_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->label9 = (gcnew System::Windows::Forms::Label());
+            this->groupBox16 = (gcnew System::Windows::Forms::GroupBox());
+            this->related_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->label7 = (gcnew System::Windows::Forms::Label());
+            this->MKB_groupBox = (gcnew System::Windows::Forms::GroupBox());
+            this->mkb_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->groupBox14 = (gcnew System::Windows::Forms::GroupBox());
+            this->epicrizdiagnoses_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->label4 = (gcnew System::Windows::Forms::Label());
+            this->groupBox13 = (gcnew System::Windows::Forms::GroupBox());
+            this->outcome_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
+            this->groupBox12 = (gcnew System::Windows::Forms::GroupBox());
+            this->income_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
+            this->SideInfo_panel = (gcnew System::Windows::Forms::Panel());
+            this->F7_button = (gcnew System::Windows::Forms::Button());
+            this->SideInfo_groupBox = (gcnew System::Windows::Forms::GroupBox());
+            this->SideInfo_comboBox = (gcnew System::Windows::Forms::ComboBox());
+            this->AnalysisResults_panel = (gcnew System::Windows::Forms::Panel());
+            this->F5_button = (gcnew System::Windows::Forms::Button());
+            this->AnalysisResults_groupBox = (gcnew System::Windows::Forms::GroupBox());
+            this->AnalyzesResults_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->Anamnesis_panel = (gcnew System::Windows::Forms::Panel());
             this->tableLayoutPanel14 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->panel3 = (gcnew System::Windows::Forms::Panel());
@@ -730,14 +761,6 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->button4 = (gcnew System::Windows::Forms::Button());
             this->button6 = (gcnew System::Windows::Forms::Button());
             this->button5 = (gcnew System::Windows::Forms::Button());
-            this->AnalysisResults_panel = (gcnew System::Windows::Forms::Panel());
-            this->F5_button = (gcnew System::Windows::Forms::Button());
-            this->AnalysisResults_groupBox = (gcnew System::Windows::Forms::GroupBox());
-            this->AnalyzesResults_comboBox = (gcnew System::Windows::Forms::ComboBox());
-            this->SideInfo_panel = (gcnew System::Windows::Forms::Panel());
-            this->F7_button = (gcnew System::Windows::Forms::Button());
-            this->SideInfo_groupBox = (gcnew System::Windows::Forms::GroupBox());
-            this->SideInfo_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->AddingInfo_panel = (gcnew System::Windows::Forms::Panel());
             this->tableLayoutPanel15 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->groupBox = (gcnew System::Windows::Forms::GroupBox());
@@ -753,23 +776,6 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->textBox1 = (gcnew System::Windows::Forms::TextBox());
             this->groupBox22 = (gcnew System::Windows::Forms::GroupBox());
             this->comboBox11 = (gcnew System::Windows::Forms::ComboBox());
-            this->Ill_History_panel = (gcnew System::Windows::Forms::Panel());
-            this->F3_button = (gcnew System::Windows::Forms::Button());
-            this->groupBox15 = (gcnew System::Windows::Forms::GroupBox());
-            this->complications_comboBox = (gcnew System::Windows::Forms::ComboBox());
-            this->label9 = (gcnew System::Windows::Forms::Label());
-            this->groupBox16 = (gcnew System::Windows::Forms::GroupBox());
-            this->related_comboBox = (gcnew System::Windows::Forms::ComboBox());
-            this->label7 = (gcnew System::Windows::Forms::Label());
-            this->MKB_groupBox = (gcnew System::Windows::Forms::GroupBox());
-            this->mkb_comboBox = (gcnew System::Windows::Forms::ComboBox());
-            this->groupBox14 = (gcnew System::Windows::Forms::GroupBox());
-            this->epicrizdiagnoses_comboBox = (gcnew System::Windows::Forms::ComboBox());
-            this->label4 = (gcnew System::Windows::Forms::Label());
-            this->groupBox13 = (gcnew System::Windows::Forms::GroupBox());
-            this->outcome_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
-            this->groupBox12 = (gcnew System::Windows::Forms::GroupBox());
-            this->income_dateTimePicker = (gcnew System::Windows::Forms::DateTimePicker());
             this->UnworkableList_panel = (gcnew System::Windows::Forms::Panel());
             this->tableLayoutPanel18 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->F9_button = (gcnew System::Windows::Forms::Button());
@@ -808,6 +814,17 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->id_numericUpDown))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->year_numericUpDown))->BeginInit();
             this->flowLayoutPanel1->SuspendLayout();
+            this->Ill_History_panel->SuspendLayout();
+            this->groupBox15->SuspendLayout();
+            this->groupBox16->SuspendLayout();
+            this->MKB_groupBox->SuspendLayout();
+            this->groupBox14->SuspendLayout();
+            this->groupBox13->SuspendLayout();
+            this->groupBox12->SuspendLayout();
+            this->SideInfo_panel->SuspendLayout();
+            this->SideInfo_groupBox->SuspendLayout();
+            this->AnalysisResults_panel->SuspendLayout();
+            this->AnalysisResults_groupBox->SuspendLayout();
             this->Anamnesis_panel->SuspendLayout();
             this->tableLayoutPanel14->SuspendLayout();
             this->panel3->SuspendLayout();
@@ -842,10 +859,6 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel17->SuspendLayout();
             this->groupBox21->SuspendLayout();
             this->tableLayoutPanel16->SuspendLayout();
-            this->AnalysisResults_panel->SuspendLayout();
-            this->AnalysisResults_groupBox->SuspendLayout();
-            this->SideInfo_panel->SuspendLayout();
-            this->SideInfo_groupBox->SuspendLayout();
             this->AddingInfo_panel->SuspendLayout();
             this->tableLayoutPanel15->SuspendLayout();
             this->groupBox->SuspendLayout();
@@ -854,13 +867,6 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->DoctorLook_groupBox->SuspendLayout();
             this->Mouth_groupBox->SuspendLayout();
             this->groupBox22->SuspendLayout();
-            this->Ill_History_panel->SuspendLayout();
-            this->groupBox15->SuspendLayout();
-            this->groupBox16->SuspendLayout();
-            this->MKB_groupBox->SuspendLayout();
-            this->groupBox14->SuspendLayout();
-            this->groupBox13->SuspendLayout();
-            this->groupBox12->SuspendLayout();
             this->UnworkableList_panel->SuspendLayout();
             this->tableLayoutPanel18->SuspendLayout();
             this->SuspendLayout();
@@ -899,17 +905,18 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
             this->Home_panel->Location = System::Drawing::Point(0, 0);
             this->Home_panel->Name = L"Home_panel";
-            this->Home_panel->Size = System::Drawing::Size(1313, 742);
+            this->Home_panel->Size = System::Drawing::Size(1329, 742);
             this->Home_panel->TabIndex = 5;
+            this->Home_panel->TabStop = true;
             // 
             // tableLayoutPanel12
             // 
             this->tableLayoutPanel12->ColumnCount = 1;
             this->tableLayoutPanel12->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
                 100)));
+            this->tableLayoutPanel12->Controls->Add(this->label1, 0, 0);
             this->tableLayoutPanel12->Controls->Add(this->tableLayoutPanel1, 0, 1);
             this->tableLayoutPanel12->Controls->Add(this->tableLayoutPanel2, 0, 3);
-            this->tableLayoutPanel12->Controls->Add(this->label1, 0, 0);
             this->tableLayoutPanel12->Dock = System::Windows::Forms::DockStyle::Top;
             this->tableLayoutPanel12->Location = System::Drawing::Point(0, 0);
             this->tableLayoutPanel12->Name = L"tableLayoutPanel12";
@@ -922,7 +929,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 214)));
             this->tableLayoutPanel12->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
                 183)));
-            this->tableLayoutPanel12->Size = System::Drawing::Size(1296, 1383);
+            this->tableLayoutPanel12->Size = System::Drawing::Size(1312, 1383);
             this->tableLayoutPanel12->TabIndex = 11;
             // 
             // tableLayoutPanel1
@@ -942,7 +949,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 25)));
             this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 25)));
             this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 25)));
-            this->tableLayoutPanel1->Size = System::Drawing::Size(1290, 218);
+            this->tableLayoutPanel1->Size = System::Drawing::Size(1306, 218);
             this->tableLayoutPanel1->TabIndex = 5;
             // 
             // Hitory_button
@@ -964,7 +971,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Hitory_button->Margin = System::Windows::Forms::Padding(0, 3, 0, 3);
             this->Hitory_button->Name = L"Hitory_button";
             this->Hitory_button->RightToLeft = System::Windows::Forms::RightToLeft::No;
-            this->Hitory_button->Size = System::Drawing::Size(1290, 48);
+            this->Hitory_button->Size = System::Drawing::Size(1306, 48);
             this->Hitory_button->TabIndex = 9;
             this->Hitory_button->TabStop = false;
             this->Hitory_button->Text = L"История";
@@ -989,7 +996,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->epicrisis_button->Margin = System::Windows::Forms::Padding(0, 3, 0, 3);
             this->epicrisis_button->Name = L"epicrisis_button";
             this->epicrisis_button->RightToLeft = System::Windows::Forms::RightToLeft::No;
-            this->epicrisis_button->Size = System::Drawing::Size(1290, 48);
+            this->epicrisis_button->Size = System::Drawing::Size(1306, 48);
             this->epicrisis_button->TabIndex = 2;
             this->epicrisis_button->TabStop = false;
             this->epicrisis_button->Text = L"Эпикриз";
@@ -1014,7 +1021,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->doctors_notes_button->Margin = System::Windows::Forms::Padding(0, 3, 0, 3);
             this->doctors_notes_button->Name = L"doctors_notes_button";
             this->doctors_notes_button->RightToLeft = System::Windows::Forms::RightToLeft::No;
-            this->doctors_notes_button->Size = System::Drawing::Size(1290, 48);
+            this->doctors_notes_button->Size = System::Drawing::Size(1306, 48);
             this->doctors_notes_button->TabIndex = 1;
             this->doctors_notes_button->TabStop = false;
             this->doctors_notes_button->Text = L"Записи лечащего врача";
@@ -1035,7 +1042,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->f1_button->Location = System::Drawing::Point(0, 165);
             this->f1_button->Margin = System::Windows::Forms::Padding(0, 3, 0, 3);
             this->f1_button->Name = L"f1_button";
-            this->f1_button->Size = System::Drawing::Size(1290, 50);
+            this->f1_button->Size = System::Drawing::Size(1306, 50);
             this->f1_button->TabIndex = 4;
             this->f1_button->TabStop = false;
             this->f1_button->Text = L"Справка(F1)";
@@ -1077,7 +1084,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel2->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 37)));
             this->tableLayoutPanel2->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 68)));
             this->tableLayoutPanel2->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
-            this->tableLayoutPanel2->Size = System::Drawing::Size(1290, 728);
+            this->tableLayoutPanel2->Size = System::Drawing::Size(1306, 728);
             this->tableLayoutPanel2->TabIndex = 9;
             // 
             // tableLayoutPanel7
@@ -1094,7 +1101,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel7->Name = L"tableLayoutPanel7";
             this->tableLayoutPanel7->RowCount = 1;
             this->tableLayoutPanel7->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-            this->tableLayoutPanel7->Size = System::Drawing::Size(1284, 62);
+            this->tableLayoutPanel7->Size = System::Drawing::Size(1300, 62);
             this->tableLayoutPanel7->TabIndex = 12;
             // 
             // groupBox5
@@ -1108,7 +1115,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox5->ForeColor = System::Drawing::SystemColors::WindowText;
             this->groupBox5->Location = System::Drawing::Point(3, 3);
             this->groupBox5->Name = L"groupBox5";
-            this->groupBox5->Size = System::Drawing::Size(1152, 56);
+            this->groupBox5->Size = System::Drawing::Size(1168, 56);
             this->groupBox5->TabIndex = 8;
             this->groupBox5->TabStop = false;
             this->groupBox5->Text = L"Путь сохранения отчета";
@@ -1121,7 +1128,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->epicrizPath_label->ForeColor = System::Drawing::SystemColors::ControlText;
             this->epicrizPath_label->Location = System::Drawing::Point(3, 18);
             this->epicrizPath_label->Name = L"epicrizPath_label";
-            this->epicrizPath_label->Size = System::Drawing::Size(1146, 35);
+            this->epicrizPath_label->Size = System::Drawing::Size(1162, 35);
             this->epicrizPath_label->TabIndex = 3;
             this->epicrizPath_label->Text = L"C:\\Users\\user\\Documents\\Записи лечащего врача";
             this->epicrizPath_label->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
@@ -1144,7 +1151,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
             this->epicrizPathChange_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)),
                 static_cast<System::Int32>(static_cast<System::Byte>(80)), static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->epicrizPathChange_button->Location = System::Drawing::Point(1161, 10);
+            this->epicrizPathChange_button->Location = System::Drawing::Point(1177, 10);
             this->epicrizPathChange_button->Name = L"epicrizPathChange_button";
             this->epicrizPathChange_button->Size = System::Drawing::Size(120, 49);
             this->epicrizPathChange_button->TabIndex = 7;
@@ -1177,7 +1184,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox4->ForeColor = System::Drawing::SystemColors::WindowText;
             this->groupBox4->Location = System::Drawing::Point(3, 512);
             this->groupBox4->Name = L"groupBox4";
-            this->groupBox4->Size = System::Drawing::Size(1284, 62);
+            this->groupBox4->Size = System::Drawing::Size(1300, 62);
             this->groupBox4->TabIndex = 10;
             this->groupBox4->TabStop = false;
             this->groupBox4->Text = L"Префикс имени файла отчета";
@@ -1190,8 +1197,9 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 static_cast<System::Byte>(204)));
             this->textBox5->Location = System::Drawing::Point(3, 18);
             this->textBox5->Name = L"textBox5";
-            this->textBox5->Size = System::Drawing::Size(1278, 19);
+            this->textBox5->Size = System::Drawing::Size(1294, 19);
             this->textBox5->TabIndex = 2;
+            this->textBox5->TabStop = false;
             this->textBox5->Text = L"Первый лист";
             // 
             // label6
@@ -1217,7 +1225,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel6->Name = L"tableLayoutPanel6";
             this->tableLayoutPanel6->RowCount = 1;
             this->tableLayoutPanel6->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-            this->tableLayoutPanel6->Size = System::Drawing::Size(1284, 62);
+            this->tableLayoutPanel6->Size = System::Drawing::Size(1300, 62);
             this->tableLayoutPanel6->TabIndex = 9;
             // 
             // groupBox3
@@ -1231,7 +1239,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox3->ForeColor = System::Drawing::SystemColors::WindowText;
             this->groupBox3->Location = System::Drawing::Point(3, 3);
             this->groupBox3->Name = L"groupBox3";
-            this->groupBox3->Size = System::Drawing::Size(1152, 56);
+            this->groupBox3->Size = System::Drawing::Size(1168, 56);
             this->groupBox3->TabIndex = 8;
             this->groupBox3->TabStop = false;
             this->groupBox3->Text = L"Путь сохранения отчета";
@@ -1244,7 +1252,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->label20->ForeColor = System::Drawing::SystemColors::ControlText;
             this->label20->Location = System::Drawing::Point(3, 18);
             this->label20->Name = L"label20";
-            this->label20->Size = System::Drawing::Size(1146, 35);
+            this->label20->Size = System::Drawing::Size(1162, 35);
             this->label20->TabIndex = 3;
             this->label20->Text = L"C:\\Users\\user\\Documents\\Записи лечащего врача";
             this->label20->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
@@ -1267,7 +1275,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 static_cast<System::Byte>(204)));
             this->button1->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->button1->Location = System::Drawing::Point(1161, 10);
+            this->button1->Location = System::Drawing::Point(1177, 10);
             this->button1->Name = L"button1";
             this->button1->Size = System::Drawing::Size(120, 49);
             this->button1->TabIndex = 7;
@@ -1318,7 +1326,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel3->Name = L"tableLayoutPanel3";
             this->tableLayoutPanel3->RowCount = 1;
             this->tableLayoutPanel3->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-            this->tableLayoutPanel3->Size = System::Drawing::Size(1284, 62);
+            this->tableLayoutPanel3->Size = System::Drawing::Size(1300, 62);
             this->tableLayoutPanel3->TabIndex = 3;
             // 
             // TemplatesChange_button
@@ -1330,7 +1338,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
             this->TemplatesChange_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)),
                 static_cast<System::Int32>(static_cast<System::Byte>(80)), static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->TemplatesChange_button->Location = System::Drawing::Point(1161, 10);
+            this->TemplatesChange_button->Location = System::Drawing::Point(1177, 10);
             this->TemplatesChange_button->Name = L"TemplatesChange_button";
             this->TemplatesChange_button->Size = System::Drawing::Size(120, 49);
             this->TemplatesChange_button->TabIndex = 0;
@@ -1350,7 +1358,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox1->ForeColor = System::Drawing::SystemColors::WindowText;
             this->groupBox1->Location = System::Drawing::Point(3, 3);
             this->groupBox1->Name = L"groupBox1";
-            this->groupBox1->Size = System::Drawing::Size(1152, 56);
+            this->groupBox1->Size = System::Drawing::Size(1168, 56);
             this->groupBox1->TabIndex = 1;
             this->groupBox1->TabStop = false;
             this->groupBox1->Text = L"Папка с шаблонами";
@@ -1363,7 +1371,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tamplatesPath_label->ForeColor = System::Drawing::SystemColors::ControlText;
             this->tamplatesPath_label->Location = System::Drawing::Point(3, 18);
             this->tamplatesPath_label->Name = L"tamplatesPath_label";
-            this->tamplatesPath_label->Size = System::Drawing::Size(1146, 35);
+            this->tamplatesPath_label->Size = System::Drawing::Size(1162, 35);
             this->tamplatesPath_label->TabIndex = 1;
             this->tamplatesPath_label->Text = L"C:\\Users\\erik\\develop\\host\\project\\unsaintedWinApp\\Templates\\";
             this->tamplatesPath_label->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
@@ -1394,7 +1402,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel4->Name = L"tableLayoutPanel4";
             this->tableLayoutPanel4->RowCount = 1;
             this->tableLayoutPanel4->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-            this->tableLayoutPanel4->Size = System::Drawing::Size(1284, 62);
+            this->tableLayoutPanel4->Size = System::Drawing::Size(1300, 62);
             this->tableLayoutPanel4->TabIndex = 4;
             // 
             // DB_create_button
@@ -1405,7 +1413,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
             this->DB_create_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->DB_create_button->Location = System::Drawing::Point(1161, 10);
+            this->DB_create_button->Location = System::Drawing::Point(1177, 10);
             this->DB_create_button->Name = L"DB_create_button";
             this->DB_create_button->Size = System::Drawing::Size(120, 49);
             this->DB_create_button->TabIndex = 2;
@@ -1422,7 +1430,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
             this->DB_change_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->DB_change_button->Location = System::Drawing::Point(1035, 10);
+            this->DB_change_button->Location = System::Drawing::Point(1051, 10);
             this->DB_change_button->Name = L"DB_change_button";
             this->DB_change_button->Size = System::Drawing::Size(120, 49);
             this->DB_change_button->TabIndex = 1;
@@ -1440,7 +1448,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 static_cast<System::Byte>(204)));
             this->DB_groupBox->Location = System::Drawing::Point(3, 3);
             this->DB_groupBox->Name = L"DB_groupBox";
-            this->DB_groupBox->Size = System::Drawing::Size(1026, 56);
+            this->DB_groupBox->Size = System::Drawing::Size(1042, 56);
             this->DB_groupBox->TabIndex = 0;
             this->DB_groupBox->TabStop = false;
             this->DB_groupBox->Text = L"Файл базы данных";
@@ -1453,7 +1461,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->dbPath_label->ForeColor = System::Drawing::SystemColors::ControlText;
             this->dbPath_label->Location = System::Drawing::Point(3, 18);
             this->dbPath_label->Name = L"dbPath_label";
-            this->dbPath_label->Size = System::Drawing::Size(1020, 35);
+            this->dbPath_label->Size = System::Drawing::Size(1036, 35);
             this->dbPath_label->TabIndex = 0;
             this->dbPath_label->Text = L"C:\\Users\\erik\\develop\\host\\projects\\unsaintedWinApp\\prod.db";
             this->dbPath_label->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
@@ -1473,7 +1481,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->DoctorsNotes_tableLayoutPanel->RowCount = 1;
             this->DoctorsNotes_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent,
                 100)));
-            this->DoctorsNotes_tableLayoutPanel->Size = System::Drawing::Size(1284, 62);
+            this->DoctorsNotes_tableLayoutPanel->Size = System::Drawing::Size(1300, 62);
             this->DoctorsNotes_tableLayoutPanel->TabIndex = 6;
             // 
             // ReportDir_groupBox
@@ -1487,7 +1495,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->ReportDir_groupBox->ForeColor = System::Drawing::SystemColors::WindowText;
             this->ReportDir_groupBox->Location = System::Drawing::Point(3, 3);
             this->ReportDir_groupBox->Name = L"ReportDir_groupBox";
-            this->ReportDir_groupBox->Size = System::Drawing::Size(1152, 56);
+            this->ReportDir_groupBox->Size = System::Drawing::Size(1168, 56);
             this->ReportDir_groupBox->TabIndex = 8;
             this->ReportDir_groupBox->TabStop = false;
             this->ReportDir_groupBox->Text = L"Путь сохранения отчета";
@@ -1500,7 +1508,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->label18->ForeColor = System::Drawing::SystemColors::ControlText;
             this->label18->Location = System::Drawing::Point(3, 18);
             this->label18->Name = L"label18";
-            this->label18->Size = System::Drawing::Size(1146, 35);
+            this->label18->Size = System::Drawing::Size(1162, 35);
             this->label18->TabIndex = 2;
             this->label18->Text = L"C:\\Users\\user\\Documents\\Записи лечащего врача";
             this->label18->TextAlign = System::Drawing::ContentAlignment::MiddleLeft;
@@ -1523,7 +1531,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
             this->ReportSave_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)),
                 static_cast<System::Int32>(static_cast<System::Byte>(80)), static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->ReportSave_button->Location = System::Drawing::Point(1161, 10);
+            this->ReportSave_button->Location = System::Drawing::Point(1177, 10);
             this->ReportSave_button->Name = L"ReportSave_button";
             this->ReportSave_button->Size = System::Drawing::Size(120, 49);
             this->ReportSave_button->TabIndex = 7;
@@ -1542,7 +1550,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel5->Name = L"tableLayoutPanel5";
             this->tableLayoutPanel5->RowCount = 1;
             this->tableLayoutPanel5->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50)));
-            this->tableLayoutPanel5->Size = System::Drawing::Size(1284, 62);
+            this->tableLayoutPanel5->Size = System::Drawing::Size(1300, 62);
             this->tableLayoutPanel5->TabIndex = 7;
             // 
             // groupBox2
@@ -1556,7 +1564,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox2->ForeColor = System::Drawing::SystemColors::WindowText;
             this->groupBox2->Location = System::Drawing::Point(3, 3);
             this->groupBox2->Name = L"groupBox2";
-            this->groupBox2->Size = System::Drawing::Size(1278, 56);
+            this->groupBox2->Size = System::Drawing::Size(1294, 56);
             this->groupBox2->TabIndex = 9;
             this->groupBox2->TabStop = false;
             this->groupBox2->Text = L"Префикс имени файла отчета";
@@ -1569,8 +1577,9 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 static_cast<System::Byte>(204)));
             this->textBox4->Location = System::Drawing::Point(3, 18);
             this->textBox4->Name = L"textBox4";
-            this->textBox4->Size = System::Drawing::Size(1272, 19);
+            this->textBox4->Size = System::Drawing::Size(1288, 19);
             this->textBox4->TabIndex = 1;
+            this->textBox4->TabStop = false;
             this->textBox4->Text = L"Лист первичного осмотра";
             // 
             // label3
@@ -1622,7 +1631,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel8->Name = L"tableLayoutPanel8";
             this->tableLayoutPanel8->RowCount = 1;
             this->tableLayoutPanel8->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 50)));
-            this->tableLayoutPanel8->Size = System::Drawing::Size(1284, 40);
+            this->tableLayoutPanel8->Size = System::Drawing::Size(1300, 40);
             this->tableLayoutPanel8->TabIndex = 13;
             // 
             // Recovery_button
@@ -1636,7 +1645,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
             this->Recovery_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->Recovery_button->Location = System::Drawing::Point(485, 3);
+            this->Recovery_button->Location = System::Drawing::Point(493, 3);
             this->Recovery_button->Name = L"Recovery_button";
             this->Recovery_button->Size = System::Drawing::Size(154, 34);
             this->Recovery_button->TabIndex = 0;
@@ -1655,7 +1664,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->SaveSettings_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular,
                 System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
             this->SaveSettings_button->ForeColor = System::Drawing::Color::White;
-            this->SaveSettings_button->Location = System::Drawing::Point(645, 3);
+            this->SaveSettings_button->Location = System::Drawing::Point(653, 3);
             this->SaveSettings_button->Name = L"SaveSettings_button";
             this->SaveSettings_button->Size = System::Drawing::Size(117, 34);
             this->SaveSettings_button->TabIndex = 1;
@@ -1682,17 +1691,17 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Epicrisis_panel->Controls->Add(this->tableLayoutPanel10);
             this->Epicrisis_panel->Controls->Add(this->tableLayoutPanel9);
             this->Epicrisis_panel->Controls->Add(this->Anamnesis_panel);
+            this->Epicrisis_panel->Controls->Add(this->Ill_History_panel);
+            this->Epicrisis_panel->Controls->Add(this->SideInfo_panel);
+            this->Epicrisis_panel->Controls->Add(this->AnalysisResults_panel);
             this->Epicrisis_panel->Controls->Add(this->Stamp_panel);
             this->Epicrisis_panel->Controls->Add(this->Recomendations_panel);
-            this->Epicrisis_panel->Controls->Add(this->AnalysisResults_panel);
-            this->Epicrisis_panel->Controls->Add(this->SideInfo_panel);
             this->Epicrisis_panel->Controls->Add(this->AddingInfo_panel);
-            this->Epicrisis_panel->Controls->Add(this->Ill_History_panel);
             this->Epicrisis_panel->Controls->Add(this->UnworkableList_panel);
             this->Epicrisis_panel->Dock = System::Windows::Forms::DockStyle::Fill;
             this->Epicrisis_panel->Location = System::Drawing::Point(0, 0);
             this->Epicrisis_panel->Name = L"Epicrisis_panel";
-            this->Epicrisis_panel->Size = System::Drawing::Size(1313, 742);
+            this->Epicrisis_panel->Size = System::Drawing::Size(1329, 742);
             this->Epicrisis_panel->TabIndex = 11;
             // 
             // EpiricisisTabMenu_tableLayoutPanel
@@ -1742,7 +1751,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 58)));
             this->EpiricisisTabMenu_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
                 30)));
-            this->EpiricisisTabMenu_tableLayoutPanel->Size = System::Drawing::Size(1313, 64);
+            this->EpiricisisTabMenu_tableLayoutPanel->Size = System::Drawing::Size(1329, 64);
             this->EpiricisisTabMenu_tableLayoutPanel->TabIndex = 6;
             // 
             // Anamnesis_button
@@ -1792,7 +1801,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Stamp_button->Location = System::Drawing::Point(1221, 2);
             this->Stamp_button->Margin = System::Windows::Forms::Padding(2);
             this->Stamp_button->Name = L"Stamp_button";
-            this->Stamp_button->Size = System::Drawing::Size(90, 54);
+            this->Stamp_button->Size = System::Drawing::Size(106, 54);
             this->Stamp_button->TabIndex = 10;
             this->Stamp_button->TabStop = false;
             this->Stamp_button->Text = L"Штамп(F9)";
@@ -1996,12 +2005,13 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Stamp_label->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
             this->Stamp_label->Location = System::Drawing::Point(1222, 58);
             this->Stamp_label->Name = L"Stamp_label";
-            this->Stamp_label->Size = System::Drawing::Size(88, 13);
+            this->Stamp_label->Size = System::Drawing::Size(104, 13);
             this->Stamp_label->TabIndex = 21;
             // 
             // tableLayoutPanel10
             // 
-            this->tableLayoutPanel10->AutoSize = true;
+            this->tableLayoutPanel10->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
             this->tableLayoutPanel10->ColumnCount = 3;
             this->tableLayoutPanel10->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
                 33.33333F)));
@@ -2022,7 +2032,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 50)));
             this->tableLayoutPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
                 50)));
-            this->tableLayoutPanel10->Size = System::Drawing::Size(1377, 100);
+            this->tableLayoutPanel10->Size = System::Drawing::Size(1324, 100);
             this->tableLayoutPanel10->TabIndex = 5;
             // 
             // groupBox11
@@ -2030,9 +2040,9 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox11->Controls->Add(this->birthday_dateTimePicker);
             this->groupBox11->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox11->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->groupBox11->Location = System::Drawing::Point(920, 53);
+            this->groupBox11->Location = System::Drawing::Point(885, 53);
             this->groupBox11->Name = L"groupBox11";
-            this->groupBox11->Size = System::Drawing::Size(454, 44);
+            this->groupBox11->Size = System::Drawing::Size(436, 44);
             this->groupBox11->TabIndex = 5;
             this->groupBox11->TabStop = false;
             this->groupBox11->Text = L"Дата рождения*";
@@ -2043,7 +2053,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->birthday_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
             this->birthday_dateTimePicker->Location = System::Drawing::Point(3, 16);
             this->birthday_dateTimePicker->Name = L"birthday_dateTimePicker";
-            this->birthday_dateTimePicker->Size = System::Drawing::Size(448, 20);
+            this->birthday_dateTimePicker->Size = System::Drawing::Size(430, 20);
             this->birthday_dateTimePicker->TabIndex = 8;
             this->birthday_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::birthday_dateTimePicker_Leave);
             // 
@@ -2054,9 +2064,9 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox10->Dock = System::Windows::Forms::DockStyle::Fill;
             this->groupBox10->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->groupBox10->Location = System::Drawing::Point(461, 53);
+            this->groupBox10->Location = System::Drawing::Point(444, 53);
             this->groupBox10->Name = L"groupBox10";
-            this->groupBox10->Size = System::Drawing::Size(453, 44);
+            this->groupBox10->Size = System::Drawing::Size(435, 44);
             this->groupBox10->TabIndex = 4;
             this->groupBox10->TabStop = false;
             this->groupBox10->Text = L"Воинская часть*";
@@ -2064,6 +2074,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             // militaryUnit_comboBox
             // 
             this->militaryUnit_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->militaryUnit_comboBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::ListItems;
             this->militaryUnit_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->militaryUnit_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
             this->militaryUnit_comboBox->DropDownHeight = 150;
@@ -2075,10 +2086,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->militaryUnit_comboBox->Location = System::Drawing::Point(3, 16);
             this->militaryUnit_comboBox->MaxDropDownItems = 10;
             this->militaryUnit_comboBox->Name = L"militaryUnit_comboBox";
-            this->militaryUnit_comboBox->Size = System::Drawing::Size(447, 24);
+            this->militaryUnit_comboBox->Size = System::Drawing::Size(429, 24);
             this->militaryUnit_comboBox->TabIndex = 7;
-            this->militaryUnit_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
-            this->militaryUnit_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->militaryUnit_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->militaryUnit_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
             this->militaryUnit_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::militaryUnit_comboBox_Leave);
             // 
             // groupBox9
@@ -2090,7 +2101,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 static_cast<System::Byte>(204)));
             this->groupBox9->Location = System::Drawing::Point(3, 53);
             this->groupBox9->Name = L"groupBox9";
-            this->groupBox9->Size = System::Drawing::Size(452, 44);
+            this->groupBox9->Size = System::Drawing::Size(435, 44);
             this->groupBox9->TabIndex = 3;
             this->groupBox9->TabStop = false;
             this->groupBox9->Text = L"Звание*";
@@ -2098,6 +2109,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             // rank_comboBox
             // 
             this->rank_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->rank_comboBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::ListItems;
             this->rank_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->rank_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
             this->rank_comboBox->DropDownHeight = 150;
@@ -2109,10 +2121,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->rank_comboBox->Location = System::Drawing::Point(3, 16);
             this->rank_comboBox->MaxDropDownItems = 10;
             this->rank_comboBox->Name = L"rank_comboBox";
-            this->rank_comboBox->Size = System::Drawing::Size(446, 24);
+            this->rank_comboBox->Size = System::Drawing::Size(429, 24);
             this->rank_comboBox->TabIndex = 6;
-            this->rank_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
-            this->rank_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->rank_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->rank_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
             this->rank_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::rank_comboBox_Leave);
             // 
             // groupBox8
@@ -2120,9 +2132,9 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox8->Controls->Add(this->Patronymic_comboBox);
             this->groupBox8->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox8->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->groupBox8->Location = System::Drawing::Point(920, 3);
+            this->groupBox8->Location = System::Drawing::Point(885, 3);
             this->groupBox8->Name = L"groupBox8";
-            this->groupBox8->Size = System::Drawing::Size(454, 44);
+            this->groupBox8->Size = System::Drawing::Size(436, 44);
             this->groupBox8->TabIndex = 2;
             this->groupBox8->TabStop = false;
             this->groupBox8->Text = L"Отчество";
@@ -2130,6 +2142,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             // Patronymic_comboBox
             // 
             this->Patronymic_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->Patronymic_comboBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::ListItems;
             this->Patronymic_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->Patronymic_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
             this->Patronymic_comboBox->DropDownHeight = 150;
@@ -2141,10 +2154,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Patronymic_comboBox->Location = System::Drawing::Point(3, 16);
             this->Patronymic_comboBox->MaxDropDownItems = 10;
             this->Patronymic_comboBox->Name = L"Patronymic_comboBox";
-            this->Patronymic_comboBox->Size = System::Drawing::Size(448, 24);
+            this->Patronymic_comboBox->Size = System::Drawing::Size(430, 24);
             this->Patronymic_comboBox->TabIndex = 5;
-            this->Patronymic_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
-            this->Patronymic_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->Patronymic_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->Patronymic_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
             this->Patronymic_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::Patronymic_comboBox_Leave);
             // 
             // groupBox7
@@ -2154,9 +2167,9 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox7->Dock = System::Windows::Forms::DockStyle::Fill;
             this->groupBox7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->groupBox7->Location = System::Drawing::Point(461, 3);
+            this->groupBox7->Location = System::Drawing::Point(444, 3);
             this->groupBox7->Name = L"groupBox7";
-            this->groupBox7->Size = System::Drawing::Size(453, 44);
+            this->groupBox7->Size = System::Drawing::Size(435, 44);
             this->groupBox7->TabIndex = 1;
             this->groupBox7->TabStop = false;
             this->groupBox7->Text = L"Имя";
@@ -2164,6 +2177,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             // Names_comboBox
             // 
             this->Names_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->Names_comboBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::ListItems;
             this->Names_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->Names_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
             this->Names_comboBox->DropDownHeight = 150;
@@ -2175,10 +2189,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Names_comboBox->Location = System::Drawing::Point(3, 16);
             this->Names_comboBox->MaxDropDownItems = 10;
             this->Names_comboBox->Name = L"Names_comboBox";
-            this->Names_comboBox->Size = System::Drawing::Size(447, 24);
+            this->Names_comboBox->Size = System::Drawing::Size(429, 24);
             this->Names_comboBox->TabIndex = 4;
-            this->Names_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
-            this->Names_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->Names_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->Names_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
             this->Names_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::Names_comboBox_Leave);
             // 
             // groupBox6
@@ -2190,7 +2204,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 static_cast<System::Byte>(204)));
             this->groupBox6->Location = System::Drawing::Point(3, 3);
             this->groupBox6->Name = L"groupBox6";
-            this->groupBox6->Size = System::Drawing::Size(452, 44);
+            this->groupBox6->Size = System::Drawing::Size(435, 44);
             this->groupBox6->TabIndex = 0;
             this->groupBox6->TabStop = false;
             this->groupBox6->Text = L"Фамилия";
@@ -2198,6 +2212,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             // Surname_comboBox
             // 
             this->Surname_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->Surname_comboBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::ListItems;
             this->Surname_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->Surname_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
             this->Surname_comboBox->DropDownHeight = 150;
@@ -2209,10 +2224,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Surname_comboBox->Location = System::Drawing::Point(3, 16);
             this->Surname_comboBox->MaxDropDownItems = 10;
             this->Surname_comboBox->Name = L"Surname_comboBox";
-            this->Surname_comboBox->Size = System::Drawing::Size(446, 24);
+            this->Surname_comboBox->Size = System::Drawing::Size(429, 24);
             this->Surname_comboBox->TabIndex = 3;
-            this->Surname_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
-            this->Surname_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->Surname_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->Surname_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
             this->Surname_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::Surname_comboBox_Leave);
             // 
             // tableLayoutPanel9
@@ -2237,7 +2252,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel9->Name = L"tableLayoutPanel9";
             this->tableLayoutPanel9->RowCount = 1;
             this->tableLayoutPanel9->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 50)));
-            this->tableLayoutPanel9->Size = System::Drawing::Size(1339, 50);
+            this->tableLayoutPanel9->Size = System::Drawing::Size(1329, 50);
             this->tableLayoutPanel9->TabIndex = 4;
             // 
             // id_numericUpDown
@@ -2254,6 +2269,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->id_numericUpDown->Name = L"id_numericUpDown";
             this->id_numericUpDown->Size = System::Drawing::Size(139, 29);
             this->id_numericUpDown->TabIndex = 1;
+            this->id_numericUpDown->Enter += gcnew System::EventHandler(this, &MainWindow::id_numericUpDown_Enter);
             this->id_numericUpDown->Leave += gcnew System::EventHandler(this, &MainWindow::id_numericUpDown_Leave);
             // 
             // year_numericUpDown
@@ -2272,6 +2288,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->year_numericUpDown->Size = System::Drawing::Size(130, 29);
             this->year_numericUpDown->TabIndex = 2;
             this->year_numericUpDown->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 2024, 0, 0, 0 });
+            this->year_numericUpDown->Enter += gcnew System::EventHandler(this, &MainWindow::year_numericUpDown_Enter);
             this->year_numericUpDown->Leave += gcnew System::EventHandler(this, &MainWindow::year_numericUpDown_Leave);
             // 
             // ID_label
@@ -2296,7 +2313,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->flowLayoutPanel1->Location = System::Drawing::Point(521, 1);
             this->flowLayoutPanel1->Margin = System::Windows::Forms::Padding(3, 1, 3, 3);
             this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
-            this->flowLayoutPanel1->Size = System::Drawing::Size(815, 46);
+            this->flowLayoutPanel1->Size = System::Drawing::Size(805, 46);
             this->flowLayoutPanel1->TabIndex = 7;
             // 
             // button3
@@ -2311,7 +2328,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
             this->button3->ForeColor = System::Drawing::Color::White;
-            this->button3->Location = System::Drawing::Point(688, 1);
+            this->button3->Location = System::Drawing::Point(678, 1);
             this->button3->Margin = System::Windows::Forms::Padding(3, 1, 3, 3);
             this->button3->Name = L"button3";
             this->button3->Size = System::Drawing::Size(124, 37);
@@ -2331,7 +2348,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Clear_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
             this->Clear_button->ForeColor = System::Drawing::Color::Red;
-            this->Clear_button->Location = System::Drawing::Point(558, 1);
+            this->Clear_button->Location = System::Drawing::Point(548, 1);
             this->Clear_button->Margin = System::Windows::Forms::Padding(0, 1, 3, 3);
             this->Clear_button->Name = L"Clear_button";
             this->Clear_button->Size = System::Drawing::Size(124, 37);
@@ -2340,13 +2357,399 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Clear_button->Text = L"Очистить";
             this->Clear_button->UseVisualStyleBackColor = false;
             // 
+            // Ill_History_panel
+            // 
+            this->Ill_History_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->Ill_History_panel->AutoScroll = true;
+            this->Ill_History_panel->AutoSize = true;
+            this->Ill_History_panel->Controls->Add(this->F3_button);
+            this->Ill_History_panel->Controls->Add(this->groupBox15);
+            this->Ill_History_panel->Controls->Add(this->label9);
+            this->Ill_History_panel->Controls->Add(this->groupBox16);
+            this->Ill_History_panel->Controls->Add(this->label7);
+            this->Ill_History_panel->Controls->Add(this->MKB_groupBox);
+            this->Ill_History_panel->Controls->Add(this->groupBox14);
+            this->Ill_History_panel->Controls->Add(this->label4);
+            this->Ill_History_panel->Controls->Add(this->groupBox13);
+            this->Ill_History_panel->Controls->Add(this->groupBox12);
+            this->Ill_History_panel->Location = System::Drawing::Point(0, 159);
+            this->Ill_History_panel->Name = L"Ill_History_panel";
+            this->Ill_History_panel->Size = System::Drawing::Size(1387, 500);
+            this->Ill_History_panel->TabIndex = 7;
+            // 
+            // F3_button
+            // 
+            this->F3_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->F3_button->FlatAppearance->BorderSize = 0;
+            this->F3_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->F3_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->F3_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+                static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->F3_button->Location = System::Drawing::Point(570, 381);
+            this->F3_button->Name = L"F3_button";
+            this->F3_button->Size = System::Drawing::Size(173, 37);
+            this->F3_button->TabIndex = 14;
+            this->F3_button->Text = L"Продолжить";
+            this->F3_button->UseVisualStyleBackColor = true;
+            this->F3_button->Click += gcnew System::EventHandler(this, &MainWindow::F2_button_Click);
+            // 
+            // groupBox15
+            // 
+            this->groupBox15->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->groupBox15->Controls->Add(this->complications_comboBox);
+            this->groupBox15->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox15->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->groupBox15->Location = System::Drawing::Point(14, 307);
+            this->groupBox15->Name = L"groupBox15";
+            this->groupBox15->Size = System::Drawing::Size(1307, 44);
+            this->groupBox15->TabIndex = 10;
+            this->groupBox15->TabStop = false;
+            this->groupBox15->Text = L"Осложнение 1*";
+            // 
+            // complications_comboBox
+            // 
+            this->complications_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->complications_comboBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::ListItems;
+            this->complications_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->complications_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->complications_comboBox->DropDownHeight = 150;
+            this->complications_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->complications_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->complications_comboBox->FormattingEnabled = true;
+            this->complications_comboBox->IntegralHeight = false;
+            this->complications_comboBox->Location = System::Drawing::Point(3, 18);
+            this->complications_comboBox->MaxDropDownItems = 10;
+            this->complications_comboBox->Name = L"complications_comboBox";
+            this->complications_comboBox->Size = System::Drawing::Size(1301, 24);
+            this->complications_comboBox->TabIndex = 13;
+            this->complications_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->complications_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->complications_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::complications_comboBox_Leave);
+            // 
+            // label9
+            // 
+            this->label9->AutoSize = true;
+            this->label9->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->label9->Location = System::Drawing::Point(9, 270);
+            this->label9->Name = L"label9";
+            this->label9->Size = System::Drawing::Size(124, 24);
+            this->label9->TabIndex = 9;
+            this->label9->Text = L"Осложнения";
+            // 
+            // groupBox16
+            // 
+            this->groupBox16->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->groupBox16->Controls->Add(this->related_comboBox);
+            this->groupBox16->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox16->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->groupBox16->Location = System::Drawing::Point(13, 201);
+            this->groupBox16->Name = L"groupBox16";
+            this->groupBox16->Size = System::Drawing::Size(1307, 44);
+            this->groupBox16->TabIndex = 8;
+            this->groupBox16->TabStop = false;
+            this->groupBox16->Text = L"Сопутствующий 1*";
+            // 
+            // related_comboBox
+            // 
+            this->related_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->related_comboBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::ListItems;
+            this->related_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->related_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->related_comboBox->DropDownHeight = 150;
+            this->related_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->related_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->related_comboBox->FormattingEnabled = true;
+            this->related_comboBox->IntegralHeight = false;
+            this->related_comboBox->Location = System::Drawing::Point(3, 18);
+            this->related_comboBox->MaxDropDownItems = 10;
+            this->related_comboBox->Name = L"related_comboBox";
+            this->related_comboBox->Size = System::Drawing::Size(1301, 24);
+            this->related_comboBox->TabIndex = 12;
+            this->related_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->related_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->related_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::related_comboBox_Leave);
+            // 
+            // label7
+            // 
+            this->label7->AutoSize = true;
+            this->label7->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->label7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->label7->Location = System::Drawing::Point(9, 164);
+            this->label7->Name = L"label7";
+            this->label7->Size = System::Drawing::Size(153, 24);
+            this->label7->TabIndex = 7;
+            this->label7->Text = L"Сопутствующие";
+            // 
+            // MKB_groupBox
+            // 
+            this->MKB_groupBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->MKB_groupBox->Controls->Add(this->mkb_comboBox);
+            this->MKB_groupBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->MKB_groupBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->MKB_groupBox->Location = System::Drawing::Point(1248, 101);
+            this->MKB_groupBox->Name = L"MKB_groupBox";
+            this->MKB_groupBox->Size = System::Drawing::Size(72, 44);
+            this->MKB_groupBox->TabIndex = 6;
+            this->MKB_groupBox->TabStop = false;
+            this->MKB_groupBox->Text = L"МКБ*";
+            // 
+            // mkb_comboBox
+            // 
+            this->mkb_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->mkb_comboBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::ListItems;
+            this->mkb_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->mkb_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->mkb_comboBox->DropDownHeight = 150;
+            this->mkb_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->mkb_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->mkb_comboBox->FormattingEnabled = true;
+            this->mkb_comboBox->IntegralHeight = false;
+            this->mkb_comboBox->Location = System::Drawing::Point(3, 18);
+            this->mkb_comboBox->MaxDropDownItems = 10;
+            this->mkb_comboBox->Name = L"mkb_comboBox";
+            this->mkb_comboBox->Size = System::Drawing::Size(66, 24);
+            this->mkb_comboBox->TabIndex = 13;
+            this->mkb_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->mkb_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->mkb_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::mkb_comboBox_Leave);
+            // 
+            // groupBox14
+            // 
+            this->groupBox14->Controls->Add(this->epicrizdiagnoses_comboBox);
+            this->groupBox14->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox14->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->groupBox14->Location = System::Drawing::Point(13, 101);
+            this->groupBox14->Name = L"groupBox14";
+            this->groupBox14->Size = System::Drawing::Size(1229, 44);
+            this->groupBox14->TabIndex = 5;
+            this->groupBox14->TabStop = false;
+            this->groupBox14->Text = L"Диагноз 1*";
+            // 
+            // epicrizdiagnoses_comboBox
+            // 
+            this->epicrizdiagnoses_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
+            this->epicrizdiagnoses_comboBox->AutoCompleteSource = System::Windows::Forms::AutoCompleteSource::ListItems;
+            this->epicrizdiagnoses_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->epicrizdiagnoses_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->epicrizdiagnoses_comboBox->DropDownHeight = 150;
+            this->epicrizdiagnoses_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->epicrizdiagnoses_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->epicrizdiagnoses_comboBox->FormattingEnabled = true;
+            this->epicrizdiagnoses_comboBox->IntegralHeight = false;
+            this->epicrizdiagnoses_comboBox->Location = System::Drawing::Point(3, 18);
+            this->epicrizdiagnoses_comboBox->MaxDropDownItems = 10;
+            this->epicrizdiagnoses_comboBox->Name = L"epicrizdiagnoses_comboBox";
+            this->epicrizdiagnoses_comboBox->Size = System::Drawing::Size(1223, 24);
+            this->epicrizdiagnoses_comboBox->TabIndex = 11;
+            this->epicrizdiagnoses_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->epicrizdiagnoses_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::TabIndexedComboBox_LeaveEnterClick);
+            this->epicrizdiagnoses_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::epicrizdiagnoses_comboBox_Leave);
+            // 
+            // label4
+            // 
+            this->label4->AutoSize = true;
+            this->label4->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->label4->Location = System::Drawing::Point(9, 64);
+            this->label4->Name = L"label4";
+            this->label4->Size = System::Drawing::Size(86, 24);
+            this->label4->TabIndex = 4;
+            this->label4->Text = L"Диагноз";
+            // 
+            // groupBox13
+            // 
+            this->groupBox13->Controls->Add(this->outcome_dateTimePicker);
+            this->groupBox13->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox13->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->groupBox13->Location = System::Drawing::Point(224, 3);
+            this->groupBox13->Name = L"groupBox13";
+            this->groupBox13->Size = System::Drawing::Size(215, 44);
+            this->groupBox13->TabIndex = 3;
+            this->groupBox13->TabStop = false;
+            this->groupBox13->Text = L"Дата выписки*";
+            // 
+            // outcome_dateTimePicker
+            // 
+            this->outcome_dateTimePicker->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->outcome_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->outcome_dateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->outcome_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
+            this->outcome_dateTimePicker->Location = System::Drawing::Point(3, 18);
+            this->outcome_dateTimePicker->Name = L"outcome_dateTimePicker";
+            this->outcome_dateTimePicker->Size = System::Drawing::Size(209, 22);
+            this->outcome_dateTimePicker->TabIndex = 10;
+            this->outcome_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 34, 0);
+            this->outcome_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::outcome_dateTimePicker_Leave);
+            // 
+            // groupBox12
+            // 
+            this->groupBox12->Controls->Add(this->income_dateTimePicker);
+            this->groupBox12->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->groupBox12->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->groupBox12->Location = System::Drawing::Point(3, 3);
+            this->groupBox12->Name = L"groupBox12";
+            this->groupBox12->Size = System::Drawing::Size(215, 44);
+            this->groupBox12->TabIndex = 2;
+            this->groupBox12->TabStop = false;
+            this->groupBox12->Text = L"Дата поступления*";
+            // 
+            // income_dateTimePicker
+            // 
+            this->income_dateTimePicker->Cursor = System::Windows::Forms::Cursors::IBeam;
+            this->income_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->income_dateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->income_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
+            this->income_dateTimePicker->Location = System::Drawing::Point(3, 18);
+            this->income_dateTimePicker->Name = L"income_dateTimePicker";
+            this->income_dateTimePicker->Size = System::Drawing::Size(209, 22);
+            this->income_dateTimePicker->TabIndex = 9;
+            this->income_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 14, 0);
+            this->income_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::income_dateTimePicker_Leave);
+            // 
+            // SideInfo_panel
+            // 
+            this->SideInfo_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
+            this->SideInfo_panel->Controls->Add(this->F7_button);
+            this->SideInfo_panel->Controls->Add(this->SideInfo_groupBox);
+            this->SideInfo_panel->Location = System::Drawing::Point(0, 180);
+            this->SideInfo_panel->Name = L"SideInfo_panel";
+            this->SideInfo_panel->Padding = System::Windows::Forms::Padding(5);
+            this->SideInfo_panel->Size = System::Drawing::Size(1329, 500);
+            this->SideInfo_panel->TabIndex = 4;
+            // 
+            // F7_button
+            // 
+            this->F7_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
+            this->F7_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->F7_button->FlatAppearance->BorderSize = 0;
+            this->F7_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->F7_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->F7_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+                static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->F7_button->Location = System::Drawing::Point(580, 79);
+            this->F7_button->Name = L"F7_button";
+            this->F7_button->Size = System::Drawing::Size(173, 37);
+            this->F7_button->TabIndex = 16;
+            this->F7_button->Text = L"Продолжить";
+            this->F7_button->UseVisualStyleBackColor = true;
+            this->F7_button->Click += gcnew System::EventHandler(this, &MainWindow::F7_button_Click);
+            // 
+            // SideInfo_groupBox
+            // 
+            this->SideInfo_groupBox->Controls->Add(this->SideInfo_comboBox);
+            this->SideInfo_groupBox->Dock = System::Windows::Forms::DockStyle::Top;
+            this->SideInfo_groupBox->Location = System::Drawing::Point(5, 5);
+            this->SideInfo_groupBox->Name = L"SideInfo_groupBox";
+            this->SideInfo_groupBox->Size = System::Drawing::Size(1319, 47);
+            this->SideInfo_groupBox->TabIndex = 0;
+            this->SideInfo_groupBox->TabStop = false;
+            // 
+            // SideInfo_comboBox
+            // 
+            this->SideInfo_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->SideInfo_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->SideInfo_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->SideInfo_comboBox->FormattingEnabled = true;
+            this->SideInfo_comboBox->Location = System::Drawing::Point(3, 16);
+            this->SideInfo_comboBox->Name = L"SideInfo_comboBox";
+            this->SideInfo_comboBox->Size = System::Drawing::Size(1313, 24);
+            this->SideInfo_comboBox->TabIndex = 0;
+            // 
+            // AnalysisResults_panel
+            // 
+            this->AnalysisResults_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->AnalysisResults_panel->AutoSize = true;
+            this->AnalysisResults_panel->Controls->Add(this->F5_button);
+            this->AnalysisResults_panel->Controls->Add(this->AnalysisResults_groupBox);
+            this->AnalysisResults_panel->Location = System::Drawing::Point(2, 159);
+            this->AnalysisResults_panel->Name = L"AnalysisResults_panel";
+            this->AnalysisResults_panel->Size = System::Drawing::Size(1327, 354);
+            this->AnalysisResults_panel->TabIndex = 8;
+            this->AnalysisResults_panel->Visible = false;
+            // 
+            // F5_button
+            // 
+            this->F5_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
+            this->F5_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->F5_button->FlatAppearance->BorderSize = 0;
+            this->F5_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->F5_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->F5_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+                static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->F5_button->Location = System::Drawing::Point(578, 79);
+            this->F5_button->Name = L"F5_button";
+            this->F5_button->Size = System::Drawing::Size(173, 37);
+            this->F5_button->TabIndex = 16;
+            this->F5_button->Text = L"Продолжить";
+            this->F5_button->UseVisualStyleBackColor = true;
+            this->F5_button->Click += gcnew System::EventHandler(this, &MainWindow::F5_button_Click);
+            // 
+            // AnalysisResults_groupBox
+            // 
+            this->AnalysisResults_groupBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->AnalysisResults_groupBox->AutoSize = true;
+            this->AnalysisResults_groupBox->Controls->Add(this->AnalyzesResults_comboBox);
+            this->AnalysisResults_groupBox->Location = System::Drawing::Point(5, 6);
+            this->AnalysisResults_groupBox->Name = L"AnalysisResults_groupBox";
+            this->AnalysisResults_groupBox->Size = System::Drawing::Size(1319, 46);
+            this->AnalysisResults_groupBox->TabIndex = 1;
+            this->AnalysisResults_groupBox->TabStop = false;
+            // 
+            // AnalyzesResults_comboBox
+            // 
+            this->AnalyzesResults_comboBox->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->AnalyzesResults_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->AnalyzesResults_comboBox->DropDownHeight = 400;
+            this->AnalyzesResults_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->AnalyzesResults_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->AnalyzesResults_comboBox->FormattingEnabled = true;
+            this->AnalyzesResults_comboBox->IntegralHeight = false;
+            this->AnalyzesResults_comboBox->ItemHeight = 20;
+            this->AnalyzesResults_comboBox->Location = System::Drawing::Point(3, 16);
+            this->AnalyzesResults_comboBox->Name = L"AnalyzesResults_comboBox";
+            this->AnalyzesResults_comboBox->Size = System::Drawing::Size(1313, 28);
+            this->AnalyzesResults_comboBox->TabIndex = 0;
+            this->AnalyzesResults_comboBox->TabStop = false;
+            this->AnalyzesResults_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
+            this->AnalyzesResults_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
+            this->AnalyzesResults_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::AnalyzesResults_comboBox_Leave);
+            // 
             // Anamnesis_panel
             // 
+            this->Anamnesis_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
             this->Anamnesis_panel->AutoSize = true;
             this->Anamnesis_panel->Controls->Add(this->tableLayoutPanel14);
             this->Anamnesis_panel->Location = System::Drawing::Point(2, 159);
             this->Anamnesis_panel->Name = L"Anamnesis_panel";
-            this->Anamnesis_panel->Size = System::Drawing::Size(1308, 488);
+            this->Anamnesis_panel->Size = System::Drawing::Size(1327, 488);
             this->Anamnesis_panel->TabIndex = 0;
             // 
             // tableLayoutPanel14
@@ -2361,7 +2764,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel14->Name = L"tableLayoutPanel14";
             this->tableLayoutPanel14->RowCount = 1;
             this->tableLayoutPanel14->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel14->Size = System::Drawing::Size(1308, 488);
+            this->tableLayoutPanel14->Size = System::Drawing::Size(1327, 488);
             this->tableLayoutPanel14->TabIndex = 2;
             // 
             // panel3
@@ -2375,6 +2778,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             // 
             // tableLayoutPanel11
             // 
+            this->tableLayoutPanel11->AutoSize = true;
             this->tableLayoutPanel11->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
             this->tableLayoutPanel11->ColumnCount = 1;
             this->tableLayoutPanel11->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
@@ -2398,7 +2802,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel11->Dock = System::Windows::Forms::DockStyle::Top;
             this->tableLayoutPanel11->Location = System::Drawing::Point(0, 0);
             this->tableLayoutPanel11->Name = L"tableLayoutPanel11";
-            this->tableLayoutPanel11->RowCount = 21;
+            this->tableLayoutPanel11->RowCount = 17;
             this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
@@ -2416,11 +2820,9 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel11->Size = System::Drawing::Size(598, 854);
+            this->tableLayoutPanel11->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
+                20)));
+            this->tableLayoutPanel11->Size = System::Drawing::Size(598, 799);
             this->tableLayoutPanel11->TabIndex = 0;
             // 
             // NapravlenV_tableLayoutPanel
@@ -2465,7 +2867,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->SentToGospital_radioButton->Location = System::Drawing::Point(3, 3);
             this->SentToGospital_radioButton->Name = L"SentToGospital_radioButton";
             this->SentToGospital_radioButton->Size = System::Drawing::Size(92, 20);
-            this->SentToGospital_radioButton->TabIndex = 0;
+            this->SentToGospital_radioButton->TabIndex = 6;
             this->SentToGospital_radioButton->TabStop = true;
             this->SentToGospital_radioButton->Text = L"Госпиталь";
             this->SentToGospital_radioButton->UseVisualStyleBackColor = true;
@@ -2482,7 +2884,8 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->SentToLazaret_radioButton->Location = System::Drawing::Point(101, 3);
             this->SentToLazaret_radioButton->Name = L"SentToLazaret_radioButton";
             this->SentToLazaret_radioButton->Size = System::Drawing::Size(80, 20);
-            this->SentToLazaret_radioButton->TabIndex = 1;
+            this->SentToLazaret_radioButton->TabIndex = 7;
+            this->SentToLazaret_radioButton->TabStop = true;
             this->SentToLazaret_radioButton->Text = L"Лазарет";
             this->SentToLazaret_radioButton->UseVisualStyleBackColor = true;
             this->SentToLazaret_radioButton->Click += gcnew System::EventHandler(this, &MainWindow::SentToLazaret_radioButton_Click);
@@ -2498,7 +2901,8 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->SentToPolyclinic_radioButton->Location = System::Drawing::Point(187, 3);
             this->SentToPolyclinic_radioButton->Name = L"SentToPolyclinic_radioButton";
             this->SentToPolyclinic_radioButton->Size = System::Drawing::Size(112, 20);
-            this->SentToPolyclinic_radioButton->TabIndex = 2;
+            this->SentToPolyclinic_radioButton->TabIndex = 8;
+            this->SentToPolyclinic_radioButton->TabStop = true;
             this->SentToPolyclinic_radioButton->Text = L"Поликлинику";
             this->SentToPolyclinic_radioButton->UseVisualStyleBackColor = true;
             this->SentToPolyclinic_radioButton->Click += gcnew System::EventHandler(this, &MainWindow::SentToPolyclinic_radioButton_Click);
@@ -2558,7 +2962,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->IsLazaretaVGospital_radioButton->Location = System::Drawing::Point(3, 3);
             this->IsLazaretaVGospital_radioButton->Name = L"IsLazaretaVGospital_radioButton";
             this->IsLazaretaVGospital_radioButton->Size = System::Drawing::Size(92, 20);
-            this->IsLazaretaVGospital_radioButton->TabIndex = 0;
+            this->IsLazaretaVGospital_radioButton->TabIndex = 12;
             this->IsLazaretaVGospital_radioButton->TabStop = true;
             this->IsLazaretaVGospital_radioButton->Text = L"Госпиталь";
             this->IsLazaretaVGospital_radioButton->UseVisualStyleBackColor = true;
@@ -2575,7 +2979,8 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->IsLazaretaVPolyclinic_radioButton->Location = System::Drawing::Point(101, 3);
             this->IsLazaretaVPolyclinic_radioButton->Name = L"IsLazaretaVPolyclinic_radioButton";
             this->IsLazaretaVPolyclinic_radioButton->Size = System::Drawing::Size(112, 20);
-            this->IsLazaretaVPolyclinic_radioButton->TabIndex = 2;
+            this->IsLazaretaVPolyclinic_radioButton->TabIndex = 13;
+            this->IsLazaretaVPolyclinic_radioButton->TabStop = true;
             this->IsLazaretaVPolyclinic_radioButton->Text = L"Поликлинику";
             this->IsLazaretaVPolyclinic_radioButton->UseVisualStyleBackColor = true;
             this->IsLazaretaVPolyclinic_radioButton->Click += gcnew System::EventHandler(this, &MainWindow::IsLazaretaV_radioButton_Click);
@@ -2614,7 +3019,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->IsLazaretaVGospital_dateTimePicker->Location = System::Drawing::Point(3, 18);
             this->IsLazaretaVGospital_dateTimePicker->Name = L"IsLazaretaVGospital_dateTimePicker";
             this->IsLazaretaVGospital_dateTimePicker->Size = System::Drawing::Size(568, 22);
-            this->IsLazaretaVGospital_dateTimePicker->TabIndex = 8;
+            this->IsLazaretaVGospital_dateTimePicker->TabIndex = 15;
             this->IsLazaretaVGospital_dateTimePicker->ValueChanged += gcnew System::EventHandler(this, &MainWindow::IsLazaretaVGospital_dateTimePicker_ValueChanged);
             // 
             // IsLazaretaVPolyclinic_groupBox
@@ -2641,7 +3046,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->IsLazaretaVPolyclinic_dateTimePicker->Location = System::Drawing::Point(3, 18);
             this->IsLazaretaVPolyclinic_dateTimePicker->Name = L"IsLazaretaVPolyclinic_dateTimePicker";
             this->IsLazaretaVPolyclinic_dateTimePicker->Size = System::Drawing::Size(568, 22);
-            this->IsLazaretaVPolyclinic_dateTimePicker->TabIndex = 8;
+            this->IsLazaretaVPolyclinic_dateTimePicker->TabIndex = 14;
             this->IsLazaretaVPolyclinic_dateTimePicker->ValueChanged += gcnew System::EventHandler(this, &MainWindow::IsLazaretaVPolyclinic_dateTimePicker_ValueChanged);
             // 
             // NapravlenieVGospital_tableLayoutPanel
@@ -2699,7 +3104,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->RepeatCheck_dateTimePicker->Location = System::Drawing::Point(3, 18);
             this->RepeatCheck_dateTimePicker->Name = L"RepeatCheck_dateTimePicker";
             this->RepeatCheck_dateTimePicker->Size = System::Drawing::Size(568, 22);
-            this->RepeatCheck_dateTimePicker->TabIndex = 8;
+            this->RepeatCheck_dateTimePicker->TabIndex = 11;
             this->RepeatCheck_dateTimePicker->ValueChanged += gcnew System::EventHandler(this, &MainWindow::RepeatCheck_dateTimePicker_ValueChanged);
             // 
             // AmbulanceHealing_radioButton
@@ -2712,7 +3117,8 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->AmbulanceHealing_radioButton->Location = System::Drawing::Point(145, 29);
             this->AmbulanceHealing_radioButton->Name = L"AmbulanceHealing_radioButton";
             this->AmbulanceHealing_radioButton->Size = System::Drawing::Size(180, 20);
-            this->AmbulanceHealing_radioButton->TabIndex = 2;
+            this->AmbulanceHealing_radioButton->TabIndex = 10;
+            this->AmbulanceHealing_radioButton->TabStop = true;
             this->AmbulanceHealing_radioButton->Text = L"Амбулаторное лечение";
             this->AmbulanceHealing_radioButton->UseVisualStyleBackColor = true;
             this->AmbulanceHealing_radioButton->Click += gcnew System::EventHandler(this, &MainWindow::AmbulanceHealing_radioButton_Click);
@@ -2728,7 +3134,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Gospitalization_radioButton->Location = System::Drawing::Point(9, 29);
             this->Gospitalization_radioButton->Name = L"Gospitalization_radioButton";
             this->Gospitalization_radioButton->Size = System::Drawing::Size(132, 20);
-            this->Gospitalization_radioButton->TabIndex = 1;
+            this->Gospitalization_radioButton->TabIndex = 9;
             this->Gospitalization_radioButton->TabStop = true;
             this->Gospitalization_radioButton->Text = L"Госпитализация";
             this->Gospitalization_radioButton->UseVisualStyleBackColor = true;
@@ -2779,7 +3185,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->ResearchDate_dateTimePicker->Location = System::Drawing::Point(3, 18);
             this->ResearchDate_dateTimePicker->Name = L"ResearchDate_dateTimePicker";
             this->ResearchDate_dateTimePicker->Size = System::Drawing::Size(583, 22);
-            this->ResearchDate_dateTimePicker->TabIndex = 8;
+            this->ResearchDate_dateTimePicker->TabIndex = 16;
             this->ResearchDate_dateTimePicker->ValueChanged += gcnew System::EventHandler(this, &MainWindow::ResearchDate_dateTimePicker_ValueChanged);
             // 
             // label14
@@ -2857,7 +3263,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->ResponseMedstation_radioButton->Location = System::Drawing::Point(3, 3);
             this->ResponseMedstation_radioButton->Name = L"ResponseMedstation_radioButton";
             this->ResponseMedstation_radioButton->Size = System::Drawing::Size(89, 20);
-            this->ResponseMedstation_radioButton->TabIndex = 0;
+            this->ResponseMedstation_radioButton->TabIndex = 3;
             this->ResponseMedstation_radioButton->TabStop = true;
             this->ResponseMedstation_radioButton->Text = L"Медпункт";
             this->ResponseMedstation_radioButton->UseVisualStyleBackColor = true;
@@ -2875,7 +3281,8 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->ResponseGospital_radioButton->Location = System::Drawing::Point(98, 3);
             this->ResponseGospital_radioButton->Name = L"ResponseGospital_radioButton";
             this->ResponseGospital_radioButton->Size = System::Drawing::Size(92, 20);
-            this->ResponseGospital_radioButton->TabIndex = 1;
+            this->ResponseGospital_radioButton->TabIndex = 4;
+            this->ResponseGospital_radioButton->TabStop = true;
             this->ResponseGospital_radioButton->Text = L"Госпиталь";
             this->ResponseGospital_radioButton->UseVisualStyleBackColor = true;
             this->ResponseGospital_radioButton->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::ResponseGospital_radioButton_CheckedChanged);
@@ -2892,7 +3299,8 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->ResponsePolyclinic_radioButton->Location = System::Drawing::Point(196, 3);
             this->ResponsePolyclinic_radioButton->Name = L"ResponsePolyclinic_radioButton";
             this->ResponsePolyclinic_radioButton->Size = System::Drawing::Size(112, 20);
-            this->ResponsePolyclinic_radioButton->TabIndex = 2;
+            this->ResponsePolyclinic_radioButton->TabIndex = 5;
+            this->ResponsePolyclinic_radioButton->TabStop = true;
             this->ResponsePolyclinic_radioButton->Text = L"Поликлинику";
             this->ResponsePolyclinic_radioButton->UseVisualStyleBackColor = true;
             this->ResponsePolyclinic_radioButton->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::ResponsePolyclinic_radioButton_CheckedChanged);
@@ -2919,7 +3327,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->IllBegining_dateTimePicker->Location = System::Drawing::Point(3, 18);
             this->IllBegining_dateTimePicker->Name = L"IllBegining_dateTimePicker";
             this->IllBegining_dateTimePicker->Size = System::Drawing::Size(583, 22);
-            this->IllBegining_dateTimePicker->TabIndex = 8;
+            this->IllBegining_dateTimePicker->TabIndex = 2;
             this->IllBegining_dateTimePicker->ValueChanged += gcnew System::EventHandler(this, &MainWindow::IllBegining_dateTimePicker_ValueChanged);
             // 
             // flowLayoutPanel2
@@ -2964,6 +3372,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Astenia_radioButton->Name = L"Astenia_radioButton";
             this->Astenia_radioButton->Size = System::Drawing::Size(78, 20);
             this->Astenia_radioButton->TabIndex = 1;
+            this->Astenia_radioButton->TabStop = true;
             this->Astenia_radioButton->Text = L"Астения";
             this->Astenia_radioButton->UseVisualStyleBackColor = true;
             this->Astenia_radioButton->Click += gcnew System::EventHandler(this, &MainWindow::Astenia_radioButton_Click);
@@ -2995,10 +3404,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->FOGK_checkBox->Location = System::Drawing::Point(3, 646);
             this->FOGK_checkBox->Name = L"FOGK_checkBox";
             this->FOGK_checkBox->Size = System::Drawing::Size(610, 20);
-            this->FOGK_checkBox->TabIndex = 15;
+            this->FOGK_checkBox->TabIndex = 17;
             this->FOGK_checkBox->Text = L"ФОГК";
             this->FOGK_checkBox->UseVisualStyleBackColor = true;
-            this->FOGK_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::FOGK_checkBox_CheckedChanged);
+            this->FOGK_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::checkBox_CheckedChanged);
             // 
             // RgOGK_checkBox
             // 
@@ -3013,10 +3422,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->RgOGK_checkBox->Location = System::Drawing::Point(3, 672);
             this->RgOGK_checkBox->Name = L"RgOGK_checkBox";
             this->RgOGK_checkBox->Size = System::Drawing::Size(610, 20);
-            this->RgOGK_checkBox->TabIndex = 16;
+            this->RgOGK_checkBox->TabIndex = 18;
             this->RgOGK_checkBox->Text = L"Rg ОГК";
             this->RgOGK_checkBox->UseVisualStyleBackColor = true;
-            this->RgOGK_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::RgOGK_checkBox_CheckedChanged);
+            this->RgOGK_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::checkBox_CheckedChanged);
             // 
             // KT_OGK_checkBox
             // 
@@ -3031,10 +3440,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->KT_OGK_checkBox->Location = System::Drawing::Point(3, 698);
             this->KT_OGK_checkBox->Name = L"KT_OGK_checkBox";
             this->KT_OGK_checkBox->Size = System::Drawing::Size(610, 20);
-            this->KT_OGK_checkBox->TabIndex = 17;
+            this->KT_OGK_checkBox->TabIndex = 19;
             this->KT_OGK_checkBox->Text = L"КТ ОГК";
             this->KT_OGK_checkBox->UseVisualStyleBackColor = true;
-            this->KT_OGK_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::KT_OGK_checkBox_CheckedChanged);
+            this->KT_OGK_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::checkBox_CheckedChanged);
             // 
             // OAK_checkBox
             // 
@@ -3049,10 +3458,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->OAK_checkBox->Location = System::Drawing::Point(3, 724);
             this->OAK_checkBox->Name = L"OAK_checkBox";
             this->OAK_checkBox->Size = System::Drawing::Size(610, 20);
-            this->OAK_checkBox->TabIndex = 18;
+            this->OAK_checkBox->TabIndex = 20;
             this->OAK_checkBox->Text = L"ОАК";
             this->OAK_checkBox->UseVisualStyleBackColor = true;
-            this->OAK_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::OAK_checkBox_CheckedChanged);
+            this->OAK_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::checkBox_CheckedChanged);
             // 
             // OAM_checkBox
             // 
@@ -3067,10 +3476,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->OAM_checkBox->Location = System::Drawing::Point(3, 750);
             this->OAM_checkBox->Name = L"OAM_checkBox";
             this->OAM_checkBox->Size = System::Drawing::Size(610, 20);
-            this->OAM_checkBox->TabIndex = 19;
+            this->OAM_checkBox->TabIndex = 21;
             this->OAM_checkBox->Text = L"ОАМ";
             this->OAM_checkBox->UseVisualStyleBackColor = true;
-            this->OAM_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::OAM_checkBox_CheckedChanged);
+            this->OAM_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::checkBox_CheckedChanged);
             // 
             // BioChemicalBloodResearch_checkBox
             // 
@@ -3088,7 +3497,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->BioChemicalBloodResearch_checkBox->TabIndex = 20;
             this->BioChemicalBloodResearch_checkBox->Text = L"Биохимическое исследование крови";
             this->BioChemicalBloodResearch_checkBox->UseVisualStyleBackColor = true;
-            this->BioChemicalBloodResearch_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::BioChemicalBloodResearch_checkBox_CheckedChanged);
+            this->BioChemicalBloodResearch_checkBox->CheckedChanged += gcnew System::EventHandler(this, &MainWindow::checkBox_CheckedChanged);
             // 
             // label11
             // 
@@ -3110,7 +3519,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->panel2->Dock = System::Windows::Forms::DockStyle::Fill;
             this->panel2->Location = System::Drawing::Point(624, 3);
             this->panel2->Name = L"panel2";
-            this->panel2->Size = System::Drawing::Size(681, 488);
+            this->panel2->Size = System::Drawing::Size(700, 488);
             this->panel2->TabIndex = 3;
             // 
             // F4_button
@@ -3138,7 +3547,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 static_cast<System::Byte>(204)));
             this->groupBox20->Location = System::Drawing::Point(0, 0);
             this->groupBox20->Name = L"groupBox20";
-            this->groupBox20->Size = System::Drawing::Size(681, 139);
+            this->groupBox20->Size = System::Drawing::Size(700, 139);
             this->groupBox20->TabIndex = 2;
             this->groupBox20->TabStop = false;
             this->groupBox20->Text = L"Анамнез (Ctlr+S)";
@@ -3150,8 +3559,8 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Anamnesis_textBox->Location = System::Drawing::Point(3, 22);
             this->Anamnesis_textBox->Multiline = true;
             this->Anamnesis_textBox->Name = L"Anamnesis_textBox";
-            this->Anamnesis_textBox->Size = System::Drawing::Size(675, 114);
-            this->Anamnesis_textBox->TabIndex = 1;
+            this->Anamnesis_textBox->Size = System::Drawing::Size(694, 114);
+            this->Anamnesis_textBox->TabIndex = 22;
             this->Anamnesis_textBox->Text = L"\r\n";
             // 
             // Stamp_panel
@@ -3606,7 +4015,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Recomendations_panel->Controls->Add(this->tableLayoutPanel16);
             this->Recomendations_panel->Location = System::Drawing::Point(0, 192);
             this->Recomendations_panel->Name = L"Recomendations_panel";
-            this->Recomendations_panel->Size = System::Drawing::Size(1339, 500);
+            this->Recomendations_panel->Size = System::Drawing::Size(1355, 500);
             this->Recomendations_panel->TabIndex = 0;
             // 
             // tableLayoutPanel19
@@ -3794,117 +4203,6 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->button5->Text = L"Бронхит";
             this->button5->UseVisualStyleBackColor = true;
             // 
-            // AnalysisResults_panel
-            // 
-            this->AnalysisResults_panel->AutoSize = true;
-            this->AnalysisResults_panel->Controls->Add(this->F5_button);
-            this->AnalysisResults_panel->Controls->Add(this->AnalysisResults_groupBox);
-            this->AnalysisResults_panel->Location = System::Drawing::Point(2, 159);
-            this->AnalysisResults_panel->Name = L"AnalysisResults_panel";
-            this->AnalysisResults_panel->Size = System::Drawing::Size(1308, 354);
-            this->AnalysisResults_panel->TabIndex = 8;
-            this->AnalysisResults_panel->Visible = false;
-            // 
-            // F5_button
-            // 
-            this->F5_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
-            this->F5_button->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->F5_button->FlatAppearance->BorderSize = 0;
-            this->F5_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->F5_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->F5_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
-                static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F5_button->Location = System::Drawing::Point(569, 79);
-            this->F5_button->Name = L"F5_button";
-            this->F5_button->Size = System::Drawing::Size(173, 37);
-            this->F5_button->TabIndex = 16;
-            this->F5_button->Text = L"Продолжить";
-            this->F5_button->UseVisualStyleBackColor = true;
-            this->F5_button->Click += gcnew System::EventHandler(this, &MainWindow::F5_button_Click);
-            // 
-            // AnalysisResults_groupBox
-            // 
-            this->AnalysisResults_groupBox->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-                | System::Windows::Forms::AnchorStyles::Right));
-            this->AnalysisResults_groupBox->AutoSize = true;
-            this->AnalysisResults_groupBox->Controls->Add(this->AnalyzesResults_comboBox);
-            this->AnalysisResults_groupBox->Location = System::Drawing::Point(5, 6);
-            this->AnalysisResults_groupBox->Name = L"AnalysisResults_groupBox";
-            this->AnalysisResults_groupBox->Size = System::Drawing::Size(1240, 46);
-            this->AnalysisResults_groupBox->TabIndex = 1;
-            this->AnalysisResults_groupBox->TabStop = false;
-            // 
-            // AnalyzesResults_comboBox
-            // 
-            this->AnalyzesResults_comboBox->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->AnalyzesResults_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->AnalyzesResults_comboBox->DropDownHeight = 400;
-            this->AnalyzesResults_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->AnalyzesResults_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->AnalyzesResults_comboBox->FormattingEnabled = true;
-            this->AnalyzesResults_comboBox->IntegralHeight = false;
-            this->AnalyzesResults_comboBox->ItemHeight = 20;
-            this->AnalyzesResults_comboBox->Location = System::Drawing::Point(3, 16);
-            this->AnalyzesResults_comboBox->Name = L"AnalyzesResults_comboBox";
-            this->AnalyzesResults_comboBox->Size = System::Drawing::Size(1234, 28);
-            this->AnalyzesResults_comboBox->TabIndex = 0;
-            this->AnalyzesResults_comboBox->TabStop = false;
-            this->AnalyzesResults_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
-            this->AnalyzesResults_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
-            this->AnalyzesResults_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::AnalyzesResults_comboBox_Leave);
-            // 
-            // SideInfo_panel
-            // 
-            this->SideInfo_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
-            this->SideInfo_panel->Controls->Add(this->F7_button);
-            this->SideInfo_panel->Controls->Add(this->SideInfo_groupBox);
-            this->SideInfo_panel->Location = System::Drawing::Point(0, 192);
-            this->SideInfo_panel->Name = L"SideInfo_panel";
-            this->SideInfo_panel->Size = System::Drawing::Size(1339, 488);
-            this->SideInfo_panel->TabIndex = 4;
-            // 
-            // F7_button
-            // 
-            this->F7_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
-            this->F7_button->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->F7_button->FlatAppearance->BorderSize = 0;
-            this->F7_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->F7_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->F7_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
-                static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F7_button->Location = System::Drawing::Point(595, 226);
-            this->F7_button->Name = L"F7_button";
-            this->F7_button->Size = System::Drawing::Size(173, 37);
-            this->F7_button->TabIndex = 16;
-            this->F7_button->Text = L"Продолжить";
-            this->F7_button->UseVisualStyleBackColor = true;
-            this->F7_button->Click += gcnew System::EventHandler(this, &MainWindow::F7_button_Click);
-            // 
-            // SideInfo_groupBox
-            // 
-            this->SideInfo_groupBox->Controls->Add(this->SideInfo_comboBox);
-            this->SideInfo_groupBox->Dock = System::Windows::Forms::DockStyle::Top;
-            this->SideInfo_groupBox->Location = System::Drawing::Point(0, 0);
-            this->SideInfo_groupBox->Name = L"SideInfo_groupBox";
-            this->SideInfo_groupBox->Size = System::Drawing::Size(1339, 47);
-            this->SideInfo_groupBox->TabIndex = 0;
-            this->SideInfo_groupBox->TabStop = false;
-            // 
-            // SideInfo_comboBox
-            // 
-            this->SideInfo_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->SideInfo_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->SideInfo_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->SideInfo_comboBox->FormattingEnabled = true;
-            this->SideInfo_comboBox->Location = System::Drawing::Point(3, 16);
-            this->SideInfo_comboBox->Name = L"SideInfo_comboBox";
-            this->SideInfo_comboBox->Size = System::Drawing::Size(1333, 24);
-            this->SideInfo_comboBox->TabIndex = 0;
-            // 
             // AddingInfo_panel
             // 
             this->AddingInfo_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
@@ -3913,7 +4211,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->AddingInfo_panel->Controls->Add(this->tableLayoutPanel13);
             this->AddingInfo_panel->Location = System::Drawing::Point(2, 194);
             this->AddingInfo_panel->Name = L"AddingInfo_panel";
-            this->AddingInfo_panel->Size = System::Drawing::Size(1337, 331);
+            this->AddingInfo_panel->Size = System::Drawing::Size(1353, 331);
             this->AddingInfo_panel->TabIndex = 9;
             // 
             // tableLayoutPanel15
@@ -3932,7 +4230,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel15->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel15->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
                 20)));
-            this->tableLayoutPanel15->Size = System::Drawing::Size(668, 331);
+            this->tableLayoutPanel15->Size = System::Drawing::Size(684, 331);
             this->tableLayoutPanel15->TabIndex = 4;
             // 
             // groupBox
@@ -3943,7 +4241,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->groupBox->Location = System::Drawing::Point(17, 3);
+            this->groupBox->Location = System::Drawing::Point(25, 3);
             this->groupBox->MinimumSize = System::Drawing::Size(633, 39);
             this->groupBox->Name = L"groupBox";
             this->groupBox->Size = System::Drawing::Size(633, 72);
@@ -3970,7 +4268,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->groupBox23->Cursor = System::Windows::Forms::Cursors::IBeam;
             this->groupBox23->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
                 static_cast<System::Byte>(204)));
-            this->groupBox23->Location = System::Drawing::Point(17, 81);
+            this->groupBox23->Location = System::Drawing::Point(25, 81);
             this->groupBox23->MinimumSize = System::Drawing::Size(633, 39);
             this->groupBox23->Name = L"groupBox23";
             this->groupBox23->Size = System::Drawing::Size(633, 76);
@@ -4121,267 +4419,6 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->comboBox11->Size = System::Drawing::Size(657, 24);
             this->comboBox11->TabIndex = 0;
             // 
-            // Ill_History_panel
-            // 
-            this->Ill_History_panel->AutoScroll = true;
-            this->Ill_History_panel->AutoSize = true;
-            this->Ill_History_panel->Controls->Add(this->F3_button);
-            this->Ill_History_panel->Controls->Add(this->groupBox15);
-            this->Ill_History_panel->Controls->Add(this->label9);
-            this->Ill_History_panel->Controls->Add(this->groupBox16);
-            this->Ill_History_panel->Controls->Add(this->label7);
-            this->Ill_History_panel->Controls->Add(this->MKB_groupBox);
-            this->Ill_History_panel->Controls->Add(this->groupBox14);
-            this->Ill_History_panel->Controls->Add(this->label4);
-            this->Ill_History_panel->Controls->Add(this->groupBox13);
-            this->Ill_History_panel->Controls->Add(this->groupBox12);
-            this->Ill_History_panel->Location = System::Drawing::Point(0, 159);
-            this->Ill_History_panel->Name = L"Ill_History_panel";
-            this->Ill_History_panel->Size = System::Drawing::Size(1371, 500);
-            this->Ill_History_panel->TabIndex = 7;
-            // 
-            // F3_button
-            // 
-            this->F3_button->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->F3_button->FlatAppearance->BorderSize = 0;
-            this->F3_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->F3_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->F3_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
-                static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F3_button->Location = System::Drawing::Point(570, 381);
-            this->F3_button->Name = L"F3_button";
-            this->F3_button->Size = System::Drawing::Size(173, 37);
-            this->F3_button->TabIndex = 14;
-            this->F3_button->Text = L"Продолжить";
-            this->F3_button->UseVisualStyleBackColor = true;
-            this->F3_button->Click += gcnew System::EventHandler(this, &MainWindow::F2_button_Click);
-            // 
-            // groupBox15
-            // 
-            this->groupBox15->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-                | System::Windows::Forms::AnchorStyles::Right));
-            this->groupBox15->Controls->Add(this->complications_comboBox);
-            this->groupBox15->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->groupBox15->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->groupBox15->Location = System::Drawing::Point(14, 307);
-            this->groupBox15->Name = L"groupBox15";
-            this->groupBox15->Size = System::Drawing::Size(1291, 44);
-            this->groupBox15->TabIndex = 10;
-            this->groupBox15->TabStop = false;
-            this->groupBox15->Text = L"Осложнение 1*";
-            // 
-            // complications_comboBox
-            // 
-            this->complications_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
-            this->complications_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->complications_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->complications_comboBox->DropDownHeight = 150;
-            this->complications_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->complications_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->complications_comboBox->FormattingEnabled = true;
-            this->complications_comboBox->IntegralHeight = false;
-            this->complications_comboBox->Location = System::Drawing::Point(3, 18);
-            this->complications_comboBox->MaxDropDownItems = 10;
-            this->complications_comboBox->Name = L"complications_comboBox";
-            this->complications_comboBox->Size = System::Drawing::Size(1285, 24);
-            this->complications_comboBox->TabIndex = 13;
-            this->complications_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
-            this->complications_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
-            this->complications_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::complications_comboBox_Leave);
-            // 
-            // label9
-            // 
-            this->label9->AutoSize = true;
-            this->label9->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->label9->Location = System::Drawing::Point(9, 270);
-            this->label9->Name = L"label9";
-            this->label9->Size = System::Drawing::Size(124, 24);
-            this->label9->TabIndex = 9;
-            this->label9->Text = L"Осложнения";
-            // 
-            // groupBox16
-            // 
-            this->groupBox16->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-                | System::Windows::Forms::AnchorStyles::Right));
-            this->groupBox16->Controls->Add(this->related_comboBox);
-            this->groupBox16->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->groupBox16->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->groupBox16->Location = System::Drawing::Point(13, 201);
-            this->groupBox16->Name = L"groupBox16";
-            this->groupBox16->Size = System::Drawing::Size(1291, 44);
-            this->groupBox16->TabIndex = 8;
-            this->groupBox16->TabStop = false;
-            this->groupBox16->Text = L"Сопутствующий 1*";
-            // 
-            // related_comboBox
-            // 
-            this->related_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
-            this->related_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->related_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->related_comboBox->DropDownHeight = 150;
-            this->related_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->related_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->related_comboBox->FormattingEnabled = true;
-            this->related_comboBox->IntegralHeight = false;
-            this->related_comboBox->Location = System::Drawing::Point(3, 18);
-            this->related_comboBox->MaxDropDownItems = 10;
-            this->related_comboBox->Name = L"related_comboBox";
-            this->related_comboBox->Size = System::Drawing::Size(1285, 24);
-            this->related_comboBox->TabIndex = 12;
-            this->related_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
-            this->related_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
-            this->related_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::related_comboBox_Leave);
-            // 
-            // label7
-            // 
-            this->label7->AutoSize = true;
-            this->label7->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->label7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->label7->Location = System::Drawing::Point(9, 164);
-            this->label7->Name = L"label7";
-            this->label7->Size = System::Drawing::Size(153, 24);
-            this->label7->TabIndex = 7;
-            this->label7->Text = L"Сопутствующие";
-            // 
-            // MKB_groupBox
-            // 
-            this->MKB_groupBox->Controls->Add(this->mkb_comboBox);
-            this->MKB_groupBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->MKB_groupBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->MKB_groupBox->Location = System::Drawing::Point(1182, 101);
-            this->MKB_groupBox->Name = L"MKB_groupBox";
-            this->MKB_groupBox->Size = System::Drawing::Size(122, 44);
-            this->MKB_groupBox->TabIndex = 6;
-            this->MKB_groupBox->TabStop = false;
-            this->MKB_groupBox->Text = L"МКБ*";
-            // 
-            // mkb_comboBox
-            // 
-            this->mkb_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
-            this->mkb_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->mkb_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->mkb_comboBox->DropDownHeight = 150;
-            this->mkb_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->mkb_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->mkb_comboBox->FormattingEnabled = true;
-            this->mkb_comboBox->IntegralHeight = false;
-            this->mkb_comboBox->Location = System::Drawing::Point(3, 18);
-            this->mkb_comboBox->MaxDropDownItems = 10;
-            this->mkb_comboBox->Name = L"mkb_comboBox";
-            this->mkb_comboBox->Size = System::Drawing::Size(116, 24);
-            this->mkb_comboBox->TabIndex = 13;
-            this->mkb_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
-            this->mkb_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::mkb_comboBox_Leave);
-            // 
-            // groupBox14
-            // 
-            this->groupBox14->Controls->Add(this->epicrizdiagnoses_comboBox);
-            this->groupBox14->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->groupBox14->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->groupBox14->Location = System::Drawing::Point(13, 101);
-            this->groupBox14->Name = L"groupBox14";
-            this->groupBox14->Size = System::Drawing::Size(1161, 44);
-            this->groupBox14->TabIndex = 5;
-            this->groupBox14->TabStop = false;
-            this->groupBox14->Text = L"Диагноз 1*";
-            // 
-            // epicrizdiagnoses_comboBox
-            // 
-            this->epicrizdiagnoses_comboBox->AutoCompleteMode = System::Windows::Forms::AutoCompleteMode::SuggestAppend;
-            this->epicrizdiagnoses_comboBox->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->epicrizdiagnoses_comboBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->epicrizdiagnoses_comboBox->DropDownHeight = 150;
-            this->epicrizdiagnoses_comboBox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->epicrizdiagnoses_comboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->epicrizdiagnoses_comboBox->FormattingEnabled = true;
-            this->epicrizdiagnoses_comboBox->IntegralHeight = false;
-            this->epicrizdiagnoses_comboBox->Location = System::Drawing::Point(3, 18);
-            this->epicrizdiagnoses_comboBox->MaxDropDownItems = 10;
-            this->epicrizdiagnoses_comboBox->Name = L"epicrizdiagnoses_comboBox";
-            this->epicrizdiagnoses_comboBox->Size = System::Drawing::Size(1155, 24);
-            this->epicrizdiagnoses_comboBox->TabIndex = 11;
-            this->epicrizdiagnoses_comboBox->Click += gcnew System::EventHandler(this, &MainWindow::comboBox_Click);
-            this->epicrizdiagnoses_comboBox->Enter += gcnew System::EventHandler(this, &MainWindow::comboBox_Enter);
-            this->epicrizdiagnoses_comboBox->Leave += gcnew System::EventHandler(this, &MainWindow::epicrizdiagnoses_comboBox_Leave);
-            // 
-            // label4
-            // 
-            this->label4->AutoSize = true;
-            this->label4->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->label4->Location = System::Drawing::Point(9, 64);
-            this->label4->Name = L"label4";
-            this->label4->Size = System::Drawing::Size(86, 24);
-            this->label4->TabIndex = 4;
-            this->label4->Text = L"Диагноз";
-            // 
-            // groupBox13
-            // 
-            this->groupBox13->Controls->Add(this->outcome_dateTimePicker);
-            this->groupBox13->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->groupBox13->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->groupBox13->Location = System::Drawing::Point(224, 3);
-            this->groupBox13->Name = L"groupBox13";
-            this->groupBox13->Size = System::Drawing::Size(215, 44);
-            this->groupBox13->TabIndex = 3;
-            this->groupBox13->TabStop = false;
-            this->groupBox13->Text = L"Дата выписки*";
-            // 
-            // outcome_dateTimePicker
-            // 
-            this->outcome_dateTimePicker->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->outcome_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->outcome_dateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->outcome_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
-            this->outcome_dateTimePicker->Location = System::Drawing::Point(3, 18);
-            this->outcome_dateTimePicker->Name = L"outcome_dateTimePicker";
-            this->outcome_dateTimePicker->Size = System::Drawing::Size(209, 22);
-            this->outcome_dateTimePicker->TabIndex = 10;
-            this->outcome_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 34, 0);
-            this->outcome_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::outcome_dateTimePicker_Leave);
-            // 
-            // groupBox12
-            // 
-            this->groupBox12->Controls->Add(this->income_dateTimePicker);
-            this->groupBox12->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->groupBox12->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->groupBox12->Location = System::Drawing::Point(3, 3);
-            this->groupBox12->Name = L"groupBox12";
-            this->groupBox12->Size = System::Drawing::Size(215, 44);
-            this->groupBox12->TabIndex = 2;
-            this->groupBox12->TabStop = false;
-            this->groupBox12->Text = L"Дата поступления*";
-            // 
-            // income_dateTimePicker
-            // 
-            this->income_dateTimePicker->Cursor = System::Windows::Forms::Cursors::IBeam;
-            this->income_dateTimePicker->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->income_dateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->income_dateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
-            this->income_dateTimePicker->Location = System::Drawing::Point(3, 18);
-            this->income_dateTimePicker->Name = L"income_dateTimePicker";
-            this->income_dateTimePicker->Size = System::Drawing::Size(209, 22);
-            this->income_dateTimePicker->TabIndex = 9;
-            this->income_dateTimePicker->Value = System::DateTime(2024, 8, 14, 18, 5, 14, 0);
-            this->income_dateTimePicker->Leave += gcnew System::EventHandler(this, &MainWindow::income_dateTimePicker_Leave);
-            // 
             // UnworkableList_panel
             // 
             this->UnworkableList_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
@@ -4391,7 +4428,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->UnworkableList_panel->Controls->Add(this->radioButton2);
             this->UnworkableList_panel->Location = System::Drawing::Point(0, 194);
             this->UnworkableList_panel->Name = L"UnworkableList_panel";
-            this->UnworkableList_panel->Size = System::Drawing::Size(1339, 498);
+            this->UnworkableList_panel->Size = System::Drawing::Size(1355, 498);
             this->UnworkableList_panel->TabIndex = 0;
             // 
             // tableLayoutPanel18
@@ -4406,7 +4443,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel18->RowCount = 2;
             this->tableLayoutPanel18->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel18->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel18->Size = System::Drawing::Size(1365, 115);
+            this->tableLayoutPanel18->Size = System::Drawing::Size(1381, 115);
             this->tableLayoutPanel18->TabIndex = 17;
             // 
             // F9_button
@@ -4419,7 +4456,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
                 static_cast<System::Byte>(204)));
             this->F9_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F9_button->Location = System::Drawing::Point(596, 3);
+            this->F9_button->Location = System::Drawing::Point(604, 3);
             this->F9_button->Name = L"F9_button";
             this->F9_button->Size = System::Drawing::Size(173, 37);
             this->F9_button->TabIndex = 16;
@@ -4484,9 +4521,10 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             // 
             this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
             this->AutoScroll = true;
+            this->AutoSize = true;
             this->BackColor = System::Drawing::SystemColors::ControlLightLight;
             this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Center;
-            this->ClientSize = System::Drawing::Size(1313, 742);
+            this->ClientSize = System::Drawing::Size(1329, 742);
             this->Controls->Add(this->Epicrisis_panel);
             this->Controls->Add(this->Home_panel);
             this->HelpButton = true;
@@ -4539,10 +4577,24 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->year_numericUpDown))->EndInit();
             this->flowLayoutPanel1->ResumeLayout(false);
             this->flowLayoutPanel1->PerformLayout();
+            this->Ill_History_panel->ResumeLayout(false);
+            this->Ill_History_panel->PerformLayout();
+            this->groupBox15->ResumeLayout(false);
+            this->groupBox16->ResumeLayout(false);
+            this->MKB_groupBox->ResumeLayout(false);
+            this->groupBox14->ResumeLayout(false);
+            this->groupBox13->ResumeLayout(false);
+            this->groupBox12->ResumeLayout(false);
+            this->SideInfo_panel->ResumeLayout(false);
+            this->SideInfo_groupBox->ResumeLayout(false);
+            this->AnalysisResults_panel->ResumeLayout(false);
+            this->AnalysisResults_panel->PerformLayout();
+            this->AnalysisResults_groupBox->ResumeLayout(false);
             this->Anamnesis_panel->ResumeLayout(false);
             this->tableLayoutPanel14->ResumeLayout(false);
             this->tableLayoutPanel14->PerformLayout();
             this->panel3->ResumeLayout(false);
+            this->panel3->PerformLayout();
             this->tableLayoutPanel11->ResumeLayout(false);
             this->tableLayoutPanel11->PerformLayout();
             this->NapravlenV_tableLayoutPanel->ResumeLayout(false);
@@ -4590,11 +4642,6 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->tableLayoutPanel17->PerformLayout();
             this->groupBox21->ResumeLayout(false);
             this->tableLayoutPanel16->ResumeLayout(false);
-            this->AnalysisResults_panel->ResumeLayout(false);
-            this->AnalysisResults_panel->PerformLayout();
-            this->AnalysisResults_groupBox->ResumeLayout(false);
-            this->SideInfo_panel->ResumeLayout(false);
-            this->SideInfo_groupBox->ResumeLayout(false);
             this->AddingInfo_panel->ResumeLayout(false);
             this->AddingInfo_panel->PerformLayout();
             this->tableLayoutPanel15->ResumeLayout(false);
@@ -4609,14 +4656,6 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
             this->Mouth_groupBox->ResumeLayout(false);
             this->Mouth_groupBox->PerformLayout();
             this->groupBox22->ResumeLayout(false);
-            this->Ill_History_panel->ResumeLayout(false);
-            this->Ill_History_panel->PerformLayout();
-            this->groupBox15->ResumeLayout(false);
-            this->groupBox16->ResumeLayout(false);
-            this->MKB_groupBox->ResumeLayout(false);
-            this->groupBox14->ResumeLayout(false);
-            this->groupBox13->ResumeLayout(false);
-            this->groupBox12->ResumeLayout(false);
             this->UnworkableList_panel->ResumeLayout(false);
             this->UnworkableList_panel->PerformLayout();
             this->tableLayoutPanel18->ResumeLayout(false);
@@ -4659,6 +4698,7 @@ private: System::Void epicrisis_button_Click(System::Object^ sender, System::Eve
     CleanEpicrisisTabLastLabel();
     Ill_History_label->BackColor = Color::FromArgb(10, 80, 255);
     lastLabel = Ill_History_label;
+    id_numericUpDown->Focus();
 }
 private: System::Void BackToHome_button_Click(System::Object^ sender, System::EventArgs^ e) {
     ShowPanel(Home_panel);
@@ -4676,6 +4716,7 @@ private: System::Void IllHistory_button_Click(System::Object^ sender, System::Ev
     ShowPanel(Ill_History_panel);
     CleanEpicrisisTabLastLabel();
     SetTabMenuLabelBottomLine(Ill_History_label);
+    id_numericUpDown->Focus();
 }
 
 private: System::Void Anamnesis_button_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -4926,24 +4967,6 @@ private: System::Void CheckBoxChangeValue(CheckBox^ box) {
     }
     AnamnesisTextBox();
 }
-private: System::Void FOGK_checkBox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-    CheckBoxChangeValue(static_cast<CheckBox^>(sender));
-}
-private: System::Void RgOGK_checkBox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-    CheckBoxChangeValue(static_cast<CheckBox^>(sender));
-}
-private: System::Void KT_OGK_checkBox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-    CheckBoxChangeValue(static_cast<CheckBox^>(sender));
-}
-private: System::Void OAK_checkBox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-    CheckBoxChangeValue(static_cast<CheckBox^>(sender));
-}
-private: System::Void OAM_checkBox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-    CheckBoxChangeValue(static_cast<CheckBox^>(sender));
-}
-private: System::Void BioChemicalBloodResearch_checkBox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
-    CheckBoxChangeValue(static_cast<CheckBox^>(sender));
-}
 private: System::Void checkBox_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
     CheckBoxChangeValue(static_cast<CheckBox^>(sender));
 }
@@ -5050,7 +5073,7 @@ private: Void FillCheckBoxList(CheckedListBox^ checklist, List<String^>^ items) 
         checklist->SetItemChecked(checklist->Items->IndexOf(item), (dbHelper->SetQueryByCondition("recommendations", "selectedByDefault", "title", item)[0]->Contains(item)));
     }
 }
-private: Void FillComboBox(ComboBoxEdit^ box, List<String^>^ items) {
+private: Void FillComboBox(XtraEditors::ComboBoxEdit^ box, List<String^>^ items) {
     box->Properties->Items->Clear();
     for each (String ^ item in items) {
         box->Properties->Items->Add(item);
@@ -5060,6 +5083,8 @@ private: Void FillComboBox(ComboBoxEdit^ box, List<String^>^ items) {
 private: Void InitializeData() {
     dbPath = dbPath_label->Text;
     dbHelper = gcnew DB_Helper(dbPath);
+    epicrizDiagnosesList = gcnew List<String^>();
+    epicrizDiagnosesList = dbHelper->GetColumnData("epicrizDiagnoses", "title");
     FillComboBox(Names_comboBox, dbHelper->GetSortedColumnData("firstNames", "value", 1));
     FillComboBox(Surname_comboBox, dbHelper->GetSortedColumnData("lastNames", "value", 1));
     FillComboBox(Patronymic_comboBox, dbHelper->GetSortedColumnData("middleNames", "value", 1));
@@ -5076,12 +5101,6 @@ private: Void InitializeData() {
 }   
 private: System::Void comboBox_Click(System::Object^ sender, System::EventArgs^ e) {
     System::Windows::Forms::ComboBox^ box = safe_cast<System::Windows::Forms::ComboBox^>(sender);
-    if (box->Focus()) {
-        if (!box->DroppedDown) {
-            box->DroppedDown = true;
-        }
-        else box->DroppedDown = false;
-    }
 }
 private: System::Void DB_change_button_Click(System::Object^ sender, System::EventArgs^ e) {
     PathType = PathTypes::DB;
@@ -5135,52 +5154,75 @@ private: System::Void AnalyzesResults_comboBox_Leave(System::Object^ sender, Sys
 }
 private: System::Void Surname_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
     Surname = Surname_comboBox->Text;
-    Surname_comboBox->Text = Surname;
+    //Surname_comboBox->Text = Surname;
 }
 private: System::Void Names_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
     Name = Names_comboBox->Text;
-    Names_comboBox->Text = Name;
+    //Names_comboBox->Text = Name;
 }
 private: System::Void Patronymic_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
     Patronymic = Patronymic_comboBox->Text;
-    Patronymic_comboBox->Text = Patronymic;
+    //Patronymic_comboBox->Text = Patronymic;
 }
 private: System::Void rank_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
     Rank = rank_comboBox->Text;
-    rank_comboBox->Text = Rank;
+    //rank_comboBox->Text = Rank;
 }
 private: System::Void militaryUnit_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
     MilitaryUnit = militaryUnit_comboBox->Text;
-    militaryUnit_comboBox->Text = MilitaryUnit;
+    //militaryUnit_comboBox->Text = MilitaryUnit;
 }
 private: System::Void birthday_dateTimePicker_Leave(System::Object^ sender, System::EventArgs^ e) {
     Birthday = birthday_dateTimePicker->Text;
-    birthday_dateTimePicker->Text = Birthday;
+    //birthday_dateTimePicker->Text = Birthday;
 }
 private: System::Void income_dateTimePicker_Leave(System::Object^ sender, System::EventArgs^ e) {
     IncomeDate = income_dateTimePicker->Text;
-    income_dateTimePicker->Text = IncomeDate;
+    //income_dateTimePicker->Text = IncomeDate;
 }
 private: System::Void outcome_dateTimePicker_Leave(System::Object^ sender, System::EventArgs^ e) {
     OutcomeDate = outcome_dateTimePicker->Text;
-    outcome_dateTimePicker->Text = OutcomeDate;
+    //outcome_dateTimePicker->Text = OutcomeDate;
 }
 private: System::Void epicrizdiagnoses_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
     Diagnosis = epicrizdiagnoses_comboBox->Text;
-    epicrizdiagnoses_comboBox->Text = Diagnosis;
-    mkb_comboBox->Text = dbHelper->SetQueryByConditionLike("epicrizDiagnoses", "mkb", "title", Diagnosis)[0];
+    //int index = String::Substring()
+    String^ DiagnosisInMkb = SearchingStringInList(Diagnosis, epicrizDiagnosesList);
+    //epicrizdiagnoses_comboBox->Text = Diagnosis;
+    if (DiagnosisInMkb != nullptr)
+        mkb_comboBox->Text = dbHelper->SetQueryByConditionLike("epicrizDiagnoses", "mkb", "title", DiagnosisInMkb)[0];
+}
+private: System::String^ SearchingStringInList(String^ str, List<String^>^ Items) {
+    List<String^>^ items = gcnew List<String^>(Items);
+    List<String^>^ tmp_list = gcnew List<String^>();
+    String^ result;
+    for (int i = 1; i < str->Length; i++) {
+        String^ substr = str->Substring(0, i);
+        for each (String^ item in items) {
+            if (item->Substring(0, i)->ToLower() == substr->ToLower()) {
+                tmp_list->Add(item);
+            }
+        }
+        if (tmp_list->Count == 1) {
+            return result = tmp_list[0];
+        }
+        items->Clear();
+        items->AddRange(tmp_list);
+        tmp_list->Clear();
+    }
+    return result;
 }
 private: System::Void related_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
     RelatedDiagnosis = related_comboBox->Text;
-    related_comboBox->Text = RelatedDiagnosis;
+    //related_comboBox->Text = RelatedDiagnosis;
 }
 private: System::Void complications_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
     Complications = complications_comboBox->Text;
-    complications_comboBox->Text = Complications;
+    //complications_comboBox->Text = Complications;
 }
 private: System::Void mkb_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
     Mkb = mkb_comboBox->Text;
-    mkb_comboBox->Text;
+    //mkb_comboBox->Text;
 }
 private: System::Void id_numericUpDown_Leave(System::Object^ sender, System::EventArgs^ e) {
     HistoryNumber = id_numericUpDown->Text;
@@ -5190,13 +5232,54 @@ private: System::Void year_numericUpDown_Leave(System::Object^ sender, System::E
     HistoryYear = year_numericUpDown->Text;
     year_numericUpDown->Text = HistoryYear; 
 }       
-private: System::Void TabIndexedControlLeave(System::Object^ sender, System::EventArgs^ e) {
-    
-    /*switch (switch_on)
-    {
-    default:
-        break;
-    }*/
+private: System::Void TabIndexedComboBox_LeaveEnterClick(System::Object^ sender, System::EventArgs^ e) {
+    ComboBox^ box = safe_cast<ComboBox^>(sender);
+    String^ name = box->Name;
+    NextComboBox(box);
+    /*if (!box->DroppedDown || box->Focused) {
+        box->DroppedDown = true;
+    }
+    else {
+        box->DroppedDown = false;
+    }
+    */
+}
+
+private: System::Void InitializeComboBox() {
+    ComboBoxList = gcnew List<ComboBox^>();
+    ComboBoxList->Add(Surname_comboBox);
+    ComboBoxList->Add(Names_comboBox);
+    ComboBoxList->Add(Patronymic_comboBox);
+    ComboBoxList->Add(rank_comboBox);
+    ComboBoxList->Add(militaryUnit_comboBox);
+    ComboBoxList->Add(epicrizdiagnoses_comboBox);
+    ComboBoxList->Add(related_comboBox);
+    ComboBoxList->Add(complications_comboBox);
+    ComboBoxList->Add(mkb_comboBox);
+}
+private: System::Void AddComboBox(ComboBox^ box) {
+    ComboBoxList->Add(box);
+}
+private: System::Void NextComboBox(ComboBox^ box) {
+    if (currentComboBox == ComboBoxList[ComboBoxList->IndexOf(box)] && box->DroppedDown == true)
+        return;
+    String^ boxName = box->Name;
+    String^ currName;
+    String^ prevName;
+    if (ComboBoxList->Count != 0) {
+        previousComboBox = currentComboBox;
+        currentComboBox = ComboBoxList[ComboBoxList->IndexOf(box)];
+        currName = currentComboBox->Name;
+        if (previousComboBox != nullptr)
+            prevName = previousComboBox->Name;
+    }
+    ComboBoxDropDownLogic();
+}
+private: System::Void ComboBoxDropDownLogic() {
+    //if (previousComboBox != nullptr)
+    //  previousComboBox->DroppedDown = false;
+    currentComboBox->Focus();
+    currentComboBox->DroppedDown = true;
 }
 private: System::Void comboBox_Enter(System::Object^ sender, System::EventArgs^ e) {
     System::Windows::Forms::ComboBox^ box = safe_cast<System::Windows::Forms::ComboBox^>(sender);
@@ -5246,6 +5329,22 @@ private: System::Void IsLazaretaV_radioButton_Click(System::Object^ sender, Syst
         IsLazaretaVPolyclinic = true;
     }
     AnamnesisTextBox();
+}
+private: System::Void InitializeInterface() {
+    id_numericUpDown->Value = Convert::ToDecimal(dbHelper->GetMinMaxColumnData("epicrises", "historyNumber", MinMax::Max)) + 1;
+    birthday_dateTimePicker->Value = DateTime::Now.AddYears(-18);
+    income_dateTimePicker->Value = DateTime::Now.AddDays(-12);
+    outcome_dateTimePicker->Value = DateTime::Now.AddDays(1);
+    IllBegining_dateTimePicker->Value = income_dateTimePicker->Value.AddDays(-3);
+
+}
+private: System::Void id_numericUpDown_Enter(System::Object^ sender, System::EventArgs^ e) {
+    TextBox^ numericTextBox = safe_cast<TextBox^>(id_numericUpDown->Controls[1]);
+    numericTextBox->SelectAll();
+}
+private: System::Void year_numericUpDown_Enter(System::Object^ sender, System::EventArgs^ e) {
+    TextBox^ numericTextBox = safe_cast<TextBox^>(year_numericUpDown->Controls[1]);
+    numericTextBox->SelectAll();
 }
 };
 }

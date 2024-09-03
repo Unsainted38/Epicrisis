@@ -186,6 +186,7 @@ namespace unsaintedWinApp {
         tmp_table = "";
         return results;
     }
+    // Функция возвращает отсортированный список строк по убыванию или возрастанию
     List<String^>^ DB_Helper::GetSortedColumnData(String^ tableName, String^ columnName, int sortOrder)
     {
         List<String^>^ results = gcnew List<String^>();
@@ -237,5 +238,47 @@ namespace unsaintedWinApp {
         tmp_query = "";
         tmp_table = "";
         return results;
+    }
+    String^ DB_Helper::GetMinMaxColumnData(String^ table, String^ column, MinMax min_max)
+    {
+        SQLiteConnection^ connection = gcnew SQLiteConnection(connectionString);
+        String^ Data;
+        
+        tmp_table = table;
+        switch (min_max)
+        {
+        case unsaintedWinApp::MinMax::Min:
+            tmp_query = "SELECT DISTINCT MIN(" + column + ")" + " FROM " + table;
+            tmp_column = "MIN(" + column + ")";
+            break;
+        case unsaintedWinApp::MinMax::Max:
+            tmp_query = "SELECT DISTINCT MAX(" + column + ")" + " FROM " + table;
+            tmp_column = "MAX(" + column + ")";
+            break;
+        default:
+            break;
+        }
+        
+        try {
+            connection->Open();
+            SQLiteCommand^ cmd = gcnew SQLiteCommand(tmp_query, connection);
+            SQLiteDataReader^ reader = cmd->ExecuteReader();
+
+            if (reader->Read()) {
+                Data = reader[tmp_column]->ToString();
+            }
+            reader->Close();
+        }
+        catch (Exception^ ex) {
+            Console::WriteLine("Error: " + ex->Message);
+            return Data;
+        }
+        finally {
+            connection->Close();
+        }
+        tmp_column = "";
+        tmp_query = "";
+        tmp_table = "";
+        return Data;
     }
 };

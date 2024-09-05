@@ -57,5 +57,6 @@
   <ItemGroup>
     <None Include="prod.db" />
     <None Include="licenses.licx" />
+    <None Include=".gitignore" />
   </ItemGroup>
 </Project>

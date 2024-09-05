@@ -239,6 +239,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
     <None Include="licenses.licx" />
     <None Include="prod.db" />
   </ItemGroup>

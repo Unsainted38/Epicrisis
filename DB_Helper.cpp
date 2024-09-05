@@ -165,7 +165,7 @@ namespace unsaintedWinApp {
 
             SQLiteCommand^ command = gcnew SQLiteCommand(query, connection);
             SQLiteDataReader^ reader = command->ExecuteReader();
-
+            
             while (reader->Read())
             {
                 results->Add(reader[columnName]->ToString());

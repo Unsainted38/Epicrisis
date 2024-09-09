@@ -14,6 +14,8 @@ public:
     property Nullable<bool> Bold;
     property Nullable<bool> Underline;
     property Nullable<int> FontSize;
+    property String^ type;
+    property Nullable<bool> Inline;
 };
 
 public ref class Paragraph
@@ -54,6 +56,8 @@ public:
     property List<TableRow^>^ Children;
 };
 
-void GenerateRTFAndDisplay(String^ json, RichTextBox^ richTextBox);
+void GenerateRTFAndDisplay(String^ json);
 void CreateTableInRichTextBox(RichTextBox^ richTextBox);
+void JsonParsingTest(String^ json, RichTextBox^ richTextBox);
+void AnalyzesParser(String^ json, RichTextBox^ richTextBox);
 

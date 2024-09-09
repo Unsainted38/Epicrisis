@@ -5,7 +5,7 @@
 #include "RtfTableCreator.h"
 #include "RtfTest.h"
 
-
+// ISSUE01: Появление дропдаунменю после перехода на другую страницу при осуществлении перехода путем нажатия на кнопку "Продолжить"
 
 namespace unsaintedWinApp {
     using namespace System;
@@ -61,8 +61,21 @@ namespace unsaintedWinApp {
             InitializeInterface();
 
             InitializePagesPanels();
+
+            AnalyzesParser(R"([
+            {
+                "type": "paragraph",
+                "children": [
+                    {
+                        "text": "БИОХИМИЧЕСКИЕ ИССЛЕДОВАНИЯ КРОВИ",
+                        "bold": true,
+                        "underline": true
+                    }
+                ],
+                "align": "center"
+            }])", richTextBox);
 			//
-			//TODO: добавьте код конструктора
+			// TODO: добавьте код конструктора
 			//           
 
 		}
@@ -131,6 +144,7 @@ namespace unsaintedWinApp {
         String^ UnworkableList;
         // Поля для хранения значений для эпикриза
 
+        List<String^>^ SideDataList;
         Decimal^ id;
         Dictionary<Panel^,Label^>^ ChangePanelDict;
         Panel^ currentPanel;
@@ -4993,13 +5007,13 @@ private: System::Void AnamnesisTextBox() {
             //return;
         }
     }
-    if (researchCounter == 1) {
-        Anamnesis_textBox->Text += MedicalResearchDate + " направлен на: " + ResearchType + ".";
-    }
-    else if (researchCounter > 1) {
-        Anamnesis_textBox->Text += MedicalResearchDate + " выполнены обследования: " + ResearchType + ".";
-    }
-    AnamnesisText = Anamnesis_textBox->Text;
+    //if (researchCounter == 1) {
+    //    Anamnesis_textBox->Text += MedicalResearchDate + " направлен на: " + ResearchType + ".";
+    //}
+    //else if (researchCounter > 1) {
+    //    Anamnesis_textBox->Text += MedicalResearchDate + " выполнены обследования: " + ResearchType + ".";
+    //}
+    //AnamnesisText = Anamnesis_textBox->Text;
 }
 private: System::Void Pnevmonia_radioButton_Click(System::Object^ sender, System::EventArgs^ e) {
     if (this->Pnevmonia_radioButton->Checked) {
@@ -5242,17 +5256,29 @@ private: Void FillComboBox(XtraEditors::ComboBoxEdit^ box, List<String^>^ items)
 }
 private: System::Void FillCheckBoxesFlowLayoutPanel(String^ table, FlowLayoutPanel^ panel, List<String^>^ items) {
     panel->Refresh();
+    int i = 0;
     for each (String ^ item in items) {
         CheckBox^ box = gcnew CheckBox();
         box->AutoSize = true;
         box->Text = item;
         box->FlatStyle = FlatStyle::Flat;
+        box->TabStop = true;
+        box->TabIndex = i;
         box->Font = gcnew System::Drawing::Font(box->Font->FontFamily, float(11));
         box->Margin = System::Windows::Forms::Padding(5, 0, 5, 0);
         box->Checked = dbHelper->SetQueryByCondition(table, "selectedByDefault", "title", item)[0] == "True";
         box->CheckedChanged += gcnew EventHandler(this, &MainWindow::SideInfoCheckBox_CheckedChanged);
         panel->Controls->Add(box);
+        i++;
     }
+}
+private: System::Void RemoveFromSideDataList(String^ str) {
+    int index = SideDataList->IndexOf(str);
+    SideDataList->Remove(str);
+    SideDataList->Insert(index, "");
+}
+private: System::Void InsertIntoSideDataList(int index, String^ str) {
+    SideDataList->Insert(index, str);
 }
        //
        // TODO Прописать логику обработки события проставления галок в чекбоксах
@@ -5260,27 +5286,76 @@ private: System::Void FillCheckBoxesFlowLayoutPanel(String^ table, FlowLayoutPan
 private: System::Void SideInfoCheckBox_CheckedChanged(Object^ sender, EventArgs^ e) {
     CheckBox^ box = safe_cast<CheckBox^>(sender);
     String^ name = box->Text;
+    SideData = "";
     if (box->Checked) {
         if (name == "Выписывается") {
-
+            InsertIntoSideDataList(0, "Выписывается в удовлетворительном состоянии. Лучевая нагрузка: ЭЭД = значение мЗв.\n");
         }
         else if (name == "Телесные повреждения") {
-
+            InsertIntoSideDataList(1, "За время госпитализации телесных повреждений не выявлено.\n");
         }
         else if (name == "Не годен 15 суток") {
-
+            InsertIntoSideDataList(2, "Освидетельствован ВВК, на основании статьи 53 пункта статьи - графы II расписания болезней*и Требований к состоянию здоровья отдельных категорий граждан**Г–временно не годен к военной службе, необходимо предоставить полное освобождение от исполнения обязанностей военной службы сроком на 15 суток.\n");
         }
         else if (name == "Доп питание") {
-
+            InsertIntoSideDataList(3, "Освидетельствован ВВК, на основании пункта 136 Методических рекомендаций 'Об организации военно-врачебной экспертизы в ВС РФ' от 11.04.16г. предоставить дополнительное питание по \n");
         }
         else if (name == "Не годен 10 суток") {
-
+            InsertIntoSideDataList(4, "Освидетельствован ВВК, на основании статьи 53 пункта статьи - графы II расписания болезней*и Требований к состоянию здоровья отдельных категорий граждан**Г–временно не годен к военной службе, необходимо предоставить полное освобождение от исполнения обязанностей военной службы сроком на 10 суток.\n");
         }
         else if (name == "Санаторий") {
-
+            InsertIntoSideDataList(4, "Санаторий\nОсвидетельствован ВВК, на основании пункта 7 а, в, г приложения о военно - врачебной экспертизе, утвержденного Постановлением правительства Российской Федерации от 04 июля 2013г.№565 нуждается в продолжении стационарного лечения в условиях ФГБУ 'Евпаторийский военный детский санаторий им. Е.П.Глинки'.Предоставлен проезд железнодорожным транспортом от ст.Плесецкая до ст.Москва, проезд воздушным транспортом от аэропорта г.Москва до аэропорта г.Симферополь и обратно.\n");
         }
         else if (name == "Доп питание новое") {
-
+            InsertIntoSideDataList(5, "Освидетельствован ВВК, на основании пункта 11 к Порядку (п.9) Приказа МО РФ от 18.01.2021г. №21, предоставить дополнительное питание по\n");
+        }
+    }
+    else {
+        if (name == "Выписывается") {
+            RemoveFromSideDataList("Выписывается в удовлетворительном состоянии. Лучевая нагрузка: ЭЭД = значение мЗв.\n");
+        }
+        else if (name == "Телесные повреждения") {
+            RemoveFromSideDataList("За время госпитализации телесных повреждений не выявлено.\n");
+        }
+        else if (name == "Не годен 15 суток") {
+            RemoveFromSideDataList("Освидетельствован ВВК, на основании статьи 53 пункта статьи - графы II расписания болезней*и Требований к состоянию здоровья отдельных категорий граждан**Г–временно не годен к военной службе, необходимо предоставить полное освобождение от исполнения обязанностей военной службы сроком на 15 суток.\n");          
+        }
+        else if (name == "Доп питание") {
+            RemoveFromSideDataList("Освидетельствован ВВК, на основании пункта 136 Методических рекомендаций 'Об организации военно-врачебной экспертизы в ВС РФ' от 11.04.16г. предоставить дополнительное питание по \n");
+           
+        }
+        else if (name == "Не годен 10 суток") {
+            RemoveFromSideDataList("Освидетельствован ВВК, на основании статьи 53 пункта статьи - графы II расписания болезней*и Требований к состоянию здоровья отдельных категорий граждан**Г–временно не годен к военной службе, необходимо предоставить полное освобождение от исполнения обязанностей военной службы сроком на 10 суток.\n");
+           
+        }
+        else if (name == "Санаторий") {
+            RemoveFromSideDataList("Санаторий\nОсвидетельствован ВВК, на основании пункта 7 а, в, г приложения о военно - врачебной экспертизе, утвержденного Постановлением правительства Российской Федерации от 04 июля 2013г.№565 нуждается в продолжении стационарного лечения в условиях ФГБУ 'Евпаторийский военный детский санаторий им. Е.П.Глинки'.Предоставлен проезд железнодорожным транспортом от ст.Плесецкая до ст.Москва, проезд воздушным транспортом от аэропорта г.Москва до аэропорта г.Симферополь и обратно.\n");
+            
+        }
+        else if (name == "Доп питание новое") {
+            RemoveFromSideDataList("Освидетельствован ВВК, на основании пункта 11 к Порядку (п.9) Приказа МО РФ от 18.01.2021г. №21, предоставить дополнительное питание по\n");
+           
+        }
+    }
+    SideDataText();
+}
+       //
+       // TODO Сделать корректное изменение стиля для первых двух значений чекбоксов
+       //
+private: Void SideDataText() {
+    richTextBox->Clear();
+    for each (String ^ item in SideDataList) {
+        FontStyle newStyle;
+        FontStyle oldStyle;
+        if (SideDataList->IndexOf(item) == 0 || SideDataList->IndexOf(item) == 1) {
+            oldStyle = richTextBox->SelectionFont->Style;
+            newStyle = richTextBox->SelectionFont->Style | FontStyle::Bold;
+            richTextBox->SelectionFont = gcnew Drawing::Font(richTextBox->SelectionFont->FontFamily, float(Fontsize_numericUpDown->Value), newStyle);
+            richTextBox->Text += item;
+        }
+        else {
+            richTextBox->SelectionFont = gcnew Drawing::Font(richTextBox->SelectionFont->FontFamily, float(Fontsize_numericUpDown->Value), oldStyle);
+            richTextBox->Text += item;
         }
     }
 }
@@ -5289,6 +5364,7 @@ private: Void InitializeData() {
     dbHelper = gcnew DB_Helper(dbPath);
     epicrizDiagnosesList = gcnew List<String^>();
     RecommendationsList = gcnew List<String^>();
+    SideDataList = gcnew List<String^>();
     id_numericUpDown->Value = Convert::ToDecimal(dbHelper->GetMinMaxColumnData("epicrises", "historyNumber", MinMax::Max)) + 1;
     epicrizDiagnosesList = dbHelper->GetColumnData("epicrizDiagnoses", "title");
     FillComboBox(Names_comboBox, dbHelper->GetSortedColumnData("firstNames", "value", 1));
@@ -5303,6 +5379,9 @@ private: Void InitializeData() {
     FillComboBox(AnalyzesResults_comboBox, dbHelper->GetColumnData("analyzes", "title"));
     FillCheckBoxList("recommendations", Recommendations_checkedListBox, dbHelper->SetQueryByCondition("recommendations", "title", "selectedByDefault", "1"));
     FillCheckBoxesFlowLayoutPanel("additionalInfos", CheckBoxes_flowLayoutPanel, dbHelper->GetColumnData("additionalInfos", "title"));
+    SideDataList->Add("Выписывается в удовлетворительном состоянии. Лучевая нагрузка: ЭЭД = значение мЗв.\n");
+    SideDataList->Add("За время госпитализации телесных повреждений не выявлено.\n");
+    SideDataText();
 }
 private: System::Void DB_change_button_Click(System::Object^ sender, System::EventArgs^ e) {
     PathType = PathTypes::DB;
@@ -5589,34 +5668,6 @@ private: System::Void Recommendations_checkedListBox_ItemCheck(System::Object^ s
 }
 private: System::Void Paste_button_Click(System::Object^ sender, System::EventArgs^ e) {
     //Recommendations_richTextBox->Text = Recommendations;
-}
-private: System::Void InitializeRichTextPanel(Panel^ panel) {
-    /*Control::ControlCollection^ PanelControls = gcnew Control::ControlCollection(panel);
-    TableLayoutPanel^ tablepanel = safe_cast<TableLayoutPanel^>(PanelControls[0]);
-    Control::ControlCollection^ TableControls = gcnew Control::ControlCollection(tablepanel);
-    RichTextBox^ rtb = safe_cast<RichTextBox^>(TableControls[1]);
-    FlowLayoutPanel^ flowpanel = safe_cast<FlowLayoutPanel^>(TableControls[0]);
-    Control::ControlCollection^ FlowControls = gcnew Control::ControlCollection(flowpanel);
-    NumericUpDown^ FontSize = safe_cast<NumericUpDown^>(FlowControls[0]);
-    Button^ Bold = safe_cast<Button^>(FlowControls[1]);
-    Button^ Italic = safe_cast<Button^>(FlowControls[2]);
-    Button^ Underlined = safe_cast<Button^>(FlowControls[3]);
-    Button^ Uppercase = safe_cast<Button^>(FlowControls[4]);
-    Button^ Lowercase = safe_cast<Button^>(FlowControls[5]);
-    Button^ Unker = safe_cast<Button^>(FlowControls[6]);
-    Button^ NumList = safe_cast<Button^>(FlowControls[7]);
-    Button^ DotList = safe_cast<Button^>(FlowControls[8]);
-    Button^ CleanFormat = safe_cast<Button^>(FlowControls[9]);
-    Button^ LeftAlign = safe_cast<Button^>(FlowControls[10]);
-    Button^ CenterAlign = safe_cast<Button^>(FlowControls[11]);
-    Button^ RightAlign = safe_cast<Button^>(FlowControls[12]);
-    Button^ WideAlign = safe_cast<Button^>(FlowControls[13]);
-    Button^ Date = safe_cast<Button^>(FlowControls[14]);
-    Button^ DropDownMenu = safe_cast<Button^>(FlowControls[15]);
-    Button^ Table = safe_cast<Button^>(FlowControls[16]);*/
-}
-private: System::Void ShiftEnterHotKey() {
-    NextPagePanel();
 }
 private: System::Void InitializePagesPanels() {
     PagePanelList = gcnew List<Panel^>();    

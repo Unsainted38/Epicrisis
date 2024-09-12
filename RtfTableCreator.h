@@ -16,6 +16,7 @@ public:
     property Nullable<int> FontSize;
     property String^ type;
     property Nullable<bool> Inline;
+    property Nullable<bool> Anchor;
 };
 
 public ref class Paragraph
@@ -38,7 +39,8 @@ public ref class TableCell
 public:
     property String^ Type;
     property String^ ColumnType;
-    property List<Paragraph^>^ Children;
+    property List<Paragraph^>^ Paragraphs;
+    property List<Child^>^ Children;
 };
 
 public ref class TableRow
@@ -51,7 +53,6 @@ public:
 public ref class Table
 {
 public:
-    property String^ Type;
     property List<Column^>^ Columns;
     property List<TableRow^>^ Children;
 };
@@ -60,4 +61,6 @@ void GenerateRTFAndDisplay(String^ json);
 void CreateTableInRichTextBox(RichTextBox^ richTextBox);
 void JsonParsingTest(String^ json, RichTextBox^ richTextBox);
 void AnalyzesParser(String^ json, RichTextBox^ richTextBox);
+String^ DeserializeTable(Table^ table);
+Child^ GetChildKeys(JObject^ child);
 

@@ -99,23 +99,23 @@ void GenerateRTFAndDisplay(String^ json)
 
                                         if (cell->Children)
                                         {
-                                            for each (Paragraph ^ para in cell->Children)
-                                            {
-                                                if (para)
-                                                {
-                                                    if (para->Children)
-                                                    {
-                                                        for each (Child ^ paraChild in para->Children)
-                                                        {
-                                                            if (paraChild && paraChild->Text)
-                                                            {
-                                                                rtfBuilder->Append(paraChild->Text);
-                                                            }
-                                                        }
-                                                    }
-                                                    rtfBuilder->Append(R"(\par )");
-                                                }
-                                            }
+                                            //for each (Paragraph ^ para in cell->Children)
+                                            //{
+                                            //    if (para)
+                                            //    {
+                                            //        if (para->Children)
+                                            //        {
+                                            //            for each (Child ^ paraChild in para->Children)
+                                            //            {
+                                            //                if (paraChild && paraChild->Text)
+                                            //                {
+                                            //                    rtfBuilder->Append(paraChild->Text);
+                                            //                }
+                                            //            }
+                                            //        }
+                                            //        rtfBuilder->Append(R"(\par )");
+                                            //    }
+                                            //}
                                         }
                                     }
                                 }
@@ -221,49 +221,50 @@ void AnalyzesParser(String^ json, RichTextBox^ richTextBox) {
         String^ type;
         String^ align;
 
-        if (item["type"]) type = item["type"]->ToString();
-        
+        if (item->ContainsKey("type"))
+            type = item["type"]->ToString();    
         List<JObject^>^ children = JsonConvert::DeserializeObject<List<JObject^>^>(item["children"]->ToString());
-        
-        if (item["align"]) align = item["align"]->ToString();
+
+        if (item->ContainsKey("align"))
+            align = item["align"]->ToString();
 
         if (align == "center") {
             rtfBuilder->Append(R"(\qc )");
         }
         if (type == "paragraph") {
             for each (JObject ^ child in children) {
-                if (!child["type"]) {
+                if (child->ContainsKey("type")) {
                     if (child["type"]->ToString() == "dateInput") {
-                        if (!child["inline"])
+                        if (child->ContainsKey("inline"))
                             rtfBuilder->Append(child["inline"]);
-                        if (!child["children"]) {
+                        if (child->ContainsKey("children")) {
                             List<JObject^>^ children = JsonConvert::DeserializeObject<List<JObject^>^>(child["children"]->ToString());
                             for each (JObject ^ child in children) {
-                                if (child["text"]) {
+                                if (child->ContainsKey("text")) {
                                     rtfBuilder->Append(child["text"]->ToString());
                                 }
                             }
                         }
-                        if (child["fontSize"]) {
+                        if (child->ContainsKey("fontSize")) {
                             rtfBuilder->Append(R"(\fs)" + (child["fontSize"]->ToObject<int>() * 2) + " ");
                         }
-                        if (child["value"]) {
+                        if (child->ContainsKey("value")) {
                             rtfBuilder->Append(child["value"]->ToString());
                         }
                     }   
                 }
                 else {                      
-                    if (!child["bold"])
+                    if (child->ContainsKey("bold"))
                         rtfBuilder->Append(R"(\b )");
-                    if (child["underline"])
+                    if (child->ContainsKey("underline"))
                         rtfBuilder->Append(R"(\ul )");
-                    if (child["fontSize"])
+                    if (child->ContainsKey("fontSize"))
                         rtfBuilder->Append(R"(\fs)" + (child["fontSize"]->ToObject<int>() * 2) + " ");
-                    if (child["text"])
+                    if (child->ContainsKey("text"))
                         rtfBuilder->Append(child["text"]->ToString());
-                    if (child["bold"])
+                    if (child->ContainsKey("bold"))
                         rtfBuilder->Append(R"(\b0 )");
-                    if (child["underline"])
+                    if (child->ContainsKey("underline"))
                         rtfBuilder->Append(R"(\ul0 )");
                 }
                 
@@ -272,68 +273,212 @@ void AnalyzesParser(String^ json, RichTextBox^ richTextBox) {
             Console::WriteLine(rtfBuilder);
         }
         else if (type == "table") {
+            Table^ m_table = gcnew Table();
             List<JObject^>^ columns;
             List<JObject^>^ children;
-            if (item["column"]) {
+            if (item->ContainsKey("column")) {
                 columns = JsonConvert::DeserializeObject<List<JObject^>^>(item["columns"]->ToString());
+                m_table->Columns = gcnew List<Column^>();
                 for each (JObject ^ column in columns) {
+                    Column^ m_column = gcnew Column();
                     String^ type;
                     String^ title;
-                    if (column["type"])
+                    if (column->ContainsKey("type"))
                         type = column["type"]->ToString();
-                    if (column["title"])
+                    if (column->ContainsKey("title"))
                         title = column["title"]->ToString();
+                    m_column->Title = title;
+                    m_column->Type = type;
+                    m_table->Columns->Add(m_column);
                 }
             }
-            if (item["children"]) {
+            if (item->ContainsKey("children")) {
                 children = JsonConvert::DeserializeObject<List<JObject^>^>(item["children"]->ToString());
+                m_table->Children = gcnew List<TableRow^>();
                 for each (JObject ^ child in children) {
                     String^ type;
                     List<JObject^>^ children;
-                    if (!child["type"])
+                    TableRow^ m_tableRow = gcnew TableRow();
+                    m_tableRow->Children = gcnew List<TableCell^>();
+                    if (child->ContainsKey("type"))
                         type = child["type"]->ToString();
+                    m_tableRow->Type = type;
+                    
                     if (type == "tableRow") {
                         children = JsonConvert::DeserializeObject<List<JObject^>^>(child["children"]->ToString());
+                        
                         for each (JObject ^ child in children) {
+                            TableCell^ m_tableCell = gcnew TableCell();
+                            
+                            int fontSize = 9 * 2;
                             String^ type;
                             List<JObject^>^ children;
-                            if (!child["type"])
+                            if (child->ContainsKey("type"))
                                 type = child["type"]->ToString();
+                            m_tableCell->Type = type;
                             if (type == "tableHeaderCell") {
+                            
                                 children = JsonConvert::DeserializeObject<List<JObject^>^>(child["children"]->ToString());
+                                m_tableCell->Children = gcnew List<Child^>();
                                 for each (JObject ^ child in children) {
-                                    bool bold = false;
-                                    bool underline = false;
-                                    int fontSize = 11;
-                                    String^ text = "";
-                                    if (!child["bold"])
-                                        bold = child["bold"]->ToObject<bool>();
-                                    if (!child["underline"])
-                                        underline = child["underline"]->ToObject<bool>();
-                                    if (!child["fontSize"])
-                                        fontSize = child["fontSize"]->ToObject<int>();
-                                    if (!child["text"])
-                                        text = child["text"]->ToString();
-                                    if (bold)
+                                    Child^ m_child = GetChildKeys(child);
+                                    if (m_child->Bold)
                                         rtfBuilder->Append(R"(\b )");
-                                    if (underline)
+                                    if (m_child->Underline)
                                         rtfBuilder->Append(R"(\ul )");
-                                    rtfBuilder->Append(R"(\fs)" + fontSize.ToString() + " ");
-                                    rtfBuilder->Append(child["text"]->ToString());
+                                    rtfBuilder->Append(R"(\fs)" + m_child->FontSize + " ");
+                                    rtfBuilder->Append(m_child->Text);
                                     rtfBuilder->Append(R"(\b0 )");
                                     rtfBuilder->Append(R"(\ul0 )");
-                                    rtfBuilder->Append(R"(\fs)" + fontSize.ToString() + " ");
+                                    rtfBuilder->Append(R"(\fs)" + m_child->FontSize + " ");
+                                    m_tableCell->Children->Add(m_child);
                                 }
                             }
                             else if (type == "tableDataCell") {
-
+                                String^ columnType;
+                                List<JObject^>^ children;
+                                m_tableCell->Paragraphs = gcnew List<Paragraph^>();
+                                if (child->ContainsKey("columnType"))
+                                    columnType = child["columnType"]->ToString();
+                                m_tableCell->ColumnType = columnType;
+                                if (columnType == "date") {
+                                    children = JsonConvert::DeserializeObject<List<JObject^>^>(child["children"]->ToString());
+                                    for each (JObject ^ child in children) {
+                                        String^ type;
+                                        List<JObject^>^ children;
+                                        Paragraph^ m_paragraph = gcnew Paragraph();
+                                        m_paragraph->Children = gcnew List<Child^>();
+                                        if (child->ContainsKey("type"))
+                                            type = child["type"]->ToString();
+                                        m_paragraph->Type = type;
+                                        if (type == "dateInput") {
+                                            children = JsonConvert::DeserializeObject<List<JObject^>^>(child["children"]->ToString());
+                                            for each (JObject ^ child in children) {
+                                                Child^ m_child = GetChildKeys(child);
+                                                if (m_child->Bold)
+                                                    rtfBuilder->Append(R"(\b )");
+                                                if (m_child->Underline)
+                                                    rtfBuilder->Append(R"(\ul )");
+                                                rtfBuilder->Append(R"(\fs)" + m_child->FontSize + " ");
+                                                rtfBuilder->Append(m_child->Text);
+                                                rtfBuilder->Append(R"(\b0 )");
+                                                rtfBuilder->Append(R"(\ul0 )");
+                                                rtfBuilder->Append(R"(\fs)" + m_child->FontSize + " ");
+                                                m_paragraph->Children->Add(m_child);
+                                            }
+                                        }
+                                        else if (type == "paragraph") {
+                                            children = JsonConvert::DeserializeObject<List<JObject^>^>(child["children"]->ToString());
+                                            for each (JObject ^ child in children) {
+                                                Child^ m_child = GetChildKeys(child);
+                                                if (m_child->Bold)
+                                                    rtfBuilder->Append(R"(\b )");
+                                                if (m_child->Underline)
+                                                    rtfBuilder->Append(R"(\ul )");
+                                                rtfBuilder->Append(R"(\fs)" + m_child->FontSize + " ");
+                                                rtfBuilder->Append(m_child->Text);
+                                                rtfBuilder->Append(R"(\b0 )");
+                                                rtfBuilder->Append(R"(\ul0 )");
+                                                rtfBuilder->Append(R"(\fs)" + m_child->FontSize + " ");
+                                                m_paragraph->Children->Add(m_child);
+                                            }
+                                        }
+                                        m_tableCell->Paragraphs->Add(m_paragraph);
+                                    }
+                                }
+                                else if (columnType == "text") {
+                                    children = JsonConvert::DeserializeObject<List<JObject^>^>(child["children"]->ToString());
+                                    for each (JObject ^ child in children) {
+                                        String^ type;
+                                        List<JObject^>^ children;
+                                        Paragraph^ m_paragraph = gcnew Paragraph();
+                                        m_paragraph->Children = gcnew List<Child^>();
+                                        if (child->ContainsKey("type"))
+                                            type = child["type"]->ToString();
+                                        m_paragraph->Type = type;
+                                        if (type == "dateInput") {
+                                            children = JsonConvert::DeserializeObject<List<JObject^>^>(child["children"]->ToString());
+                                            for each (JObject ^ child in children) {
+                                                Child^ m_child = GetChildKeys(child);
+                                                if (m_child->Bold)
+                                                    rtfBuilder->Append(R"(\b )");
+                                                if (m_child->Underline)
+                                                    rtfBuilder->Append(R"(\ul )");
+                                                rtfBuilder->Append(R"(\fs)" + m_child->FontSize + " ");
+                                                rtfBuilder->Append(m_child->Text);
+                                                rtfBuilder->Append(R"(\b0 )");
+                                                rtfBuilder->Append(R"(\ul0 )");
+                                                rtfBuilder->Append(R"(\fs)" + m_child->FontSize + " ");
+                                                m_paragraph->Children->Add(m_child);
+                                            }
+                                        }
+                                        else if (type == "paragraph") {
+                                            children = JsonConvert::DeserializeObject<List<JObject^>^>(child["children"]->ToString());
+                                            for each (JObject ^ child in children) {
+                                                Child^ m_child = GetChildKeys(child);
+                                                
+                                                if (m_child->Bold)
+                                                    rtfBuilder->Append(R"(\b )");
+                                                if (m_child->Underline)
+                                                    rtfBuilder->Append(R"(\ul )");
+                                                rtfBuilder->Append(R"(\fs)" + m_child->FontSize + " ");
+                                                rtfBuilder->Append(m_child->Text);
+                                                rtfBuilder->Append(R"(\b0 )");
+                                                rtfBuilder->Append(R"(\ul0 )");
+                                                rtfBuilder->Append(R"(\fs)" + m_child->FontSize + " ");
+                                                m_paragraph->Children->Add(m_child);
+                                            }
+                                        }
+                                        m_tableCell->Paragraphs->Add(m_paragraph);
+                                    }
+                                    
+                                }
                             }
+                            m_tableRow->Children->Add(m_tableCell);
                         }
                     }
+                    m_table->Children->Add(m_tableRow);
                 }
             }
         }
     }
     rtfBuilder->Append(R"(})");
     richTextBox->Rtf = rtfBuilder->ToString();
+}
+String^ DeserializeTable(Table^ table) {
+    StringBuilder^ rtfBuilder = gcnew StringBuilder();
+    rtfBuilder->Append(R"({\rtf1\ansi\deff0)");
+    
+
+
+}
+
+Child^ GetChildKeys(JObject^ child) {
+    Child^ m_child = gcnew Child();
+    bool bold = false;
+    bool underline = false;
+    bool anchor = false;
+    bool inLine = false;
+    int fontSize = 9 * 2;
+    String^ text = "";
+    if (child->ContainsKey("bold"))
+        bold = child["bold"]->ToObject<bool>();
+    if (child->ContainsKey("text"))
+        text = child["text"]->ToString();
+    if (child->ContainsKey("underline"))
+        underline = child["underline"]->ToObject<bool>();    
+    if (child->ContainsKey("fontSize"))
+        fontSize = child["fontSize"]->ToObject<int>() * 2;
+    if (child->ContainsKey("anchor"))
+        anchor = child["anchor"]->ToObject<bool>();
+    if (child->ContainsKey("inline"))
+        inLine = child["inline"]->ToObject<bool>();
+
+    m_child->Bold = bold;
+    m_child->FontSize = fontSize;
+    m_child->Underline = underline;
+    m_child->Text = text;
+    m_child->Inline = inLine;
+    m_child->Anchor = anchor;
+    return m_child;
 }

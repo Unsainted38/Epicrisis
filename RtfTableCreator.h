@@ -56,11 +56,17 @@ public:
     property List<Column^>^ Columns;
     property List<TableRow^>^ Children;
 };
+public ref class Parser {
+public:
+    property List<Object^>^ DeserializedItems;
+    
+};
 
 void GenerateRTFAndDisplay(String^ json);
 void CreateTableInRichTextBox(RichTextBox^ richTextBox);
 void JsonParsingTest(String^ json, RichTextBox^ richTextBox);
 void AnalyzesParser(String^ json, RichTextBox^ richTextBox);
-String^ DeserializeTable(Table^ table);
-Child^ GetChildKeys(JObject^ child);
+String^ CreateTable(Table^ table);
+Child^ GenerateChild(JObject^ child);
+Parser^ GenerateParser(String^ json);
 

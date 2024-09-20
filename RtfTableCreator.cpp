@@ -1,7 +1,7 @@
 #include "RtfTableCreator.h"
 
 
-void GenerateRTFAndDisplay(String^ json)
+void GenerateRTFAndDisplay(String^ json, RichTextBox^ richTextBox)
 {
     List<JObject^>^ elements = JsonConvert::DeserializeObject<List<JObject^>^>(json);
 
@@ -29,17 +29,21 @@ void GenerateRTFAndDisplay(String^ json)
                     {
                         if (child)
                         {
-                            if (child->Bold.HasValue && child->Bold.Value)
+                            if (child->Bold.HasValue && child->Bold)
                             {
                                 rtfBuilder->Append(R"(\b )");
                             }
-                            if (child->Underline.HasValue && child->Underline.Value)
+                            if (child->Underline.HasValue && child->Underline)
                             {
                                 rtfBuilder->Append(R"(\ul )");
                             }
                             if (child->FontSize.HasValue)
                             {
                                 rtfBuilder->Append(R"(\fs)" + (child->FontSize.Value * 2) + " ");
+                            }
+                            if (child->Anchor.HasValue && child->Anchor)
+                            {
+                                //rtfBuilder->Append();
                             }
 
                             if (child->Text)
@@ -48,6 +52,10 @@ void GenerateRTFAndDisplay(String^ json)
                             }
 
                             // Окончание форматирования текста
+                            if (child->Anchor.HasValue && child->Anchor)
+                            {
+                                //rtfBuilder->Append();
+                            }
                             if (child->Bold.HasValue && child->Bold.Value)
                             {
                                 rtfBuilder->Append(R"(\b0 )");
@@ -87,7 +95,7 @@ void GenerateRTFAndDisplay(String^ json)
                     {
                         if (row)
                         {
-                            rtfBuilder->Append(R"(\row)");  // Начало строки
+                            rtfBuilder->Append(R"(\trowd)");  // Начало строки
 
                             if (row->Children)
                             {
@@ -97,7 +105,7 @@ void GenerateRTFAndDisplay(String^ json)
                                     {
                                         rtfBuilder->Append(R"(\cell)");  // Ячейка
 
-                                        if (cell->Children)
+                                        if (cell->Paragraphs)
                                         {
                                             for each (Paragraph ^ para in cell->Paragraphs)
                                             {
@@ -117,6 +125,16 @@ void GenerateRTFAndDisplay(String^ json)
                                                 }
                                             }
                                         }
+                                        else if (cell->Children)
+                                        {
+                                            for each (Child ^ child in cell->Children)
+                                            {
+                                                if (child && child->Text)
+                                                {
+                                                    rtfBuilder->Append(child->Text);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -129,8 +147,9 @@ void GenerateRTFAndDisplay(String^ json)
     }
 
     rtfBuilder->Append(R"(})");  // Завершение RTF документа
-    Console::WriteLine(rtfBuilder->ToString());
-    //richTextBox->Rtf = rtfBuilder->ToString();
+    //Console::WriteLine(rtfBuilder->ToString());
+    String^ str = rtfBuilder->ToString();
+    richTextBox->Rtf = rtfBuilder->ToString();
 }
 void CreateTableInRichTextBox(RichTextBox^ richTextBox) {
     // Пример RTF для создания таблицы с 2 строками и 3 столбцами
@@ -477,16 +496,7 @@ Child^ GenerateChild(JObject^ child) {
     m_child->Anchor = anchor;
     return m_child;
 }
-List<int>^ CalculateCellWidths(List<Column^>^ columns) {
-    List<int>^ CellWidths = gcnew List<int>();
-    for each (Column ^ column in columns) {
-        int CellWidth = column->Title->Length * 10;
-        CellWidths->Add(CellWidth);
-    }
-    return CellWidths;
-}
-
-Parser^ GenerateParser(String^ json) {
+Parser^ ConvertJsonToParser(String^ json) {
     Parser^ parser = gcnew Parser();
     parser->DeserializedItems = gcnew List<Object^>();
     List<JObject^>^ items = JsonConvert::DeserializeObject<List<JObject^>^>(json);
@@ -639,29 +649,327 @@ Parser^ GenerateParser(String^ json) {
     }
     return parser;
 }
-String^ CreateTable(Table^ table) {
+String^ ConvertParserToJson(Parser^ parser)
+{
+    String^ json;
+    json = JsonConvert::SerializeObject(parser->DeserializedItems);
+    Console::WriteLine(json);
+    return json;
+    // TODO: вставьте здесь оператор return
+}
+String^ ConvertParserToRTF(Parser^ parser) {
     StringBuilder^ rtfBuilder = gcnew StringBuilder();
     rtfBuilder->Append(R"({\rtf1\ansi\deff0)");
-
-    if (table->Columns) {
-        for each (Column ^ column in table->Columns) {
-
+    for each (Object ^ item in parser->DeserializedItems) {
+        Type^ type = item->GetType();
+        if (type->Name == "Paragraph") {
+            Paragraph^ para = safe_cast<Paragraph^>(item);
+            if (para->Align == "center")
+                rtfBuilder->Append(R"(\qc)");
+            else if (para->Align == "left")
+                rtfBuilder->Append(R"(\ql)");
+            else if (para->Align == "right")
+                rtfBuilder->Append(R"(\qr)");
+            if (para->Children) {
+                for each (Child ^ child in para->Children) {
+                    rtfBuilder->Append(ChildToRtf(child));
+                }
+            }
+            rtfBuilder->Append(R"(\par\pard)");
         }
-        rtfBuilder->Append(R"(\row)");
-    }
-    if (table->Children) {
-        for each (TableRow ^ row in table->Children) {
-            if (row->Type == "tableRow") {
-                rtfBuilder->Append(R"(\trowd)");
-                for each (TableCell ^ cell in row->Children) {
-                    rtfBuilder->Append(R"(\cellx)");
-                    if (cell->Type == "tableHeaderCell") {
-
+        else if (type->Name == "Table") {
+            Table^ table = safe_cast<Table^>(item);
+            int TotalWidth = 18800;
+            if (table->Columns) {
+                rtfBuilder->Append(R"(\trowd\trqc\trgaph108\trrh400\qc)");
+                Dictionary<String^,int>^ widths = CalculateColumnsWidths(table->Columns, TotalWidth);
+                for each (Column ^ column in table->Columns) {
+                    rtfBuilder->Append(R"(\clvertalc\cellx)");
+                    int width = widths[column->Title];
+                    if (column->Type == "text") {
+                        rtfBuilder->Append(width);
+                    }
+                    else if (column->Type == "date") {
+                        rtfBuilder->Append(width);
                     }
                 }
-                rtfBuilder->Append(R"(\row)");
             }
+            if (table->Children) {
+                rtfBuilder->Append(R"(\intbl)");
+                for each (TableRow ^ row in table->Children) {
+                    if (row->Type == "tableRow") {
+                        for each (TableCell ^ cell in row->Children) {
+                            if (cell->Type == "tableHeaderCell") {
+                                rtfBuilder->Append(R"(\b)");
+                                if (cell->Children) {
+                                    for each (Child ^ child in cell->Children) {
+                                        rtfBuilder->Append(ChildToRtf(child));
+                                    }                                
+                                }
+                                rtfBuilder->Append(R"(\b0\cell)");
+                            }
+                            else if (cell->Type == "tableDataCell") {
+                                if (cell->ColumnType == "text") {
+                                    for each (Paragraph ^ para in cell->Paragraphs) {
+                                        if (para->Type == "paragraph") {
+                                            for each (Child ^ child in para->Children) {
+                                                rtfBuilder->Append(ChildToRtf(child));
+                                            }
+                                        }
+                                        else if (para->Type == "dateInput") {
+                                            // Дописать логику заполнения даты
+                                            for each (Child ^ child in para->Children) {
+                                                rtfBuilder->Append(ChildToRtf(child));
+                                            }
+                                        }
+                                    }
+                                }
+                                rtfBuilder->Append(R"(\cell)");
+                            }
+                        }
+                        rtfBuilder->Append(R"(\row)");
+                    }                    
+                }
+            }
+            rtfBuilder->Append(R"(\par\pard)");
         }
     }
+    rtfBuilder->Append(R"(})");
     return rtfBuilder->ToString();
+}
+
+Parser^ ConvertRtfToParser(String^ rtf)
+{
+    Parser^ parser = gcnew Parser();
+    parser->DeserializedItems = gcnew List<Object^>();
+    if (rtf->Contains(RTF::BEGIN)) {
+        rtf = rtf->Remove(rtf->IndexOf(RTF::BEGIN), RTF::BEGIN->Length);
+        while (rtf != R"(})") {
+            if (rtf->StartsWith(RTF::TABLE)) {
+                Table^ table = gcnew Table();
+                table->Columns = gcnew List<Column^>();
+                table->Children = gcnew List<TableRow^>();
+                rtf = rtf->Remove(rtf->IndexOf(RTF::TABLE), RTF::TABLE->Length);                
+                while (!rtf->StartsWith(R"(\intbl)")) {
+                    rtf = rtf->Remove(rtf->IndexOf(rtf->Split('\\')[1]), rtf->Split('\\')[1]->Length + 1);                   
+                    rtf = rtf->Remove(rtf->IndexOf(R"(\intbl)"), R"(\intbl)"->Length);
+                }
+
+                while (!rtf->StartsWith(R"(par\pard)")) {
+                    bool columnRow = true;
+                    while (!rtf->StartsWith(R"(\row)")) {
+                        TableRow^ row = gcnew TableRow();
+                        Column^ column = gcnew Column();                        
+                        if (columnRow) {
+                            while (!rtf->StartsWith(R"(\cell)")) {
+
+                            }
+                            columnRow = false;
+                        }
+                        else {
+                            while (!rtf->StartsWith(R"(\cell)")) {
+
+                            }
+                        }
+                        table->Children->Add(row);
+                    }
+                    rtf = rtf->Remove(rtf->IndexOf(RTF::ROW), RTF::ROW->Length);
+                }
+                rtf = rtf->Remove(rtf->IndexOf(R"(\par\pard)"), R"(\par\pard)"->Length);
+            }
+            else {
+                Paragraph^ para = gcnew Paragraph();
+                para->Type = "paragraph";
+                para->Children = gcnew List<Child^>();
+                if (rtf->StartsWith(RTF::ALIGN)) {
+                    rtf = rtf->Remove(rtf->IndexOf(RTF::ALIGN), RTF::ALIGN->Length);
+                    if (rtf[0] == 'c')
+                        para->Align = "center";
+                    else if (rtf[0] == 'l')
+                        para->Align = "left";
+                    else if (rtf[0] == 'r')
+                        para->Align = "right";
+                    else if (rtf[0] == 'j')
+                        para->Align = "justify";
+                    rtf = rtf->Remove(0, 1);
+                }
+                if (rtf->Contains(R"(\def)")) {
+                    while (!rtf->StartsWith(R"(\par\pard)")) {
+                        Child^ child = RtfToChild(rtf);
+                        rtf = RtfAfterChildGen(rtf);
+                        para->Children->Add(child);
+                    }
+                }   
+                if (rtf->Contains(RTF::PARAGRAPH_END)) {
+                    rtf = rtf->Remove(rtf->IndexOf(RTF::PARAGRAPH_END), RTF::PARAGRAPH_END->Length);
+                    parser->DeserializedItems->Add(para);
+                }                    
+            }
+        }
+        rtf = rtf->Remove(rtf->IndexOf(RTF::END), RTF::END->Length);
+    }
+    else {
+
+        parser = nullptr;
+    }
+
+    return parser;
+    // TODO: вставьте здесь оператор return
+}
+String^ ChildToRtf(Child^ child) {
+    StringBuilder^ rtfBuilder = gcnew StringBuilder();
+    int defFontSize = 11 * 2;
+    if (child->Anchor.HasValue && child->Anchor)
+        rtfBuilder->Append(R"()");
+    if (child->Bold.HasValue && child->Bold)
+        rtfBuilder->Append(R"(\b)");
+    if (child->Inline.HasValue && child->Inline)
+        rtfBuilder->Append(R"()");
+    if (child->Underline.HasValue && child->Underline)
+        rtfBuilder->Append(R"(\ul)");
+    if (child->FontSize.HasValue && child->FontSize.Value > 0)
+        rtfBuilder->Append(R"(\fs)" + child->FontSize + " ");
+    if (child->Text)
+        rtfBuilder->Append(child->Text);
+
+    if (child->Anchor.HasValue && child->Anchor)
+        rtfBuilder->Append(R"()");
+    if (child->Bold.HasValue && child->Bold)
+        rtfBuilder->Append(R"(\b0)");
+    if (child->Inline.HasValue && child->Inline)
+        rtfBuilder->Append(R"()");
+    if (child->Underline.HasValue && child->Underline)
+        rtfBuilder->Append(R"(\ul0)");
+    if (child->FontSize.HasValue && child->FontSize.Value > 0)
+        rtfBuilder->Append(R"(\fs)" + defFontSize);
+    rtfBuilder->Append(R"(\def)");
+    return rtfBuilder->ToString();
+}
+Child^ RtfToChild(String^ rtf) {
+    Child^ child = gcnew Child();
+    String^ defFontSize = "22";
+    while (!rtf->StartsWith(RTF::CHILD_END)) {
+        if (rtf->StartsWith(RTF::BOLD_START)) {
+            child->Bold = true;
+            rtf = rtf->Remove(rtf->IndexOf(RTF::BOLD_START), RTF::BOLD_START->Length);
+        }
+        if (rtf->StartsWith(RTF::UNDERLINE_START)) {
+            child->Underline = true;
+            rtf = rtf->Remove(rtf->IndexOf(RTF::UNDERLINE_START), RTF::UNDERLINE_START->Length);
+        }
+        if (rtf->StartsWith(RTF::ITALIC_START)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::ITALIC_START), RTF::ITALIC_START->Length);
+        }
+        if (rtf->StartsWith(RTF::FONTSIZE)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::FONTSIZE), RTF::FONTSIZE->Length);
+            child->FontSize = Convert::ToInt16(rtf->Split(' ')[0]);
+            rtf = rtf->Remove(rtf->IndexOf(rtf->Split(' ')[0]), (rtf->Split(' ')[0] + " ")->Length);
+        }
+        if (!rtf->StartsWith(RTF::BACKSLASH)) {
+            child->Text = rtf->Split('\\')[0];
+            rtf = rtf->Remove(rtf->IndexOf(child->Text), child->Text->Length);
+        }
+        else if (!child->Text){
+            child->Text = "";
+        }
+        if (rtf->StartsWith(RTF::BOLD_END)) {
+            child->Bold = true;
+            rtf = rtf->Remove(rtf->IndexOf(RTF::BOLD_END), RTF::BOLD_END->Length);
+        }
+        if (rtf->StartsWith(RTF::UNDERLINE_END)) {
+            child->Underline = true;
+            rtf = rtf->Remove(rtf->IndexOf(RTF::UNDERLINE_END), RTF::UNDERLINE_END->Length);
+        }
+        if (rtf->StartsWith(RTF::ITALIC_END)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::ITALIC_END), RTF::ITALIC_END->Length);
+        }
+        if (rtf->StartsWith(RTF::FONTSIZE + defFontSize)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::FONTSIZE), (RTF::FONTSIZE + defFontSize)->Length);
+            rtf = rtf->Remove(rtf->IndexOf(rtf->Split(' ')[0]), (rtf->Split(' ')[0] + " ")->Length);
+        }
+    }
+    rtf = rtf->Remove(rtf->IndexOf(RTF::CHILD_END), RTF::CHILD_END->Length);
+    return child;
+}
+String^ CreateRtfDocumentFromJson(String^ json) {
+    String^ rtf = ConvertParserToRTF(ConvertJsonToParser(json));
+    return rtf;
+}
+Dictionary<String^,int>^ CalculateColumnsWidths(List<Column^>^ columns, int TotalWidth) {
+    Dictionary<String^,int>^ widths = gcnew Dictionary<String^,int>();
+
+    double TotalTextLength = 0;
+    double k;
+    for each (Column ^ column in columns) {
+        int length = column->Title->Length;
+        k = K(length);
+        TotalTextLength += column->Title->Length * k;
+    }
+    // Ширина ячеек
+    int currpos = 0;
+    double s = 0;
+    for each (Column^ column in columns) {
+        int CellTextLength = column->Title->Length;
+        int CellWidth;
+        int length = column->Title->Length;
+        k = K(length);
+        CellWidth = (k * CellTextLength / TotalTextLength) * TotalWidth;
+        s += k * CellTextLength / TotalTextLength;
+        if (column->Type == "date")
+            currpos += CellWidth + 1000;
+        else
+            currpos += CellWidth;
+        widths->Add(column->Title, currpos);
+    }
+    return widths;
+}
+double K(int length) {
+    double k;
+    if (length <= 2)
+        k = 1.35;
+    else if (length <= 3)
+        k = 1.1;
+    else if (length <= 4)
+        k = 1;
+    else if (length <= 5)
+        k = 0.8;
+    else
+        k = 0.7;
+    return k;
+}
+String^ RtfAfterChildGen(String^ rtf) {
+    String^ defFontSize = "22";
+    while (!rtf->StartsWith(RTF::CHILD_END)) {
+        if (rtf->StartsWith(RTF::BOLD_START)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::BOLD_START), RTF::BOLD_START->Length);
+        }
+        if (rtf->StartsWith(RTF::UNDERLINE_START)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::UNDERLINE_START), RTF::UNDERLINE_START->Length);
+        }
+        if (rtf->StartsWith(RTF::ITALIC_START)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::ITALIC_START), RTF::ITALIC_START->Length);
+        }
+        if (rtf->StartsWith(RTF::FONTSIZE)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::FONTSIZE), RTF::FONTSIZE->Length);
+            rtf = rtf->Remove(rtf->IndexOf(rtf->Split(' ')[0]), (rtf->Split(' ')[0] + " ")->Length);
+        }
+        if (!rtf->StartsWith(RTF::BACKSLASH)) {
+            rtf = rtf->Remove(rtf->IndexOf(rtf->Split('\\')[0]), rtf->Split('\\')[0]->Length);
+        }
+        if (rtf->StartsWith(RTF::BOLD_END)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::BOLD_END), RTF::BOLD_END->Length);
+        }
+        if (rtf->StartsWith(RTF::UNDERLINE_END)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::UNDERLINE_END), RTF::UNDERLINE_END->Length);
+        }
+        if (rtf->StartsWith(RTF::ITALIC_END)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::ITALIC_END), RTF::ITALIC_END->Length);
+        }
+        if (rtf->StartsWith(RTF::FONTSIZE + defFontSize)) {
+            rtf = rtf->Remove(rtf->IndexOf(RTF::FONTSIZE), (RTF::FONTSIZE + defFontSize)->Length);
+            rtf = rtf->Remove(rtf->IndexOf(rtf->Split(' ')[0]), (rtf->Split(' ')[0] + " ")->Length);
+        }
+    }
+    rtf = rtf->Remove(rtf->IndexOf(RTF::CHILD_END), RTF::CHILD_END->Length);
+    return rtf;
 }

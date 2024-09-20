@@ -1,0 +1,16 @@
+[
+  {
+    "Align": "center",
+    "Children": [
+      {
+        "Anchor": null,
+        "Inline": null,
+        "FontSize": 18,
+        "Underline": true,
+        "Bold": true,
+        "Text": "МОРФОЛОГИЧЕСКИЕ ИССЛЕДОВАНИЯ КРОВИ"
+      }
+    ],
+    "Type": "paragraph"
+  }
+]

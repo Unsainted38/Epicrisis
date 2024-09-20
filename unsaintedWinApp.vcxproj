@@ -214,6 +214,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DB_Helper.cpp" />
+    <ClCompile Include="Epicris.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MyMarshallingClass.cpp" />
     <ClCompile Include="RtfTableCreator.cpp" />
@@ -222,6 +223,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DB_Helper.h" />
+    <ClInclude Include="Epicris.h" />
     <ClInclude Include="MainWindow.h">
       <FileType>CppForm</FileType>
     </ClInclude>

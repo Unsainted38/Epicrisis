@@ -4,6 +4,7 @@
 #include "Word_Helper.h"
 #include "RtfTableCreator.h"
 #include "RtfTest.h"
+#include "Epicris.h"
 
 // ISSUE01: Появление дропдаунменю после перехода на другую страницу при осуществлении перехода путем нажатия на кнопку "Продолжить"
 
@@ -62,12 +63,12 @@ namespace unsaintedWinApp {
 
             InitializePagesPanels();
 
-            Parser^ parser = GenerateParser(dbHelper->SetQueryByCondition("analyzes", "value", "position", "1")[0]);
-			//
+            Parser^ parser = ConvertRtfToParser(R"({\rtf1\ansi\deff0\trowd\trqc\trgaph108\trrh400\qc\clvertalc\cellx19786\intbl\b\fs16 Дата\fs22 \b0\cell\b\fs16 Нв г/л\fs22 \b0\cell\b\fs16 Эр. х10^12/л\fs22 \b0\cell\b\fs16 ЦП\fs22 \b0\cell\b\fs16 Л х10^9/л\fs22 \b0\cell\b\fs16 СОЭ Мм/ч\fs22 \b0\cell\b\fs16 Ht %\fs22 \b0\cell\b\fs16 Тр х10^9/л\fs22 \b0\cell\b\fs16 Ре %\fs22 \b0\cell\b\fs16 t сверт.\fs22 \b0\cell\b\fs16 t кров.\fs22 \b0\cell\b\fs16 Млц\fs22 \b0\cell\b\fs16 Мтм\fs22 \b0\cell\b\fs16 Пя\fs22 \b0\cell\b\fs16 Ся\fs22 \b0\cell\b\fs16 Эоз\fs22 \b0\cell\b\fs16 Баз\fs22 \b0\cell\b\fs16 Мон\fs22 \b0\cell\b\fs16 Лиф\fs22 \b0\cell\b\fs16 Плз\fs22 \b0\cell\b\fs16 Анз\fs22 \b0\cell\b\fs16 Пйкл\fs22 \b0\cell\b\fs16 Гпхр\fs22 \b0\cell\b\fs16 ТЗН\fs22 \b0\cell\row\cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\fs18 \fs22 \cell\row\par\pard\fs18 \fs22 \par\pard})");
+            String^ json = ConvertParserToJson(parser);
+            //
 			// TODO: добавьте код конструктора
-			//           
-
-		}
+			//
+    	}
 
 	protected:
 
@@ -103,35 +104,11 @@ namespace unsaintedWinApp {
         String^ epicrizPath;
         DB_Helper^ dbHelper;
         Word_Helper^ wordHelper;
+        Epicris^ epicris;
 
         
         
-    public:    
-        // Поля для хранения значений для эпикриза
-        String^ HistoryNumber;
-        String^ HistoryYear;
-        String^ Name;
-        String^ Surname;
-        String^ Patronymic;
-        String^ Rank;
-        String^ MilitaryUnit;
-        String^ Birthday;
-        String^ IncomeDate;
-        String^ OutcomeDate;
-        String^ Mkb;
-        String^ Diagnosis;
-        String^ RelatedDiagnosis;
-        String^ Complications;
-        String^ AnamnesisJson;
-        String^ AnamnesisText;
-        String^ Analyzes;
-        String^ AdditionalData;
-        String^ Therapy;
-        String^ DoctorsLooked;
-        String^ SideData;
-        String^ Recommendations;
-        String^ UnworkableList;
-        // Поля для хранения значений для эпикриза
+    public:
 
         List<String^>^ SideDataList;
         Decimal^ id;
@@ -370,7 +347,7 @@ private: System::Windows::Forms::ComboBox^ AnalyzesResults_comboBox;
     private: System::Windows::Forms::Panel^ Stamp_panel;
     private: System::Windows::Forms::Panel^ Recomendations_panel;
     private: System::Windows::Forms::Button^ F6_button;
-    private: System::Windows::Forms::Button^ F5_button;
+
     private: System::Windows::Forms::GroupBox^ SideInfo_groupBox;
 
     private: System::Windows::Forms::Button^ F7_button;
@@ -484,7 +461,7 @@ private: System::Windows::Forms::RadioButton^ IsLazaretaVPolyclinic_radioButton;
 
 
 private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel9;
-private: System::Windows::Forms::Button^ button2;
+
 
 private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel10;
 private: System::Windows::Forms::TableLayoutPanel^ TextMiniEditor_tableLayoutPanel;
@@ -497,7 +474,8 @@ private: System::Windows::Forms::Button^ Italic_button;
 private: System::Windows::Forms::Button^ Underline_button;
 private: System::Windows::Forms::Button^ Uppercase_button;
 private: System::Windows::Forms::Button^ Lowercase_button;
-private: System::Windows::Forms::Button^ Unker_button;
+private: System::Windows::Forms::Button^ Anchor_button;
+
 private: System::Windows::Forms::Button^ NumList_button;
 private: System::Windows::Forms::Button^ DotList_button;
 private: System::Windows::Forms::Button^ CleanFormat_button;
@@ -505,12 +483,91 @@ private: DevExpress::XtraEditors::SeparatorControl^ separatorControl3;
 private: System::Windows::Forms::Button^ LeftAlign_button;
 private: System::Windows::Forms::Button^ CenterAlign_button;
 private: System::Windows::Forms::Button^ RightAlign_button;
-private: System::Windows::Forms::Button^ WideAlign_button;
+private: System::Windows::Forms::Button^ JustAlign_button;
+
 private: DevExpress::XtraEditors::SeparatorControl^ separatorControl2;
 private: System::Windows::Forms::Button^ Date_button;
 private: System::Windows::Forms::Button^ DropDownMenu_button;
 private: System::Windows::Forms::Button^ Table_button;
 private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
+private: System::Windows::Forms::Button^ button4;
+private: System::Windows::Forms::RichTextBox^ richTextBoxTest;
+private: System::Windows::Forms::NumericUpDown^ numericUpDown1;
+private: System::Windows::Forms::Button^ button5;
+private: System::Windows::Forms::TableLayoutPanel^ RichTextBox1_tableLayoutPanel;
+
+private: System::Windows::Forms::RichTextBox^ richTextBox1;
+private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel4;
+private: System::Windows::Forms::NumericUpDown^ numericUpDown2;
+private: DevExpress::XtraEditors::SeparatorControl^ separatorControl4;
+private: System::Windows::Forms::Button^ Bold1_button;
+private: System::Windows::Forms::Button^ Italic1_button;
+private: System::Windows::Forms::Button^ Underline1_button;
+private: System::Windows::Forms::Button^ Uppercase1_button;
+private: System::Windows::Forms::Button^ Lowercase1_button;
+private: System::Windows::Forms::Button^ Anchor1_button;
+private: System::Windows::Forms::Button^ NumList1_button;
+private: System::Windows::Forms::Button^ DotList1_button;
+private: System::Windows::Forms::Button^ CleanFormat1_button;
+
+
+
+
+
+
+
+
+
+
+
+private: DevExpress::XtraEditors::SeparatorControl^ separatorControl5;
+private: System::Windows::Forms::Button^ LeftAlign1_button;
+private: System::Windows::Forms::Button^ CenterAlign1_button;
+private: System::Windows::Forms::Button^ RightAlign1_button;
+private: System::Windows::Forms::Button^ JustAlign1_button;
+
+
+
+
+
+private: DevExpress::XtraEditors::SeparatorControl^ separatorControl6;
+private: System::Windows::Forms::Button^ Date1_button;
+private: System::Windows::Forms::Button^ DropDownMenu1_button;
+private: System::Windows::Forms::Button^ Table1_button;
+
+
+
+
+private: System::Windows::Forms::Button^ F5_button;
+private: System::Windows::Forms::Button^ SaveAnalyzes_button;
+private: System::Windows::Forms::Button^ CancelAnalyzes_button;
+
+
+private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel22;
+private: System::Windows::Forms::TableLayoutPanel^ tableLayoutPanel20;
+private: System::Windows::Forms::RichTextBox^ richTextBox2;
+private: System::Windows::Forms::FlowLayoutPanel^ flowLayoutPanel7;
+private: System::Windows::Forms::NumericUpDown^ numericUpDown3;
+private: DevExpress::XtraEditors::SeparatorControl^ separatorControl7;
+private: System::Windows::Forms::Button^ button2;
+private: System::Windows::Forms::Button^ button6;
+private: System::Windows::Forms::Button^ button7;
+private: System::Windows::Forms::Button^ button8;
+private: System::Windows::Forms::Button^ button9;
+private: System::Windows::Forms::Button^ button10;
+private: System::Windows::Forms::Button^ button11;
+private: System::Windows::Forms::Button^ button12;
+private: System::Windows::Forms::Button^ button13;
+private: DevExpress::XtraEditors::SeparatorControl^ separatorControl8;
+private: System::Windows::Forms::Button^ button14;
+private: System::Windows::Forms::Button^ button15;
+private: System::Windows::Forms::Button^ button16;
+private: System::Windows::Forms::Button^ button17;
+private: DevExpress::XtraEditors::SeparatorControl^ separatorControl9;
+private: System::Windows::Forms::Button^ button18;
+private: System::Windows::Forms::Button^ button19;
+private: System::Windows::Forms::Button^ button20;
+
 
 
 
@@ -745,36 +802,31 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
             this->button3 = (gcnew System::Windows::Forms::Button());
             this->Clear_button = (gcnew System::Windows::Forms::Button());
-            this->SideInfo_panel = (gcnew System::Windows::Forms::Panel());
-            this->tableLayoutPanel10 = (gcnew System::Windows::Forms::TableLayoutPanel());
-            this->SideInfo_groupBox = (gcnew System::Windows::Forms::GroupBox());
-            this->CheckBoxes_flowLayoutPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
-            this->TextMiniEditor_tableLayoutPanel = (gcnew System::Windows::Forms::TableLayoutPanel());
-            this->richTextBox = (gcnew System::Windows::Forms::RichTextBox());
-            this->TextMiniEditor_flowLayoutPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
-            this->Fontsize_numericUpDown = (gcnew System::Windows::Forms::NumericUpDown());
-            this->separatorControl1 = (gcnew DevExpress::XtraEditors::SeparatorControl());
-            this->Bold_button = (gcnew System::Windows::Forms::Button());
-            this->Italic_button = (gcnew System::Windows::Forms::Button());
-            this->Underline_button = (gcnew System::Windows::Forms::Button());
-            this->Uppercase_button = (gcnew System::Windows::Forms::Button());
-            this->Lowercase_button = (gcnew System::Windows::Forms::Button());
-            this->Unker_button = (gcnew System::Windows::Forms::Button());
-            this->NumList_button = (gcnew System::Windows::Forms::Button());
-            this->DotList_button = (gcnew System::Windows::Forms::Button());
-            this->CleanFormat_button = (gcnew System::Windows::Forms::Button());
-            this->separatorControl3 = (gcnew DevExpress::XtraEditors::SeparatorControl());
-            this->LeftAlign_button = (gcnew System::Windows::Forms::Button());
-            this->CenterAlign_button = (gcnew System::Windows::Forms::Button());
-            this->RightAlign_button = (gcnew System::Windows::Forms::Button());
-            this->WideAlign_button = (gcnew System::Windows::Forms::Button());
-            this->separatorControl2 = (gcnew DevExpress::XtraEditors::SeparatorControl());
-            this->Date_button = (gcnew System::Windows::Forms::Button());
-            this->DropDownMenu_button = (gcnew System::Windows::Forms::Button());
-            this->Table_button = (gcnew System::Windows::Forms::Button());
-            this->F7_button = (gcnew System::Windows::Forms::Button());
             this->Recomendations_panel = (gcnew System::Windows::Forms::Panel());
             this->tableLayoutPanel19 = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->tableLayoutPanel20 = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->richTextBox2 = (gcnew System::Windows::Forms::RichTextBox());
+            this->flowLayoutPanel7 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+            this->numericUpDown3 = (gcnew System::Windows::Forms::NumericUpDown());
+            this->separatorControl7 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->button2 = (gcnew System::Windows::Forms::Button());
+            this->button6 = (gcnew System::Windows::Forms::Button());
+            this->button7 = (gcnew System::Windows::Forms::Button());
+            this->button8 = (gcnew System::Windows::Forms::Button());
+            this->button9 = (gcnew System::Windows::Forms::Button());
+            this->button10 = (gcnew System::Windows::Forms::Button());
+            this->button11 = (gcnew System::Windows::Forms::Button());
+            this->button12 = (gcnew System::Windows::Forms::Button());
+            this->button13 = (gcnew System::Windows::Forms::Button());
+            this->separatorControl8 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->button14 = (gcnew System::Windows::Forms::Button());
+            this->button15 = (gcnew System::Windows::Forms::Button());
+            this->button16 = (gcnew System::Windows::Forms::Button());
+            this->button17 = (gcnew System::Windows::Forms::Button());
+            this->separatorControl9 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->button18 = (gcnew System::Windows::Forms::Button());
+            this->button19 = (gcnew System::Windows::Forms::Button());
+            this->button20 = (gcnew System::Windows::Forms::Button());
             this->F8_button = (gcnew System::Windows::Forms::Button());
             this->tableLayoutPanel17 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->Recommendations_groupBox = (gcnew System::Windows::Forms::GroupBox());
@@ -788,10 +840,67 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             this->BronhitRec_button = (gcnew System::Windows::Forms::Button());
             this->AnalysisResults_panel = (gcnew System::Windows::Forms::Panel());
             this->tableLayoutPanel9 = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->RichTextBox1_tableLayoutPanel = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
+            this->flowLayoutPanel4 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+            this->numericUpDown2 = (gcnew System::Windows::Forms::NumericUpDown());
+            this->separatorControl4 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->Bold1_button = (gcnew System::Windows::Forms::Button());
+            this->Italic1_button = (gcnew System::Windows::Forms::Button());
+            this->Underline1_button = (gcnew System::Windows::Forms::Button());
+            this->Uppercase1_button = (gcnew System::Windows::Forms::Button());
+            this->Lowercase1_button = (gcnew System::Windows::Forms::Button());
+            this->Anchor1_button = (gcnew System::Windows::Forms::Button());
+            this->NumList1_button = (gcnew System::Windows::Forms::Button());
+            this->DotList1_button = (gcnew System::Windows::Forms::Button());
+            this->CleanFormat1_button = (gcnew System::Windows::Forms::Button());
+            this->separatorControl5 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->LeftAlign1_button = (gcnew System::Windows::Forms::Button());
+            this->CenterAlign1_button = (gcnew System::Windows::Forms::Button());
+            this->RightAlign1_button = (gcnew System::Windows::Forms::Button());
+            this->JustAlign1_button = (gcnew System::Windows::Forms::Button());
+            this->separatorControl6 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->Date1_button = (gcnew System::Windows::Forms::Button());
+            this->DropDownMenu1_button = (gcnew System::Windows::Forms::Button());
+            this->Table1_button = (gcnew System::Windows::Forms::Button());
+            this->tableLayoutPanel22 = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->SaveAnalyzes_button = (gcnew System::Windows::Forms::Button());
+            this->CancelAnalyzes_button = (gcnew System::Windows::Forms::Button());
             this->AnalysisResults_groupBox = (gcnew System::Windows::Forms::GroupBox());
             this->AnalyzesResults_comboBox = (gcnew System::Windows::Forms::ComboBox());
             this->F5_button = (gcnew System::Windows::Forms::Button());
-            this->button2 = (gcnew System::Windows::Forms::Button());
+            this->SideInfo_panel = (gcnew System::Windows::Forms::Panel());
+            this->numericUpDown1 = (gcnew System::Windows::Forms::NumericUpDown());
+            this->button5 = (gcnew System::Windows::Forms::Button());
+            this->button4 = (gcnew System::Windows::Forms::Button());
+            this->richTextBoxTest = (gcnew System::Windows::Forms::RichTextBox());
+            this->tableLayoutPanel10 = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->SideInfo_groupBox = (gcnew System::Windows::Forms::GroupBox());
+            this->CheckBoxes_flowLayoutPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
+            this->TextMiniEditor_tableLayoutPanel = (gcnew System::Windows::Forms::TableLayoutPanel());
+            this->richTextBox = (gcnew System::Windows::Forms::RichTextBox());
+            this->TextMiniEditor_flowLayoutPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
+            this->Fontsize_numericUpDown = (gcnew System::Windows::Forms::NumericUpDown());
+            this->separatorControl1 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->Bold_button = (gcnew System::Windows::Forms::Button());
+            this->Italic_button = (gcnew System::Windows::Forms::Button());
+            this->Underline_button = (gcnew System::Windows::Forms::Button());
+            this->Uppercase_button = (gcnew System::Windows::Forms::Button());
+            this->Lowercase_button = (gcnew System::Windows::Forms::Button());
+            this->Anchor_button = (gcnew System::Windows::Forms::Button());
+            this->NumList_button = (gcnew System::Windows::Forms::Button());
+            this->DotList_button = (gcnew System::Windows::Forms::Button());
+            this->CleanFormat_button = (gcnew System::Windows::Forms::Button());
+            this->separatorControl3 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->LeftAlign_button = (gcnew System::Windows::Forms::Button());
+            this->CenterAlign_button = (gcnew System::Windows::Forms::Button());
+            this->RightAlign_button = (gcnew System::Windows::Forms::Button());
+            this->JustAlign_button = (gcnew System::Windows::Forms::Button());
+            this->separatorControl2 = (gcnew DevExpress::XtraEditors::SeparatorControl());
+            this->Date_button = (gcnew System::Windows::Forms::Button());
+            this->DropDownMenu_button = (gcnew System::Windows::Forms::Button());
+            this->Table_button = (gcnew System::Windows::Forms::Button());
+            this->F7_button = (gcnew System::Windows::Forms::Button());
             this->Anamnesis_panel = (gcnew System::Windows::Forms::Panel());
             this->tableLayoutPanel14 = (gcnew System::Windows::Forms::TableLayoutPanel());
             this->panel3 = (gcnew System::Windows::Forms::Panel());
@@ -917,7 +1026,29 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->id_numericUpDown))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->year_numericUpDown))->BeginInit();
             this->flowLayoutPanel1->SuspendLayout();
+            this->Recomendations_panel->SuspendLayout();
+            this->tableLayoutPanel19->SuspendLayout();
+            this->tableLayoutPanel20->SuspendLayout();
+            this->flowLayoutPanel7->SuspendLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown3))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl7))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl8))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl9))->BeginInit();
+            this->tableLayoutPanel17->SuspendLayout();
+            this->Recommendations_groupBox->SuspendLayout();
+            this->tableLayoutPanel16->SuspendLayout();
+            this->AnalysisResults_panel->SuspendLayout();
+            this->tableLayoutPanel9->SuspendLayout();
+            this->RichTextBox1_tableLayoutPanel->SuspendLayout();
+            this->flowLayoutPanel4->SuspendLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown2))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl4))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl5))->BeginInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl6))->BeginInit();
+            this->tableLayoutPanel22->SuspendLayout();
+            this->AnalysisResults_groupBox->SuspendLayout();
             this->SideInfo_panel->SuspendLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
             this->tableLayoutPanel10->SuspendLayout();
             this->SideInfo_groupBox->SuspendLayout();
             this->TextMiniEditor_tableLayoutPanel->SuspendLayout();
@@ -926,14 +1057,6 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl1))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl3))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl2))->BeginInit();
-            this->Recomendations_panel->SuspendLayout();
-            this->tableLayoutPanel19->SuspendLayout();
-            this->tableLayoutPanel17->SuspendLayout();
-            this->Recommendations_groupBox->SuspendLayout();
-            this->tableLayoutPanel16->SuspendLayout();
-            this->AnalysisResults_panel->SuspendLayout();
-            this->tableLayoutPanel9->SuspendLayout();
-            this->AnalysisResults_groupBox->SuspendLayout();
             this->Anamnesis_panel->SuspendLayout();
             this->tableLayoutPanel14->SuspendLayout();
             this->panel3->SuspendLayout();
@@ -1793,9 +1916,9 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             this->Epicrisis_panel->Controls->Add(this->EpiricisisTabMenu_tableLayoutPanel);
             this->Epicrisis_panel->Controls->Add(this->Hat_tableLayoutPanel);
             this->Epicrisis_panel->Controls->Add(this->UpperHat_tableLayoutPanel);
-            this->Epicrisis_panel->Controls->Add(this->SideInfo_panel);
             this->Epicrisis_panel->Controls->Add(this->Recomendations_panel);
             this->Epicrisis_panel->Controls->Add(this->AnalysisResults_panel);
+            this->Epicrisis_panel->Controls->Add(this->SideInfo_panel);
             this->Epicrisis_panel->Controls->Add(this->Anamnesis_panel);
             this->Epicrisis_panel->Controls->Add(this->Stamp_panel);
             this->Epicrisis_panel->Controls->Add(this->Ill_History_panel);
@@ -2468,509 +2591,6 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             this->Clear_button->Text = L"Очистить";
             this->Clear_button->UseVisualStyleBackColor = false;
             // 
-            // SideInfo_panel
-            // 
-            this->SideInfo_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
-            this->SideInfo_panel->Controls->Add(this->tableLayoutPanel10);
-            this->SideInfo_panel->Location = System::Drawing::Point(0, 180);
-            this->SideInfo_panel->Name = L"SideInfo_panel";
-            this->SideInfo_panel->Padding = System::Windows::Forms::Padding(5);
-            this->SideInfo_panel->Size = System::Drawing::Size(1329, 500);
-            this->SideInfo_panel->TabIndex = 4;
-            // 
-            // tableLayoutPanel10
-            // 
-            this->tableLayoutPanel10->ColumnCount = 1;
-            this->tableLayoutPanel10->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-                100)));
-            this->tableLayoutPanel10->Controls->Add(this->SideInfo_groupBox, 0, 0);
-            this->tableLayoutPanel10->Controls->Add(this->TextMiniEditor_tableLayoutPanel, 0, 1);
-            this->tableLayoutPanel10->Controls->Add(this->F7_button, 0, 2);
-            this->tableLayoutPanel10->Dock = System::Windows::Forms::DockStyle::Top;
-            this->tableLayoutPanel10->Location = System::Drawing::Point(5, 5);
-            this->tableLayoutPanel10->Name = L"tableLayoutPanel10";
-            this->tableLayoutPanel10->RowCount = 3;
-            this->tableLayoutPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-            this->tableLayoutPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel10->Size = System::Drawing::Size(1319, 328);
-            this->tableLayoutPanel10->TabIndex = 17;
-            // 
-            // SideInfo_groupBox
-            // 
-            this->SideInfo_groupBox->Controls->Add(this->CheckBoxes_flowLayoutPanel);
-            this->SideInfo_groupBox->Location = System::Drawing::Point(3, 3);
-            this->SideInfo_groupBox->Name = L"SideInfo_groupBox";
-            this->SideInfo_groupBox->Size = System::Drawing::Size(1313, 45);
-            this->SideInfo_groupBox->TabIndex = 0;
-            this->SideInfo_groupBox->TabStop = false;
-            // 
-            // CheckBoxes_flowLayoutPanel
-            // 
-            this->CheckBoxes_flowLayoutPanel->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->CheckBoxes_flowLayoutPanel->Location = System::Drawing::Point(3, 16);
-            this->CheckBoxes_flowLayoutPanel->Name = L"CheckBoxes_flowLayoutPanel";
-            this->CheckBoxes_flowLayoutPanel->Padding = System::Windows::Forms::Padding(5, 0, 5, 0);
-            this->CheckBoxes_flowLayoutPanel->Size = System::Drawing::Size(1307, 26);
-            this->CheckBoxes_flowLayoutPanel->TabIndex = 0;
-            this->CheckBoxes_flowLayoutPanel->WrapContents = false;
-            // 
-            // TextMiniEditor_tableLayoutPanel
-            // 
-            this->TextMiniEditor_tableLayoutPanel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
-                | System::Windows::Forms::AnchorStyles::Right));
-            this->TextMiniEditor_tableLayoutPanel->AutoSize = true;
-            this->TextMiniEditor_tableLayoutPanel->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::Single;
-            this->TextMiniEditor_tableLayoutPanel->ColumnCount = 1;
-            this->TextMiniEditor_tableLayoutPanel->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-                100)));
-            this->TextMiniEditor_tableLayoutPanel->Controls->Add(this->richTextBox, 0, 1);
-            this->TextMiniEditor_tableLayoutPanel->Controls->Add(this->TextMiniEditor_flowLayoutPanel, 0, 0);
-            this->TextMiniEditor_tableLayoutPanel->Location = System::Drawing::Point(3, 54);
-            this->TextMiniEditor_tableLayoutPanel->Name = L"TextMiniEditor_tableLayoutPanel";
-            this->TextMiniEditor_tableLayoutPanel->RowCount = 2;
-            this->TextMiniEditor_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->TextMiniEditor_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->TextMiniEditor_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
-                20)));
-            this->TextMiniEditor_tableLayoutPanel->Size = System::Drawing::Size(1313, 228);
-            this->TextMiniEditor_tableLayoutPanel->TabIndex = 17;
-            // 
-            // richTextBox
-            // 
-            this->richTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
-            this->richTextBox->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->richTextBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->richTextBox->Location = System::Drawing::Point(4, 53);
-            this->richTextBox->Name = L"richTextBox";
-            this->richTextBox->Size = System::Drawing::Size(1305, 171);
-            this->richTextBox->TabIndex = 0;
-            this->richTextBox->Text = L"";
-            this->richTextBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // TextMiniEditor_flowLayoutPanel
-            // 
-            this->TextMiniEditor_flowLayoutPanel->AutoSize = true;
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Fontsize_numericUpDown);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->separatorControl1);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Bold_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Italic_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Underline_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Uppercase_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Lowercase_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Unker_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->NumList_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->DotList_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->CleanFormat_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->separatorControl3);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->LeftAlign_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->CenterAlign_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->RightAlign_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->WideAlign_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->separatorControl2);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Date_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->DropDownMenu_button);
-            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Table_button);
-            this->TextMiniEditor_flowLayoutPanel->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->TextMiniEditor_flowLayoutPanel->Location = System::Drawing::Point(1, 1);
-            this->TextMiniEditor_flowLayoutPanel->Margin = System::Windows::Forms::Padding(0);
-            this->TextMiniEditor_flowLayoutPanel->Name = L"TextMiniEditor_flowLayoutPanel";
-            this->TextMiniEditor_flowLayoutPanel->Size = System::Drawing::Size(1311, 48);
-            this->TextMiniEditor_flowLayoutPanel->TabIndex = 1;
-            // 
-            // Fontsize_numericUpDown
-            // 
-            this->Fontsize_numericUpDown->BorderStyle = System::Windows::Forms::BorderStyle::None;
-            this->Fontsize_numericUpDown->Dock = System::Windows::Forms::DockStyle::Fill;
-            this->Fontsize_numericUpDown->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Regular,
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->Fontsize_numericUpDown->Location = System::Drawing::Point(6, 10);
-            this->Fontsize_numericUpDown->Margin = System::Windows::Forms::Padding(6, 10, 3, 0);
-            this->Fontsize_numericUpDown->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 72, 0, 0, 0 });
-            this->Fontsize_numericUpDown->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
-            this->Fontsize_numericUpDown->Name = L"Fontsize_numericUpDown";
-            this->Fontsize_numericUpDown->Size = System::Drawing::Size(48, 28);
-            this->Fontsize_numericUpDown->TabIndex = 0;
-            this->Fontsize_numericUpDown->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 11, 0, 0, 0 });
-            this->Fontsize_numericUpDown->ValueChanged += gcnew System::EventHandler(this, &MainWindow::Fontsize_numericUpDown_ValueChanged);
-            // 
-            // separatorControl1
-            // 
-            this->separatorControl1->AutoSizeMode = true;
-            this->separatorControl1->BackColor = System::Drawing::SystemColors::ControlDark;
-            this->separatorControl1->Dock = System::Windows::Forms::DockStyle::Left;
-            this->separatorControl1->LineOrientation = System::Windows::Forms::Orientation::Vertical;
-            this->separatorControl1->LineThickness = 2;
-            this->separatorControl1->Location = System::Drawing::Point(57, 0);
-            this->separatorControl1->Margin = System::Windows::Forms::Padding(0);
-            this->separatorControl1->Name = L"separatorControl1";
-            this->separatorControl1->Padding = System::Windows::Forms::Padding(0);
-            this->separatorControl1->Size = System::Drawing::Size(2, 48);
-            this->separatorControl1->TabIndex = 20;
-            // 
-            // Bold_button
-            // 
-            this->Bold_button->AutoSize = true;
-            this->Bold_button->BackColor = System::Drawing::SystemColors::ControlLightLight;
-            this->Bold_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->Bold_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->Bold_button->FlatAppearance->BorderSize = 0;
-            this->Bold_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->Bold_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(0)));
-            this->Bold_button->ForeColor = System::Drawing::Color::Black;
-            this->Bold_button->Location = System::Drawing::Point(62, 6);
-            this->Bold_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->Bold_button->Name = L"Bold_button";
-            this->Bold_button->Size = System::Drawing::Size(36, 36);
-            this->Bold_button->TabIndex = 2;
-            this->Bold_button->TabStop = false;
-            this->Bold_button->Text = L"B";
-            this->Bold_button->UseVisualStyleBackColor = false;
-            this->Bold_button->Click += gcnew System::EventHandler(this, &MainWindow::Bold_button_Click);
-            // 
-            // Italic_button
-            // 
-            this->Italic_button->AutoSize = true;
-            this->Italic_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->Italic_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->Italic_button->FlatAppearance->BorderSize = 0;
-            this->Italic_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->Italic_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->Italic_button->Location = System::Drawing::Point(104, 6);
-            this->Italic_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->Italic_button->Name = L"Italic_button";
-            this->Italic_button->Size = System::Drawing::Size(36, 36);
-            this->Italic_button->TabIndex = 3;
-            this->Italic_button->TabStop = false;
-            this->Italic_button->Text = L"I";
-            this->Italic_button->UseVisualStyleBackColor = true;
-            this->Italic_button->Click += gcnew System::EventHandler(this, &MainWindow::Italic_button_Click);
-            this->Italic_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // Underline_button
-            // 
-            this->Underline_button->AutoSize = true;
-            this->Underline_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->Underline_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->Underline_button->FlatAppearance->BorderSize = 0;
-            this->Underline_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->Underline_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Underline)),
-                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-            this->Underline_button->Location = System::Drawing::Point(146, 6);
-            this->Underline_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->Underline_button->Name = L"Underline_button";
-            this->Underline_button->Size = System::Drawing::Size(36, 36);
-            this->Underline_button->TabIndex = 4;
-            this->Underline_button->TabStop = false;
-            this->Underline_button->Text = L"U";
-            this->Underline_button->UseVisualStyleBackColor = true;
-            this->Underline_button->Click += gcnew System::EventHandler(this, &MainWindow::Underline_button_Click);
-            this->Underline_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // Uppercase_button
-            // 
-            this->Uppercase_button->AutoSize = true;
-            this->Uppercase_button->BackColor = System::Drawing::SystemColors::ControlLightLight;
-            this->Uppercase_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->Uppercase_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->Uppercase_button->FlatAppearance->BorderSize = 0;
-            this->Uppercase_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->Uppercase_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->Uppercase_button->Location = System::Drawing::Point(188, 6);
-            this->Uppercase_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->Uppercase_button->Name = L"Uppercase_button";
-            this->Uppercase_button->Size = System::Drawing::Size(35, 36);
-            this->Uppercase_button->TabIndex = 5;
-            this->Uppercase_button->TabStop = false;
-            this->Uppercase_button->Text = L"X";
-            this->Uppercase_button->UseVisualStyleBackColor = false;
-            this->Uppercase_button->Click += gcnew System::EventHandler(this, &MainWindow::Uppercase_button_Click);
-            this->Uppercase_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // Lowercase_button
-            // 
-            this->Lowercase_button->AutoSize = true;
-            this->Lowercase_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->Lowercase_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->Lowercase_button->FlatAppearance->BorderSize = 0;
-            this->Lowercase_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->Lowercase_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->Lowercase_button->Location = System::Drawing::Point(229, 6);
-            this->Lowercase_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->Lowercase_button->Name = L"Lowercase_button";
-            this->Lowercase_button->Size = System::Drawing::Size(35, 36);
-            this->Lowercase_button->TabIndex = 6;
-            this->Lowercase_button->TabStop = false;
-            this->Lowercase_button->Text = L"X";
-            this->Lowercase_button->UseVisualStyleBackColor = true;
-            this->Lowercase_button->Click += gcnew System::EventHandler(this, &MainWindow::Lowercase_button_Click);
-            this->Lowercase_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // Unker_button
-            // 
-            this->Unker_button->AutoSize = true;
-            this->Unker_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->Unker_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->Unker_button->FlatAppearance->BorderSize = 0;
-            this->Unker_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->Unker_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->Unker_button->Location = System::Drawing::Point(270, 6);
-            this->Unker_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->Unker_button->Name = L"Unker_button";
-            this->Unker_button->Size = System::Drawing::Size(36, 36);
-            this->Unker_button->TabIndex = 7;
-            this->Unker_button->TabStop = false;
-            this->Unker_button->Text = L"B";
-            this->Unker_button->UseVisualStyleBackColor = true;
-            this->Unker_button->Click += gcnew System::EventHandler(this, &MainWindow::Unker_button_Click);
-            this->Unker_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // NumList_button
-            // 
-            this->NumList_button->AutoSize = true;
-            this->NumList_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->NumList_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->NumList_button->FlatAppearance->BorderSize = 0;
-            this->NumList_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->NumList_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->NumList_button->Location = System::Drawing::Point(312, 6);
-            this->NumList_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->NumList_button->Name = L"NumList_button";
-            this->NumList_button->Size = System::Drawing::Size(36, 36);
-            this->NumList_button->TabIndex = 8;
-            this->NumList_button->TabStop = false;
-            this->NumList_button->Text = L"B";
-            this->NumList_button->UseVisualStyleBackColor = true;
-            this->NumList_button->Click += gcnew System::EventHandler(this, &MainWindow::NumList_button_Click);
-            this->NumList_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // DotList_button
-            // 
-            this->DotList_button->AutoSize = true;
-            this->DotList_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->DotList_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->DotList_button->FlatAppearance->BorderSize = 0;
-            this->DotList_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->DotList_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->DotList_button->Location = System::Drawing::Point(354, 6);
-            this->DotList_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->DotList_button->Name = L"DotList_button";
-            this->DotList_button->Size = System::Drawing::Size(36, 36);
-            this->DotList_button->TabIndex = 9;
-            this->DotList_button->TabStop = false;
-            this->DotList_button->Text = L"B";
-            this->DotList_button->UseVisualStyleBackColor = true;
-            this->DotList_button->Click += gcnew System::EventHandler(this, &MainWindow::DotList_button_Click);
-            this->DotList_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // CleanFormat_button
-            // 
-            this->CleanFormat_button->AutoSize = true;
-            this->CleanFormat_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->CleanFormat_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->CleanFormat_button->FlatAppearance->BorderSize = 0;
-            this->CleanFormat_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->CleanFormat_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->CleanFormat_button->Location = System::Drawing::Point(396, 6);
-            this->CleanFormat_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->CleanFormat_button->Name = L"CleanFormat_button";
-            this->CleanFormat_button->Size = System::Drawing::Size(36, 36);
-            this->CleanFormat_button->TabIndex = 10;
-            this->CleanFormat_button->TabStop = false;
-            this->CleanFormat_button->Text = L"B";
-            this->CleanFormat_button->UseVisualStyleBackColor = true;
-            this->CleanFormat_button->Click += gcnew System::EventHandler(this, &MainWindow::CleanFormat_button_Click);
-            this->CleanFormat_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // separatorControl3
-            // 
-            this->separatorControl3->AutoSizeMode = true;
-            this->separatorControl3->BackColor = System::Drawing::SystemColors::ControlDark;
-            this->separatorControl3->LineOrientation = System::Windows::Forms::Orientation::Vertical;
-            this->separatorControl3->LineThickness = 2;
-            this->separatorControl3->Location = System::Drawing::Point(435, 0);
-            this->separatorControl3->Margin = System::Windows::Forms::Padding(0);
-            this->separatorControl3->Name = L"separatorControl3";
-            this->separatorControl3->Padding = System::Windows::Forms::Padding(0);
-            this->separatorControl3->Size = System::Drawing::Size(2, 48);
-            this->separatorControl3->TabIndex = 22;
-            // 
-            // LeftAlign_button
-            // 
-            this->LeftAlign_button->AutoSize = true;
-            this->LeftAlign_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->LeftAlign_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->LeftAlign_button->FlatAppearance->BorderSize = 0;
-            this->LeftAlign_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->LeftAlign_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->LeftAlign_button->Location = System::Drawing::Point(440, 6);
-            this->LeftAlign_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->LeftAlign_button->Name = L"LeftAlign_button";
-            this->LeftAlign_button->Size = System::Drawing::Size(36, 36);
-            this->LeftAlign_button->TabIndex = 12;
-            this->LeftAlign_button->TabStop = false;
-            this->LeftAlign_button->Text = L"B";
-            this->LeftAlign_button->UseVisualStyleBackColor = true;
-            this->LeftAlign_button->Click += gcnew System::EventHandler(this, &MainWindow::LeftAlign_button_Click);
-            this->LeftAlign_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // CenterAlign_button
-            // 
-            this->CenterAlign_button->AutoSize = true;
-            this->CenterAlign_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->CenterAlign_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->CenterAlign_button->FlatAppearance->BorderSize = 0;
-            this->CenterAlign_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->CenterAlign_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->CenterAlign_button->Location = System::Drawing::Point(482, 6);
-            this->CenterAlign_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->CenterAlign_button->Name = L"CenterAlign_button";
-            this->CenterAlign_button->Size = System::Drawing::Size(36, 36);
-            this->CenterAlign_button->TabIndex = 13;
-            this->CenterAlign_button->TabStop = false;
-            this->CenterAlign_button->Text = L"B";
-            this->CenterAlign_button->UseVisualStyleBackColor = true;
-            this->CenterAlign_button->Click += gcnew System::EventHandler(this, &MainWindow::CenterAlign_button_Click);
-            this->CenterAlign_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // RightAlign_button
-            // 
-            this->RightAlign_button->AutoSize = true;
-            this->RightAlign_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->RightAlign_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->RightAlign_button->FlatAppearance->BorderSize = 0;
-            this->RightAlign_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->RightAlign_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->RightAlign_button->Location = System::Drawing::Point(524, 6);
-            this->RightAlign_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->RightAlign_button->Name = L"RightAlign_button";
-            this->RightAlign_button->Size = System::Drawing::Size(36, 36);
-            this->RightAlign_button->TabIndex = 14;
-            this->RightAlign_button->TabStop = false;
-            this->RightAlign_button->Text = L"B";
-            this->RightAlign_button->UseVisualStyleBackColor = true;
-            this->RightAlign_button->Click += gcnew System::EventHandler(this, &MainWindow::RightAlign_button_Click);
-            this->RightAlign_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // WideAlign_button
-            // 
-            this->WideAlign_button->AutoSize = true;
-            this->WideAlign_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->WideAlign_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->WideAlign_button->FlatAppearance->BorderSize = 0;
-            this->WideAlign_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->WideAlign_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->WideAlign_button->Location = System::Drawing::Point(566, 6);
-            this->WideAlign_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->WideAlign_button->Name = L"WideAlign_button";
-            this->WideAlign_button->Size = System::Drawing::Size(36, 36);
-            this->WideAlign_button->TabIndex = 15;
-            this->WideAlign_button->TabStop = false;
-            this->WideAlign_button->Text = L"B";
-            this->WideAlign_button->UseVisualStyleBackColor = true;
-            this->WideAlign_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // separatorControl2
-            // 
-            this->separatorControl2->AutoSizeMode = true;
-            this->separatorControl2->BackColor = System::Drawing::SystemColors::ControlDark;
-            this->separatorControl2->LineOrientation = System::Windows::Forms::Orientation::Vertical;
-            this->separatorControl2->LineThickness = 2;
-            this->separatorControl2->Location = System::Drawing::Point(605, 0);
-            this->separatorControl2->Margin = System::Windows::Forms::Padding(0);
-            this->separatorControl2->Name = L"separatorControl2";
-            this->separatorControl2->Padding = System::Windows::Forms::Padding(0);
-            this->separatorControl2->Size = System::Drawing::Size(2, 48);
-            this->separatorControl2->TabIndex = 21;
-            // 
-            // Date_button
-            // 
-            this->Date_button->AutoSize = true;
-            this->Date_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->Date_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->Date_button->FlatAppearance->BorderSize = 0;
-            this->Date_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->Date_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->Date_button->Location = System::Drawing::Point(610, 6);
-            this->Date_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->Date_button->Name = L"Date_button";
-            this->Date_button->Size = System::Drawing::Size(36, 36);
-            this->Date_button->TabIndex = 17;
-            this->Date_button->TabStop = false;
-            this->Date_button->Text = L"B";
-            this->Date_button->UseVisualStyleBackColor = true;
-            this->Date_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // DropDownMenu_button
-            // 
-            this->DropDownMenu_button->AutoSize = true;
-            this->DropDownMenu_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->DropDownMenu_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->DropDownMenu_button->FlatAppearance->BorderSize = 0;
-            this->DropDownMenu_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->DropDownMenu_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->DropDownMenu_button->Location = System::Drawing::Point(652, 6);
-            this->DropDownMenu_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->DropDownMenu_button->Name = L"DropDownMenu_button";
-            this->DropDownMenu_button->Size = System::Drawing::Size(36, 36);
-            this->DropDownMenu_button->TabIndex = 18;
-            this->DropDownMenu_button->TabStop = false;
-            this->DropDownMenu_button->Text = L"B";
-            this->DropDownMenu_button->UseVisualStyleBackColor = true;
-            this->DropDownMenu_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // Table_button
-            // 
-            this->Table_button->AutoSize = true;
-            this->Table_button->Dock = System::Windows::Forms::DockStyle::Left;
-            this->Table_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
-            this->Table_button->FlatAppearance->BorderSize = 0;
-            this->Table_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->Table_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->Table_button->Location = System::Drawing::Point(694, 6);
-            this->Table_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
-            this->Table_button->Name = L"Table_button";
-            this->Table_button->Size = System::Drawing::Size(36, 36);
-            this->Table_button->TabIndex = 19;
-            this->Table_button->TabStop = false;
-            this->Table_button->Text = L"B";
-            this->Table_button->UseVisualStyleBackColor = true;
-            this->Table_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
-            // 
-            // F7_button
-            // 
-            this->F7_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
-            this->F7_button->Cursor = System::Windows::Forms::Cursors::Hand;
-            this->F7_button->FlatAppearance->BorderSize = 0;
-            this->F7_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->F7_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-                static_cast<System::Byte>(204)));
-            this->F7_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
-                static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F7_button->Location = System::Drawing::Point(573, 288);
-            this->F7_button->Name = L"F7_button";
-            this->F7_button->Size = System::Drawing::Size(173, 37);
-            this->F7_button->TabIndex = 16;
-            this->F7_button->Text = L"Продолжить";
-            this->F7_button->UseVisualStyleBackColor = true;
-            this->F7_button->Click += gcnew System::EventHandler(this, &MainWindow::F7_button_Click);
-            // 
             // Recomendations_panel
             // 
             this->Recomendations_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
@@ -2986,17 +2606,439 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             // 
             this->tableLayoutPanel19->AutoSize = true;
             this->tableLayoutPanel19->ColumnCount = 1;
-            this->tableLayoutPanel19->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
-                100)));
+            this->tableLayoutPanel19->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
+            this->tableLayoutPanel19->Controls->Add(this->tableLayoutPanel20, 0, 0);
             this->tableLayoutPanel19->Controls->Add(this->F8_button, 0, 1);
-            this->tableLayoutPanel19->Location = System::Drawing::Point(337, 0);
+            this->tableLayoutPanel19->Location = System::Drawing::Point(326, 5);
             this->tableLayoutPanel19->Name = L"tableLayoutPanel19";
             this->tableLayoutPanel19->RowCount = 2;
-            this->tableLayoutPanel19->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
-                20)));
             this->tableLayoutPanel19->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel19->Size = System::Drawing::Size(976, 307);
+            this->tableLayoutPanel19->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel19->Size = System::Drawing::Size(1003, 326);
             this->tableLayoutPanel19->TabIndex = 18;
+            // 
+            // tableLayoutPanel20
+            // 
+            this->tableLayoutPanel20->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->tableLayoutPanel20->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::Single;
+            this->tableLayoutPanel20->ColumnCount = 1;
+            this->tableLayoutPanel20->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+                100)));
+            this->tableLayoutPanel20->Controls->Add(this->richTextBox2, 0, 1);
+            this->tableLayoutPanel20->Controls->Add(this->flowLayoutPanel7, 0, 0);
+            this->tableLayoutPanel20->Location = System::Drawing::Point(3, 3);
+            this->tableLayoutPanel20->Name = L"tableLayoutPanel20";
+            this->tableLayoutPanel20->RowCount = 2;
+            this->tableLayoutPanel20->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel20->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel20->Size = System::Drawing::Size(997, 277);
+            this->tableLayoutPanel20->TabIndex = 19;
+            // 
+            // richTextBox2
+            // 
+            this->richTextBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->richTextBox2->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->richTextBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->richTextBox2->Location = System::Drawing::Point(4, 53);
+            this->richTextBox2->Name = L"richTextBox2";
+            this->richTextBox2->Size = System::Drawing::Size(989, 220);
+            this->richTextBox2->TabIndex = 0;
+            this->richTextBox2->Text = L"";
+            // 
+            // flowLayoutPanel7
+            // 
+            this->flowLayoutPanel7->AutoSize = true;
+            this->flowLayoutPanel7->Controls->Add(this->numericUpDown3);
+            this->flowLayoutPanel7->Controls->Add(this->separatorControl7);
+            this->flowLayoutPanel7->Controls->Add(this->button2);
+            this->flowLayoutPanel7->Controls->Add(this->button6);
+            this->flowLayoutPanel7->Controls->Add(this->button7);
+            this->flowLayoutPanel7->Controls->Add(this->button8);
+            this->flowLayoutPanel7->Controls->Add(this->button9);
+            this->flowLayoutPanel7->Controls->Add(this->button10);
+            this->flowLayoutPanel7->Controls->Add(this->button11);
+            this->flowLayoutPanel7->Controls->Add(this->button12);
+            this->flowLayoutPanel7->Controls->Add(this->button13);
+            this->flowLayoutPanel7->Controls->Add(this->separatorControl8);
+            this->flowLayoutPanel7->Controls->Add(this->button14);
+            this->flowLayoutPanel7->Controls->Add(this->button15);
+            this->flowLayoutPanel7->Controls->Add(this->button16);
+            this->flowLayoutPanel7->Controls->Add(this->button17);
+            this->flowLayoutPanel7->Controls->Add(this->separatorControl9);
+            this->flowLayoutPanel7->Controls->Add(this->button18);
+            this->flowLayoutPanel7->Controls->Add(this->button19);
+            this->flowLayoutPanel7->Controls->Add(this->button20);
+            this->flowLayoutPanel7->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->flowLayoutPanel7->Location = System::Drawing::Point(1, 1);
+            this->flowLayoutPanel7->Margin = System::Windows::Forms::Padding(0);
+            this->flowLayoutPanel7->Name = L"flowLayoutPanel7";
+            this->flowLayoutPanel7->Size = System::Drawing::Size(995, 48);
+            this->flowLayoutPanel7->TabIndex = 1;
+            // 
+            // numericUpDown3
+            // 
+            this->numericUpDown3->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->numericUpDown3->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->numericUpDown3->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->numericUpDown3->Location = System::Drawing::Point(6, 10);
+            this->numericUpDown3->Margin = System::Windows::Forms::Padding(6, 10, 3, 0);
+            this->numericUpDown3->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 72, 0, 0, 0 });
+            this->numericUpDown3->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
+            this->numericUpDown3->Name = L"numericUpDown3";
+            this->numericUpDown3->Size = System::Drawing::Size(48, 28);
+            this->numericUpDown3->TabIndex = 0;
+            this->numericUpDown3->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 11, 0, 0, 0 });
+            this->numericUpDown3->ValueChanged += gcnew System::EventHandler(this, &MainWindow::Fontsize_numericUpDown_ValueChanged);
+            // 
+            // separatorControl7
+            // 
+            this->separatorControl7->AutoSizeMode = true;
+            this->separatorControl7->BackColor = System::Drawing::SystemColors::ControlDark;
+            this->separatorControl7->Dock = System::Windows::Forms::DockStyle::Left;
+            this->separatorControl7->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl7->LineThickness = 2;
+            this->separatorControl7->Location = System::Drawing::Point(57, 0);
+            this->separatorControl7->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl7->Name = L"separatorControl7";
+            this->separatorControl7->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl7->Size = System::Drawing::Size(2, 48);
+            this->separatorControl7->TabIndex = 20;
+            // 
+            // button2
+            // 
+            this->button2->AutoSize = true;
+            this->button2->BackColor = System::Drawing::SystemColors::ControlLightLight;
+            this->button2->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button2->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button2->FlatAppearance->BorderSize = 0;
+            this->button2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button2->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(0)));
+            this->button2->ForeColor = System::Drawing::Color::Black;
+            this->button2->Location = System::Drawing::Point(62, 6);
+            this->button2->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button2->Name = L"button2";
+            this->button2->Size = System::Drawing::Size(36, 36);
+            this->button2->TabIndex = 2;
+            this->button2->TabStop = false;
+            this->button2->Text = L"B";
+            this->button2->UseVisualStyleBackColor = false;
+            this->button2->Click += gcnew System::EventHandler(this, &MainWindow::Bold_button_Click);
+            // 
+            // button6
+            // 
+            this->button6->AutoSize = true;
+            this->button6->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button6->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button6->FlatAppearance->BorderSize = 0;
+            this->button6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button6->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->button6->Location = System::Drawing::Point(104, 6);
+            this->button6->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button6->Name = L"button6";
+            this->button6->Size = System::Drawing::Size(36, 36);
+            this->button6->TabIndex = 3;
+            this->button6->TabStop = false;
+            this->button6->Text = L"I";
+            this->button6->UseVisualStyleBackColor = true;
+            this->button6->Click += gcnew System::EventHandler(this, &MainWindow::Italic_button_Click);
+            // 
+            // button7
+            // 
+            this->button7->AutoSize = true;
+            this->button7->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button7->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button7->FlatAppearance->BorderSize = 0;
+            this->button7->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button7->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Underline)),
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->button7->Location = System::Drawing::Point(146, 6);
+            this->button7->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button7->Name = L"button7";
+            this->button7->Size = System::Drawing::Size(36, 36);
+            this->button7->TabIndex = 4;
+            this->button7->TabStop = false;
+            this->button7->Text = L"U";
+            this->button7->UseVisualStyleBackColor = true;
+            this->button7->Click += gcnew System::EventHandler(this, &MainWindow::Underline_button_Click);
+            // 
+            // button8
+            // 
+            this->button8->AutoSize = true;
+            this->button8->BackColor = System::Drawing::SystemColors::ControlLightLight;
+            this->button8->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button8->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button8->FlatAppearance->BorderSize = 0;
+            this->button8->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button8->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button8->Location = System::Drawing::Point(188, 6);
+            this->button8->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button8->Name = L"button8";
+            this->button8->Size = System::Drawing::Size(35, 36);
+            this->button8->TabIndex = 5;
+            this->button8->TabStop = false;
+            this->button8->Text = L"X";
+            this->button8->UseVisualStyleBackColor = false;
+            this->button8->Click += gcnew System::EventHandler(this, &MainWindow::Uppercase_button_Click);
+            // 
+            // button9
+            // 
+            this->button9->AutoSize = true;
+            this->button9->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button9->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button9->FlatAppearance->BorderSize = 0;
+            this->button9->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button9->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button9->Location = System::Drawing::Point(229, 6);
+            this->button9->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button9->Name = L"button9";
+            this->button9->Size = System::Drawing::Size(35, 36);
+            this->button9->TabIndex = 6;
+            this->button9->TabStop = false;
+            this->button9->Text = L"x";
+            this->button9->UseVisualStyleBackColor = true;
+            this->button9->Click += gcnew System::EventHandler(this, &MainWindow::Lowercase_button_Click);
+            // 
+            // button10
+            // 
+            this->button10->AutoSize = true;
+            this->button10->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button10->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button10->FlatAppearance->BorderSize = 0;
+            this->button10->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button10->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button10->Location = System::Drawing::Point(270, 6);
+            this->button10->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button10->Name = L"button10";
+            this->button10->Size = System::Drawing::Size(36, 36);
+            this->button10->TabIndex = 7;
+            this->button10->TabStop = false;
+            this->button10->Text = L"A";
+            this->button10->UseVisualStyleBackColor = true;
+            this->button10->Click += gcnew System::EventHandler(this, &MainWindow::Unker_button_Click);
+            // 
+            // button11
+            // 
+            this->button11->AutoSize = true;
+            this->button11->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button11->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button11->FlatAppearance->BorderSize = 0;
+            this->button11->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button11->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button11->Location = System::Drawing::Point(312, 6);
+            this->button11->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button11->Name = L"button11";
+            this->button11->Size = System::Drawing::Size(36, 36);
+            this->button11->TabIndex = 8;
+            this->button11->TabStop = false;
+            this->button11->Text = L"N";
+            this->button11->UseVisualStyleBackColor = true;
+            this->button11->Click += gcnew System::EventHandler(this, &MainWindow::NumList_button_Click);
+            // 
+            // button12
+            // 
+            this->button12->AutoSize = true;
+            this->button12->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button12->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button12->FlatAppearance->BorderSize = 0;
+            this->button12->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button12->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button12->Location = System::Drawing::Point(354, 6);
+            this->button12->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button12->Name = L"button12";
+            this->button12->Size = System::Drawing::Size(35, 36);
+            this->button12->TabIndex = 9;
+            this->button12->TabStop = false;
+            this->button12->Text = L"B";
+            this->button12->UseVisualStyleBackColor = true;
+            this->button12->Click += gcnew System::EventHandler(this, &MainWindow::DotList_button_Click);
+            // 
+            // button13
+            // 
+            this->button13->AutoSize = true;
+            this->button13->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button13->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button13->FlatAppearance->BorderSize = 0;
+            this->button13->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button13->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button13->Location = System::Drawing::Point(395, 6);
+            this->button13->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button13->Name = L"button13";
+            this->button13->Size = System::Drawing::Size(36, 36);
+            this->button13->TabIndex = 10;
+            this->button13->TabStop = false;
+            this->button13->Text = L"T";
+            this->button13->UseVisualStyleBackColor = true;
+            this->button13->Click += gcnew System::EventHandler(this, &MainWindow::CleanFormat_button_Click);
+            // 
+            // separatorControl8
+            // 
+            this->separatorControl8->AutoSizeMode = true;
+            this->separatorControl8->BackColor = System::Drawing::SystemColors::ControlDark;
+            this->separatorControl8->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl8->LineThickness = 2;
+            this->separatorControl8->Location = System::Drawing::Point(434, 0);
+            this->separatorControl8->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl8->Name = L"separatorControl8";
+            this->separatorControl8->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl8->Size = System::Drawing::Size(2, 48);
+            this->separatorControl8->TabIndex = 22;
+            // 
+            // button14
+            // 
+            this->button14->AutoSize = true;
+            this->button14->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button14->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button14->FlatAppearance->BorderSize = 0;
+            this->button14->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button14->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button14->Location = System::Drawing::Point(439, 6);
+            this->button14->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button14->Name = L"button14";
+            this->button14->Size = System::Drawing::Size(36, 36);
+            this->button14->TabIndex = 12;
+            this->button14->TabStop = false;
+            this->button14->Text = L"L";
+            this->button14->UseVisualStyleBackColor = true;
+            this->button14->Click += gcnew System::EventHandler(this, &MainWindow::LeftAlign_button_Click);
+            // 
+            // button15
+            // 
+            this->button15->AutoSize = true;
+            this->button15->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button15->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button15->FlatAppearance->BorderSize = 0;
+            this->button15->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button15->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button15->Location = System::Drawing::Point(481, 6);
+            this->button15->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button15->Name = L"button15";
+            this->button15->Size = System::Drawing::Size(36, 36);
+            this->button15->TabIndex = 13;
+            this->button15->TabStop = false;
+            this->button15->Text = L"C";
+            this->button15->UseVisualStyleBackColor = true;
+            this->button15->Click += gcnew System::EventHandler(this, &MainWindow::CenterAlign_button_Click);
+            // 
+            // button16
+            // 
+            this->button16->AutoSize = true;
+            this->button16->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button16->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button16->FlatAppearance->BorderSize = 0;
+            this->button16->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button16->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button16->Location = System::Drawing::Point(523, 6);
+            this->button16->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button16->Name = L"button16";
+            this->button16->Size = System::Drawing::Size(36, 36);
+            this->button16->TabIndex = 14;
+            this->button16->TabStop = false;
+            this->button16->Text = L"R";
+            this->button16->UseVisualStyleBackColor = true;
+            this->button16->Click += gcnew System::EventHandler(this, &MainWindow::RightAlign_button_Click);
+            // 
+            // button17
+            // 
+            this->button17->AutoSize = true;
+            this->button17->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button17->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button17->FlatAppearance->BorderSize = 0;
+            this->button17->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button17->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button17->Location = System::Drawing::Point(565, 6);
+            this->button17->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button17->Name = L"button17";
+            this->button17->Size = System::Drawing::Size(36, 36);
+            this->button17->TabIndex = 15;
+            this->button17->TabStop = false;
+            this->button17->Text = L"J";
+            this->button17->UseVisualStyleBackColor = true;
+            this->button17->Click += gcnew System::EventHandler(this, &MainWindow::JustAlign_button_Click);
+            // 
+            // separatorControl9
+            // 
+            this->separatorControl9->AutoSizeMode = true;
+            this->separatorControl9->BackColor = System::Drawing::SystemColors::ControlDark;
+            this->separatorControl9->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl9->LineThickness = 2;
+            this->separatorControl9->Location = System::Drawing::Point(604, 0);
+            this->separatorControl9->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl9->Name = L"separatorControl9";
+            this->separatorControl9->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl9->Size = System::Drawing::Size(2, 48);
+            this->separatorControl9->TabIndex = 21;
+            // 
+            // button18
+            // 
+            this->button18->AutoSize = true;
+            this->button18->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button18->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button18->FlatAppearance->BorderSize = 0;
+            this->button18->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button18->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button18->Location = System::Drawing::Point(609, 6);
+            this->button18->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button18->Name = L"button18";
+            this->button18->Size = System::Drawing::Size(36, 36);
+            this->button18->TabIndex = 17;
+            this->button18->TabStop = false;
+            this->button18->Text = L"D";
+            this->button18->UseVisualStyleBackColor = true;
+            this->button18->Click += gcnew System::EventHandler(this, &MainWindow::Date_button_Click);
+            // 
+            // button19
+            // 
+            this->button19->AutoSize = true;
+            this->button19->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button19->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button19->FlatAppearance->BorderSize = 0;
+            this->button19->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button19->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button19->Location = System::Drawing::Point(651, 6);
+            this->button19->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button19->Name = L"button19";
+            this->button19->Size = System::Drawing::Size(39, 36);
+            this->button19->TabIndex = 18;
+            this->button19->TabStop = false;
+            this->button19->Text = L"M";
+            this->button19->UseVisualStyleBackColor = true;
+            this->button19->Click += gcnew System::EventHandler(this, &MainWindow::DropDownMenu_button_Click);
+            // 
+            // button20
+            // 
+            this->button20->AutoSize = true;
+            this->button20->Dock = System::Windows::Forms::DockStyle::Left;
+            this->button20->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->button20->FlatAppearance->BorderSize = 0;
+            this->button20->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->button20->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button20->Location = System::Drawing::Point(696, 6);
+            this->button20->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->button20->Name = L"button20";
+            this->button20->Size = System::Drawing::Size(36, 36);
+            this->button20->TabIndex = 19;
+            this->button20->TabStop = false;
+            this->button20->Text = L"T";
+            this->button20->UseVisualStyleBackColor = true;
+            this->button20->Click += gcnew System::EventHandler(this, &MainWindow::Table_button_Click);
             // 
             // F8_button
             // 
@@ -3008,7 +3050,7 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
                 static_cast<System::Byte>(204)));
             this->F8_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F8_button->Location = System::Drawing::Point(401, 23);
+            this->F8_button->Location = System::Drawing::Point(415, 286);
             this->F8_button->Name = L"F8_button";
             this->F8_button->Size = System::Drawing::Size(173, 37);
             this->F8_button->TabIndex = 17;
@@ -3028,12 +3070,14 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             this->tableLayoutPanel17->Controls->Add(this->Paste_button, 0, 3);
             this->tableLayoutPanel17->Location = System::Drawing::Point(5, 158);
             this->tableLayoutPanel17->Name = L"tableLayoutPanel17";
-            this->tableLayoutPanel17->RowCount = 4;
+            this->tableLayoutPanel17->RowCount = 5;
             this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel17->Size = System::Drawing::Size(307, 215);
+            this->tableLayoutPanel17->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
+                20)));
+            this->tableLayoutPanel17->Size = System::Drawing::Size(307, 235);
             this->tableLayoutPanel17->TabIndex = 4;
             // 
             // Recommendations_groupBox
@@ -3180,19 +3224,19 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             this->AnalysisResults_panel->Controls->Add(this->tableLayoutPanel9);
             this->AnalysisResults_panel->Location = System::Drawing::Point(2, 159);
             this->AnalysisResults_panel->Name = L"AnalysisResults_panel";
-            this->AnalysisResults_panel->Size = System::Drawing::Size(1327, 354);
+            this->AnalysisResults_panel->Size = System::Drawing::Size(1327, 497);
             this->AnalysisResults_panel->TabIndex = 8;
             this->AnalysisResults_panel->Visible = false;
             // 
             // tableLayoutPanel9
             // 
-            this->tableLayoutPanel9->AutoSize = true;
             this->tableLayoutPanel9->ColumnCount = 1;
             this->tableLayoutPanel9->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
                 100)));
+            this->tableLayoutPanel9->Controls->Add(this->RichTextBox1_tableLayoutPanel, 0, 1);
+            this->tableLayoutPanel9->Controls->Add(this->tableLayoutPanel22, 0, 3);
             this->tableLayoutPanel9->Controls->Add(this->AnalysisResults_groupBox, 0, 0);
             this->tableLayoutPanel9->Controls->Add(this->F5_button, 0, 2);
-            this->tableLayoutPanel9->Controls->Add(this->button2, 0, 3);
             this->tableLayoutPanel9->Dock = System::Windows::Forms::DockStyle::Top;
             this->tableLayoutPanel9->Location = System::Drawing::Point(0, 0);
             this->tableLayoutPanel9->Name = L"tableLayoutPanel9";
@@ -3200,9 +3244,493 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             this->tableLayoutPanel9->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel9->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
             this->tableLayoutPanel9->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
-            this->tableLayoutPanel9->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 20)));
-            this->tableLayoutPanel9->Size = System::Drawing::Size(1327, 120);
+            this->tableLayoutPanel9->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel9->Size = System::Drawing::Size(1327, 310);
             this->tableLayoutPanel9->TabIndex = 11;
+            // 
+            // RichTextBox1_tableLayoutPanel
+            // 
+            this->RichTextBox1_tableLayoutPanel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->RichTextBox1_tableLayoutPanel->AutoSize = true;
+            this->RichTextBox1_tableLayoutPanel->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::Single;
+            this->RichTextBox1_tableLayoutPanel->ColumnCount = 1;
+            this->RichTextBox1_tableLayoutPanel->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+                100)));
+            this->RichTextBox1_tableLayoutPanel->Controls->Add(this->richTextBox1, 0, 1);
+            this->RichTextBox1_tableLayoutPanel->Controls->Add(this->flowLayoutPanel4, 0, 0);
+            this->RichTextBox1_tableLayoutPanel->Location = System::Drawing::Point(3, 60);
+            this->RichTextBox1_tableLayoutPanel->Name = L"RichTextBox1_tableLayoutPanel";
+            this->RichTextBox1_tableLayoutPanel->RowCount = 2;
+            this->RichTextBox1_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->RichTextBox1_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->RichTextBox1_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
+                20)));
+            this->RichTextBox1_tableLayoutPanel->Size = System::Drawing::Size(1321, 169);
+            this->RichTextBox1_tableLayoutPanel->TabIndex = 18;
+            // 
+            // richTextBox1
+            // 
+            this->richTextBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->richTextBox1->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->richTextBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->richTextBox1->Location = System::Drawing::Point(4, 53);
+            this->richTextBox1->Name = L"richTextBox1";
+            this->richTextBox1->Size = System::Drawing::Size(1313, 112);
+            this->richTextBox1->TabIndex = 0;
+            this->richTextBox1->Text = L"";
+            // 
+            // flowLayoutPanel4
+            // 
+            this->flowLayoutPanel4->AutoSize = true;
+            this->flowLayoutPanel4->Controls->Add(this->numericUpDown2);
+            this->flowLayoutPanel4->Controls->Add(this->separatorControl4);
+            this->flowLayoutPanel4->Controls->Add(this->Bold1_button);
+            this->flowLayoutPanel4->Controls->Add(this->Italic1_button);
+            this->flowLayoutPanel4->Controls->Add(this->Underline1_button);
+            this->flowLayoutPanel4->Controls->Add(this->Uppercase1_button);
+            this->flowLayoutPanel4->Controls->Add(this->Lowercase1_button);
+            this->flowLayoutPanel4->Controls->Add(this->Anchor1_button);
+            this->flowLayoutPanel4->Controls->Add(this->NumList1_button);
+            this->flowLayoutPanel4->Controls->Add(this->DotList1_button);
+            this->flowLayoutPanel4->Controls->Add(this->CleanFormat1_button);
+            this->flowLayoutPanel4->Controls->Add(this->separatorControl5);
+            this->flowLayoutPanel4->Controls->Add(this->LeftAlign1_button);
+            this->flowLayoutPanel4->Controls->Add(this->CenterAlign1_button);
+            this->flowLayoutPanel4->Controls->Add(this->RightAlign1_button);
+            this->flowLayoutPanel4->Controls->Add(this->JustAlign1_button);
+            this->flowLayoutPanel4->Controls->Add(this->separatorControl6);
+            this->flowLayoutPanel4->Controls->Add(this->Date1_button);
+            this->flowLayoutPanel4->Controls->Add(this->DropDownMenu1_button);
+            this->flowLayoutPanel4->Controls->Add(this->Table1_button);
+            this->flowLayoutPanel4->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->flowLayoutPanel4->Location = System::Drawing::Point(1, 1);
+            this->flowLayoutPanel4->Margin = System::Windows::Forms::Padding(0);
+            this->flowLayoutPanel4->Name = L"flowLayoutPanel4";
+            this->flowLayoutPanel4->Size = System::Drawing::Size(1319, 48);
+            this->flowLayoutPanel4->TabIndex = 1;
+            // 
+            // numericUpDown2
+            // 
+            this->numericUpDown2->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->numericUpDown2->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->numericUpDown2->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->numericUpDown2->Location = System::Drawing::Point(6, 10);
+            this->numericUpDown2->Margin = System::Windows::Forms::Padding(6, 10, 3, 0);
+            this->numericUpDown2->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 72, 0, 0, 0 });
+            this->numericUpDown2->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
+            this->numericUpDown2->Name = L"numericUpDown2";
+            this->numericUpDown2->Size = System::Drawing::Size(48, 28);
+            this->numericUpDown2->TabIndex = 0;
+            this->numericUpDown2->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 11, 0, 0, 0 });
+            this->numericUpDown2->ValueChanged += gcnew System::EventHandler(this, &MainWindow::Fontsize_numericUpDown_ValueChanged);
+            // 
+            // separatorControl4
+            // 
+            this->separatorControl4->AutoSizeMode = true;
+            this->separatorControl4->BackColor = System::Drawing::SystemColors::ControlDark;
+            this->separatorControl4->Dock = System::Windows::Forms::DockStyle::Left;
+            this->separatorControl4->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl4->LineThickness = 2;
+            this->separatorControl4->Location = System::Drawing::Point(57, 0);
+            this->separatorControl4->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl4->Name = L"separatorControl4";
+            this->separatorControl4->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl4->Size = System::Drawing::Size(2, 48);
+            this->separatorControl4->TabIndex = 20;
+            // 
+            // Bold1_button
+            // 
+            this->Bold1_button->AutoSize = true;
+            this->Bold1_button->BackColor = System::Drawing::SystemColors::ControlLightLight;
+            this->Bold1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Bold1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Bold1_button->FlatAppearance->BorderSize = 0;
+            this->Bold1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Bold1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(0)));
+            this->Bold1_button->ForeColor = System::Drawing::Color::Black;
+            this->Bold1_button->Location = System::Drawing::Point(62, 6);
+            this->Bold1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Bold1_button->Name = L"Bold1_button";
+            this->Bold1_button->Size = System::Drawing::Size(36, 36);
+            this->Bold1_button->TabIndex = 2;
+            this->Bold1_button->TabStop = false;
+            this->Bold1_button->Text = L"B";
+            this->Bold1_button->UseVisualStyleBackColor = false;
+            this->Bold1_button->Click += gcnew System::EventHandler(this, &MainWindow::Bold_button_Click);
+            // 
+            // Italic1_button
+            // 
+            this->Italic1_button->AutoSize = true;
+            this->Italic1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Italic1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Italic1_button->FlatAppearance->BorderSize = 0;
+            this->Italic1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Italic1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->Italic1_button->Location = System::Drawing::Point(104, 6);
+            this->Italic1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Italic1_button->Name = L"Italic1_button";
+            this->Italic1_button->Size = System::Drawing::Size(36, 36);
+            this->Italic1_button->TabIndex = 3;
+            this->Italic1_button->TabStop = false;
+            this->Italic1_button->Text = L"I";
+            this->Italic1_button->UseVisualStyleBackColor = true;
+            this->Italic1_button->Click += gcnew System::EventHandler(this, &MainWindow::Italic_button_Click);
+            // 
+            // Underline1_button
+            // 
+            this->Underline1_button->AutoSize = true;
+            this->Underline1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Underline1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Underline1_button->FlatAppearance->BorderSize = 0;
+            this->Underline1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Underline1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Underline)),
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->Underline1_button->Location = System::Drawing::Point(146, 6);
+            this->Underline1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Underline1_button->Name = L"Underline1_button";
+            this->Underline1_button->Size = System::Drawing::Size(36, 36);
+            this->Underline1_button->TabIndex = 4;
+            this->Underline1_button->TabStop = false;
+            this->Underline1_button->Text = L"U";
+            this->Underline1_button->UseVisualStyleBackColor = true;
+            this->Underline1_button->Click += gcnew System::EventHandler(this, &MainWindow::Underline_button_Click);
+            // 
+            // Uppercase1_button
+            // 
+            this->Uppercase1_button->AutoSize = true;
+            this->Uppercase1_button->BackColor = System::Drawing::SystemColors::ControlLightLight;
+            this->Uppercase1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Uppercase1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Uppercase1_button->FlatAppearance->BorderSize = 0;
+            this->Uppercase1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Uppercase1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->Uppercase1_button->Location = System::Drawing::Point(188, 6);
+            this->Uppercase1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Uppercase1_button->Name = L"Uppercase1_button";
+            this->Uppercase1_button->Size = System::Drawing::Size(35, 36);
+            this->Uppercase1_button->TabIndex = 5;
+            this->Uppercase1_button->TabStop = false;
+            this->Uppercase1_button->Text = L"X";
+            this->Uppercase1_button->UseVisualStyleBackColor = false;
+            this->Uppercase1_button->Click += gcnew System::EventHandler(this, &MainWindow::Uppercase_button_Click);
+            // 
+            // Lowercase1_button
+            // 
+            this->Lowercase1_button->AutoSize = true;
+            this->Lowercase1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Lowercase1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Lowercase1_button->FlatAppearance->BorderSize = 0;
+            this->Lowercase1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Lowercase1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->Lowercase1_button->Location = System::Drawing::Point(229, 6);
+            this->Lowercase1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Lowercase1_button->Name = L"Lowercase1_button";
+            this->Lowercase1_button->Size = System::Drawing::Size(35, 36);
+            this->Lowercase1_button->TabIndex = 6;
+            this->Lowercase1_button->TabStop = false;
+            this->Lowercase1_button->Text = L"x";
+            this->Lowercase1_button->UseVisualStyleBackColor = true;
+            this->Lowercase1_button->Click += gcnew System::EventHandler(this, &MainWindow::Lowercase_button_Click);
+            // 
+            // Anchor1_button
+            // 
+            this->Anchor1_button->AutoSize = true;
+            this->Anchor1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Anchor1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Anchor1_button->FlatAppearance->BorderSize = 0;
+            this->Anchor1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Anchor1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->Anchor1_button->Location = System::Drawing::Point(270, 6);
+            this->Anchor1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Anchor1_button->Name = L"Anchor1_button";
+            this->Anchor1_button->Size = System::Drawing::Size(36, 36);
+            this->Anchor1_button->TabIndex = 7;
+            this->Anchor1_button->TabStop = false;
+            this->Anchor1_button->Text = L"A";
+            this->Anchor1_button->UseVisualStyleBackColor = true;
+            this->Anchor1_button->Click += gcnew System::EventHandler(this, &MainWindow::Unker_button_Click);
+            // 
+            // NumList1_button
+            // 
+            this->NumList1_button->AutoSize = true;
+            this->NumList1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->NumList1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->NumList1_button->FlatAppearance->BorderSize = 0;
+            this->NumList1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->NumList1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->NumList1_button->Location = System::Drawing::Point(312, 6);
+            this->NumList1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->NumList1_button->Name = L"NumList1_button";
+            this->NumList1_button->Size = System::Drawing::Size(36, 36);
+            this->NumList1_button->TabIndex = 8;
+            this->NumList1_button->TabStop = false;
+            this->NumList1_button->Text = L"N";
+            this->NumList1_button->UseVisualStyleBackColor = true;
+            this->NumList1_button->Click += gcnew System::EventHandler(this, &MainWindow::NumList_button_Click);
+            // 
+            // DotList1_button
+            // 
+            this->DotList1_button->AutoSize = true;
+            this->DotList1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->DotList1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->DotList1_button->FlatAppearance->BorderSize = 0;
+            this->DotList1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->DotList1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->DotList1_button->Location = System::Drawing::Point(354, 6);
+            this->DotList1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->DotList1_button->Name = L"DotList1_button";
+            this->DotList1_button->Size = System::Drawing::Size(35, 36);
+            this->DotList1_button->TabIndex = 9;
+            this->DotList1_button->TabStop = false;
+            this->DotList1_button->Text = L"B";
+            this->DotList1_button->UseVisualStyleBackColor = true;
+            this->DotList1_button->Click += gcnew System::EventHandler(this, &MainWindow::DotList_button_Click);
+            // 
+            // CleanFormat1_button
+            // 
+            this->CleanFormat1_button->AutoSize = true;
+            this->CleanFormat1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->CleanFormat1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->CleanFormat1_button->FlatAppearance->BorderSize = 0;
+            this->CleanFormat1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->CleanFormat1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->CleanFormat1_button->Location = System::Drawing::Point(395, 6);
+            this->CleanFormat1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->CleanFormat1_button->Name = L"CleanFormat1_button";
+            this->CleanFormat1_button->Size = System::Drawing::Size(36, 36);
+            this->CleanFormat1_button->TabIndex = 10;
+            this->CleanFormat1_button->TabStop = false;
+            this->CleanFormat1_button->Text = L"T";
+            this->CleanFormat1_button->UseVisualStyleBackColor = true;
+            this->CleanFormat1_button->Click += gcnew System::EventHandler(this, &MainWindow::CleanFormat_button_Click);
+            // 
+            // separatorControl5
+            // 
+            this->separatorControl5->AutoSizeMode = true;
+            this->separatorControl5->BackColor = System::Drawing::SystemColors::ControlDark;
+            this->separatorControl5->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl5->LineThickness = 2;
+            this->separatorControl5->Location = System::Drawing::Point(434, 0);
+            this->separatorControl5->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl5->Name = L"separatorControl5";
+            this->separatorControl5->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl5->Size = System::Drawing::Size(2, 48);
+            this->separatorControl5->TabIndex = 22;
+            // 
+            // LeftAlign1_button
+            // 
+            this->LeftAlign1_button->AutoSize = true;
+            this->LeftAlign1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->LeftAlign1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->LeftAlign1_button->FlatAppearance->BorderSize = 0;
+            this->LeftAlign1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->LeftAlign1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->LeftAlign1_button->Location = System::Drawing::Point(439, 6);
+            this->LeftAlign1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->LeftAlign1_button->Name = L"LeftAlign1_button";
+            this->LeftAlign1_button->Size = System::Drawing::Size(36, 36);
+            this->LeftAlign1_button->TabIndex = 12;
+            this->LeftAlign1_button->TabStop = false;
+            this->LeftAlign1_button->Text = L"L";
+            this->LeftAlign1_button->UseVisualStyleBackColor = true;
+            this->LeftAlign1_button->Click += gcnew System::EventHandler(this, &MainWindow::LeftAlign_button_Click);
+            // 
+            // CenterAlign1_button
+            // 
+            this->CenterAlign1_button->AutoSize = true;
+            this->CenterAlign1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->CenterAlign1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->CenterAlign1_button->FlatAppearance->BorderSize = 0;
+            this->CenterAlign1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->CenterAlign1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->CenterAlign1_button->Location = System::Drawing::Point(481, 6);
+            this->CenterAlign1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->CenterAlign1_button->Name = L"CenterAlign1_button";
+            this->CenterAlign1_button->Size = System::Drawing::Size(36, 36);
+            this->CenterAlign1_button->TabIndex = 13;
+            this->CenterAlign1_button->TabStop = false;
+            this->CenterAlign1_button->Text = L"C";
+            this->CenterAlign1_button->UseVisualStyleBackColor = true;
+            this->CenterAlign1_button->Click += gcnew System::EventHandler(this, &MainWindow::CenterAlign_button_Click);
+            // 
+            // RightAlign1_button
+            // 
+            this->RightAlign1_button->AutoSize = true;
+            this->RightAlign1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->RightAlign1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->RightAlign1_button->FlatAppearance->BorderSize = 0;
+            this->RightAlign1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->RightAlign1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->RightAlign1_button->Location = System::Drawing::Point(523, 6);
+            this->RightAlign1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->RightAlign1_button->Name = L"RightAlign1_button";
+            this->RightAlign1_button->Size = System::Drawing::Size(36, 36);
+            this->RightAlign1_button->TabIndex = 14;
+            this->RightAlign1_button->TabStop = false;
+            this->RightAlign1_button->Text = L"R";
+            this->RightAlign1_button->UseVisualStyleBackColor = true;
+            this->RightAlign1_button->Click += gcnew System::EventHandler(this, &MainWindow::RightAlign_button_Click);
+            // 
+            // JustAlign1_button
+            // 
+            this->JustAlign1_button->AutoSize = true;
+            this->JustAlign1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->JustAlign1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->JustAlign1_button->FlatAppearance->BorderSize = 0;
+            this->JustAlign1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->JustAlign1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->JustAlign1_button->Location = System::Drawing::Point(565, 6);
+            this->JustAlign1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->JustAlign1_button->Name = L"JustAlign1_button";
+            this->JustAlign1_button->Size = System::Drawing::Size(36, 36);
+            this->JustAlign1_button->TabIndex = 15;
+            this->JustAlign1_button->TabStop = false;
+            this->JustAlign1_button->Text = L"J";
+            this->JustAlign1_button->UseVisualStyleBackColor = true;
+            this->JustAlign1_button->Click += gcnew System::EventHandler(this, &MainWindow::JustAlign_button_Click);
+            // 
+            // separatorControl6
+            // 
+            this->separatorControl6->AutoSizeMode = true;
+            this->separatorControl6->BackColor = System::Drawing::SystemColors::ControlDark;
+            this->separatorControl6->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl6->LineThickness = 2;
+            this->separatorControl6->Location = System::Drawing::Point(604, 0);
+            this->separatorControl6->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl6->Name = L"separatorControl6";
+            this->separatorControl6->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl6->Size = System::Drawing::Size(2, 48);
+            this->separatorControl6->TabIndex = 21;
+            // 
+            // Date1_button
+            // 
+            this->Date1_button->AutoSize = true;
+            this->Date1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Date1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Date1_button->FlatAppearance->BorderSize = 0;
+            this->Date1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Date1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->Date1_button->Location = System::Drawing::Point(609, 6);
+            this->Date1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Date1_button->Name = L"Date1_button";
+            this->Date1_button->Size = System::Drawing::Size(36, 36);
+            this->Date1_button->TabIndex = 17;
+            this->Date1_button->TabStop = false;
+            this->Date1_button->Text = L"D";
+            this->Date1_button->UseVisualStyleBackColor = true;
+            this->Date1_button->Click += gcnew System::EventHandler(this, &MainWindow::Date_button_Click);
+            // 
+            // DropDownMenu1_button
+            // 
+            this->DropDownMenu1_button->AutoSize = true;
+            this->DropDownMenu1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->DropDownMenu1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->DropDownMenu1_button->FlatAppearance->BorderSize = 0;
+            this->DropDownMenu1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->DropDownMenu1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->DropDownMenu1_button->Location = System::Drawing::Point(651, 6);
+            this->DropDownMenu1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->DropDownMenu1_button->Name = L"DropDownMenu1_button";
+            this->DropDownMenu1_button->Size = System::Drawing::Size(39, 36);
+            this->DropDownMenu1_button->TabIndex = 18;
+            this->DropDownMenu1_button->TabStop = false;
+            this->DropDownMenu1_button->Text = L"M";
+            this->DropDownMenu1_button->UseVisualStyleBackColor = true;
+            this->DropDownMenu1_button->Click += gcnew System::EventHandler(this, &MainWindow::DropDownMenu_button_Click);
+            // 
+            // Table1_button
+            // 
+            this->Table1_button->AutoSize = true;
+            this->Table1_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Table1_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Table1_button->FlatAppearance->BorderSize = 0;
+            this->Table1_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Table1_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->Table1_button->Location = System::Drawing::Point(696, 6);
+            this->Table1_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Table1_button->Name = L"Table1_button";
+            this->Table1_button->Size = System::Drawing::Size(36, 36);
+            this->Table1_button->TabIndex = 19;
+            this->Table1_button->TabStop = false;
+            this->Table1_button->Text = L"T";
+            this->Table1_button->UseVisualStyleBackColor = true;
+            this->Table1_button->Click += gcnew System::EventHandler(this, &MainWindow::Table_button_Click);
+            // 
+            // tableLayoutPanel22
+            // 
+            this->tableLayoutPanel22->AutoSize = true;
+            this->tableLayoutPanel22->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+            this->tableLayoutPanel22->ColumnCount = 4;
+            this->tableLayoutPanel22->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+                50)));
+            this->tableLayoutPanel22->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
+            this->tableLayoutPanel22->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle()));
+            this->tableLayoutPanel22->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+                50)));
+            this->tableLayoutPanel22->Controls->Add(this->SaveAnalyzes_button, 1, 0);
+            this->tableLayoutPanel22->Controls->Add(this->CancelAnalyzes_button, 2, 0);
+            this->tableLayoutPanel22->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->tableLayoutPanel22->Location = System::Drawing::Point(3, 271);
+            this->tableLayoutPanel22->Name = L"tableLayoutPanel22";
+            this->tableLayoutPanel22->RowCount = 1;
+            this->tableLayoutPanel22->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel22->Size = System::Drawing::Size(1321, 36);
+            this->tableLayoutPanel22->TabIndex = 19;
+            // 
+            // SaveAnalyzes_button
+            // 
+            this->SaveAnalyzes_button->AutoSize = true;
+            this->SaveAnalyzes_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->SaveAnalyzes_button->FlatAppearance->BorderSize = 0;
+            this->SaveAnalyzes_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->SaveAnalyzes_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->SaveAnalyzes_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)),
+                static_cast<System::Int32>(static_cast<System::Byte>(80)), static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->SaveAnalyzes_button->Location = System::Drawing::Point(484, 3);
+            this->SaveAnalyzes_button->Name = L"SaveAnalyzes_button";
+            this->SaveAnalyzes_button->Size = System::Drawing::Size(173, 30);
+            this->SaveAnalyzes_button->TabIndex = 21;
+            this->SaveAnalyzes_button->Text = L"Сохранить (Ctrl+S)";
+            this->SaveAnalyzes_button->UseVisualStyleBackColor = true;
+            this->SaveAnalyzes_button->Visible = false;
+            this->SaveAnalyzes_button->Click += gcnew System::EventHandler(this, &MainWindow::SaveAnalyzes_button_Click);
+            // 
+            // CancelAnalyzes_button
+            // 
+            this->CancelAnalyzes_button->AutoSize = true;
+            this->CancelAnalyzes_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->CancelAnalyzes_button->FlatAppearance->BorderSize = 0;
+            this->CancelAnalyzes_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->CancelAnalyzes_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->CancelAnalyzes_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)),
+                static_cast<System::Int32>(static_cast<System::Byte>(80)), static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->CancelAnalyzes_button->Location = System::Drawing::Point(663, 3);
+            this->CancelAnalyzes_button->Name = L"CancelAnalyzes_button";
+            this->CancelAnalyzes_button->Size = System::Drawing::Size(173, 30);
+            this->CancelAnalyzes_button->TabIndex = 20;
+            this->CancelAnalyzes_button->Text = L"Отмена";
+            this->CancelAnalyzes_button->UseVisualStyleBackColor = true;
+            this->CancelAnalyzes_button->Visible = false;
             // 
             // AnalysisResults_groupBox
             // 
@@ -3241,6 +3769,7 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             // F5_button
             // 
             this->F5_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
+            this->F5_button->AutoSize = true;
             this->F5_button->Cursor = System::Windows::Forms::Cursors::Hand;
             this->F5_button->FlatAppearance->BorderSize = 0;
             this->F5_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
@@ -3248,23 +3777,564 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
                 static_cast<System::Byte>(204)));
             this->F5_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
                 static_cast<System::Int32>(static_cast<System::Byte>(255)));
-            this->F5_button->Location = System::Drawing::Point(577, 60);
+            this->F5_button->Location = System::Drawing::Point(577, 235);
             this->F5_button->Name = L"F5_button";
-            this->F5_button->Size = System::Drawing::Size(173, 37);
+            this->F5_button->Size = System::Drawing::Size(173, 30);
             this->F5_button->TabIndex = 1;
             this->F5_button->Text = L"Продолжить";
             this->F5_button->UseVisualStyleBackColor = true;
             this->F5_button->Click += gcnew System::EventHandler(this, &MainWindow::AddingInfo_button_Click);
             // 
-            // button2
+            // SideInfo_panel
             // 
-            this->button2->FlatAppearance->BorderSize = 0;
-            this->button2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-            this->button2->Location = System::Drawing::Point(3, 103);
-            this->button2->Name = L"button2";
-            this->button2->Size = System::Drawing::Size(75, 14);
-            this->button2->TabIndex = 2;
-            this->button2->UseVisualStyleBackColor = true;
+            this->SideInfo_panel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((System::Windows::Forms::AnchorStyles::Left | System::Windows::Forms::AnchorStyles::Right));
+            this->SideInfo_panel->Controls->Add(this->numericUpDown1);
+            this->SideInfo_panel->Controls->Add(this->button5);
+            this->SideInfo_panel->Controls->Add(this->button4);
+            this->SideInfo_panel->Controls->Add(this->richTextBoxTest);
+            this->SideInfo_panel->Controls->Add(this->tableLayoutPanel10);
+            this->SideInfo_panel->Location = System::Drawing::Point(0, 180);
+            this->SideInfo_panel->Name = L"SideInfo_panel";
+            this->SideInfo_panel->Padding = System::Windows::Forms::Padding(5);
+            this->SideInfo_panel->Size = System::Drawing::Size(1329, 500);
+            this->SideInfo_panel->TabIndex = 4;
+            // 
+            // numericUpDown1
+            // 
+            this->numericUpDown1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->numericUpDown1->Location = System::Drawing::Point(1022, 279);
+            this->numericUpDown1->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 57, 0, 0, 0 });
+            this->numericUpDown1->Name = L"numericUpDown1";
+            this->numericUpDown1->Size = System::Drawing::Size(252, 29);
+            this->numericUpDown1->TabIndex = 21;
+            // 
+            // button5
+            // 
+            this->button5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button5->Location = System::Drawing::Point(1022, 317);
+            this->button5->Name = L"button5";
+            this->button5->Size = System::Drawing::Size(252, 41);
+            this->button5->TabIndex = 20;
+            this->button5->Text = L"Get Analyzes Data!";
+            this->button5->UseVisualStyleBackColor = true;
+            this->button5->Click += gcnew System::EventHandler(this, &MainWindow::button5_Click);
+            // 
+            // button4
+            // 
+            this->button4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 14.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->button4->Location = System::Drawing::Point(9, 451);
+            this->button4->Name = L"button4";
+            this->button4->Size = System::Drawing::Size(1007, 44);
+            this->button4->TabIndex = 19;
+            this->button4->Text = L"Go!";
+            this->button4->UseVisualStyleBackColor = true;
+            this->button4->Click += gcnew System::EventHandler(this, &MainWindow::button4_Click);
+            // 
+            // richTextBoxTest
+            // 
+            this->richTextBoxTest->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->richTextBoxTest->Location = System::Drawing::Point(9, 279);
+            this->richTextBoxTest->Name = L"richTextBoxTest";
+            this->richTextBoxTest->Size = System::Drawing::Size(1007, 171);
+            this->richTextBoxTest->TabIndex = 18;
+            this->richTextBoxTest->Text = L"";
+            // 
+            // tableLayoutPanel10
+            // 
+            this->tableLayoutPanel10->ColumnCount = 1;
+            this->tableLayoutPanel10->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+                100)));
+            this->tableLayoutPanel10->Controls->Add(this->SideInfo_groupBox, 0, 0);
+            this->tableLayoutPanel10->Controls->Add(this->TextMiniEditor_tableLayoutPanel, 0, 1);
+            this->tableLayoutPanel10->Controls->Add(this->F7_button, 0, 2);
+            this->tableLayoutPanel10->Dock = System::Windows::Forms::DockStyle::Top;
+            this->tableLayoutPanel10->Location = System::Drawing::Point(5, 5);
+            this->tableLayoutPanel10->Name = L"tableLayoutPanel10";
+            this->tableLayoutPanel10->RowCount = 3;
+            this->tableLayoutPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
+            this->tableLayoutPanel10->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->tableLayoutPanel10->Size = System::Drawing::Size(1319, 268);
+            this->tableLayoutPanel10->TabIndex = 17;
+            // 
+            // SideInfo_groupBox
+            // 
+            this->SideInfo_groupBox->Controls->Add(this->CheckBoxes_flowLayoutPanel);
+            this->SideInfo_groupBox->Location = System::Drawing::Point(3, 3);
+            this->SideInfo_groupBox->Name = L"SideInfo_groupBox";
+            this->SideInfo_groupBox->Size = System::Drawing::Size(1313, 45);
+            this->SideInfo_groupBox->TabIndex = 0;
+            this->SideInfo_groupBox->TabStop = false;
+            // 
+            // CheckBoxes_flowLayoutPanel
+            // 
+            this->CheckBoxes_flowLayoutPanel->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->CheckBoxes_flowLayoutPanel->Location = System::Drawing::Point(3, 16);
+            this->CheckBoxes_flowLayoutPanel->Name = L"CheckBoxes_flowLayoutPanel";
+            this->CheckBoxes_flowLayoutPanel->Padding = System::Windows::Forms::Padding(5, 0, 5, 0);
+            this->CheckBoxes_flowLayoutPanel->Size = System::Drawing::Size(1307, 26);
+            this->CheckBoxes_flowLayoutPanel->TabIndex = 0;
+            this->CheckBoxes_flowLayoutPanel->WrapContents = false;
+            // 
+            // TextMiniEditor_tableLayoutPanel
+            // 
+            this->TextMiniEditor_tableLayoutPanel->Anchor = static_cast<System::Windows::Forms::AnchorStyles>(((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Left)
+                | System::Windows::Forms::AnchorStyles::Right));
+            this->TextMiniEditor_tableLayoutPanel->AutoSize = true;
+            this->TextMiniEditor_tableLayoutPanel->CellBorderStyle = System::Windows::Forms::TableLayoutPanelCellBorderStyle::Single;
+            this->TextMiniEditor_tableLayoutPanel->ColumnCount = 1;
+            this->TextMiniEditor_tableLayoutPanel->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
+                100)));
+            this->TextMiniEditor_tableLayoutPanel->Controls->Add(this->richTextBox, 0, 1);
+            this->TextMiniEditor_tableLayoutPanel->Controls->Add(this->TextMiniEditor_flowLayoutPanel, 0, 0);
+            this->TextMiniEditor_tableLayoutPanel->Location = System::Drawing::Point(3, 54);
+            this->TextMiniEditor_tableLayoutPanel->Name = L"TextMiniEditor_tableLayoutPanel";
+            this->TextMiniEditor_tableLayoutPanel->RowCount = 2;
+            this->TextMiniEditor_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->TextMiniEditor_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle()));
+            this->TextMiniEditor_tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute,
+                20)));
+            this->TextMiniEditor_tableLayoutPanel->Size = System::Drawing::Size(1313, 168);
+            this->TextMiniEditor_tableLayoutPanel->TabIndex = 17;
+            // 
+            // richTextBox
+            // 
+            this->richTextBox->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->richTextBox->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->richTextBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->richTextBox->Location = System::Drawing::Point(4, 53);
+            this->richTextBox->Name = L"richTextBox";
+            this->richTextBox->Size = System::Drawing::Size(1305, 112);
+            this->richTextBox->TabIndex = 0;
+            this->richTextBox->Text = L"";
+            this->richTextBox->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // TextMiniEditor_flowLayoutPanel
+            // 
+            this->TextMiniEditor_flowLayoutPanel->AutoSize = true;
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Fontsize_numericUpDown);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->separatorControl1);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Bold_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Italic_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Underline_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Uppercase_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Lowercase_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Anchor_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->NumList_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->DotList_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->CleanFormat_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->separatorControl3);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->LeftAlign_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->CenterAlign_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->RightAlign_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->JustAlign_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->separatorControl2);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Date_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->DropDownMenu_button);
+            this->TextMiniEditor_flowLayoutPanel->Controls->Add(this->Table_button);
+            this->TextMiniEditor_flowLayoutPanel->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->TextMiniEditor_flowLayoutPanel->Location = System::Drawing::Point(1, 1);
+            this->TextMiniEditor_flowLayoutPanel->Margin = System::Windows::Forms::Padding(0);
+            this->TextMiniEditor_flowLayoutPanel->Name = L"TextMiniEditor_flowLayoutPanel";
+            this->TextMiniEditor_flowLayoutPanel->Size = System::Drawing::Size(1311, 48);
+            this->TextMiniEditor_flowLayoutPanel->TabIndex = 1;
+            // 
+            // Fontsize_numericUpDown
+            // 
+            this->Fontsize_numericUpDown->BorderStyle = System::Windows::Forms::BorderStyle::None;
+            this->Fontsize_numericUpDown->Dock = System::Windows::Forms::DockStyle::Fill;
+            this->Fontsize_numericUpDown->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Regular,
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->Fontsize_numericUpDown->Location = System::Drawing::Point(6, 10);
+            this->Fontsize_numericUpDown->Margin = System::Windows::Forms::Padding(6, 10, 3, 0);
+            this->Fontsize_numericUpDown->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 72, 0, 0, 0 });
+            this->Fontsize_numericUpDown->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 1, 0, 0, 0 });
+            this->Fontsize_numericUpDown->Name = L"Fontsize_numericUpDown";
+            this->Fontsize_numericUpDown->Size = System::Drawing::Size(48, 28);
+            this->Fontsize_numericUpDown->TabIndex = 0;
+            this->Fontsize_numericUpDown->Value = System::Decimal(gcnew cli::array< System::Int32 >(4) { 11, 0, 0, 0 });
+            this->Fontsize_numericUpDown->ValueChanged += gcnew System::EventHandler(this, &MainWindow::Fontsize_numericUpDown_ValueChanged);
+            // 
+            // separatorControl1
+            // 
+            this->separatorControl1->AutoSizeMode = true;
+            this->separatorControl1->BackColor = System::Drawing::SystemColors::ControlDark;
+            this->separatorControl1->Dock = System::Windows::Forms::DockStyle::Left;
+            this->separatorControl1->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl1->LineThickness = 2;
+            this->separatorControl1->Location = System::Drawing::Point(57, 0);
+            this->separatorControl1->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl1->Name = L"separatorControl1";
+            this->separatorControl1->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl1->Size = System::Drawing::Size(2, 48);
+            this->separatorControl1->TabIndex = 20;
+            // 
+            // Bold_button
+            // 
+            this->Bold_button->AutoSize = true;
+            this->Bold_button->BackColor = System::Drawing::SystemColors::ControlLightLight;
+            this->Bold_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Bold_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Bold_button->FlatAppearance->BorderSize = 0;
+            this->Bold_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Bold_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(0)));
+            this->Bold_button->ForeColor = System::Drawing::Color::Black;
+            this->Bold_button->Location = System::Drawing::Point(62, 6);
+            this->Bold_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Bold_button->Name = L"Bold_button";
+            this->Bold_button->Size = System::Drawing::Size(36, 36);
+            this->Bold_button->TabIndex = 2;
+            this->Bold_button->TabStop = false;
+            this->Bold_button->Text = L"B";
+            this->Bold_button->UseVisualStyleBackColor = false;
+            this->Bold_button->Click += gcnew System::EventHandler(this, &MainWindow::Bold_button_Click);
+            // 
+            // Italic_button
+            // 
+            this->Italic_button->AutoSize = true;
+            this->Italic_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Italic_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Italic_button->FlatAppearance->BorderSize = 0;
+            this->Italic_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Italic_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic)),
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->Italic_button->Location = System::Drawing::Point(104, 6);
+            this->Italic_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Italic_button->Name = L"Italic_button";
+            this->Italic_button->Size = System::Drawing::Size(36, 36);
+            this->Italic_button->TabIndex = 3;
+            this->Italic_button->TabStop = false;
+            this->Italic_button->Text = L"I";
+            this->Italic_button->UseVisualStyleBackColor = true;
+            this->Italic_button->Click += gcnew System::EventHandler(this, &MainWindow::Italic_button_Click);
+            this->Italic_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // Underline_button
+            // 
+            this->Underline_button->AutoSize = true;
+            this->Underline_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Underline_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Underline_button->FlatAppearance->BorderSize = 0;
+            this->Underline_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Underline_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Underline)),
+                System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+            this->Underline_button->Location = System::Drawing::Point(146, 6);
+            this->Underline_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Underline_button->Name = L"Underline_button";
+            this->Underline_button->Size = System::Drawing::Size(36, 36);
+            this->Underline_button->TabIndex = 4;
+            this->Underline_button->TabStop = false;
+            this->Underline_button->Text = L"U";
+            this->Underline_button->UseVisualStyleBackColor = true;
+            this->Underline_button->Click += gcnew System::EventHandler(this, &MainWindow::Underline_button_Click);
+            this->Underline_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // Uppercase_button
+            // 
+            this->Uppercase_button->AutoSize = true;
+            this->Uppercase_button->BackColor = System::Drawing::SystemColors::ControlLightLight;
+            this->Uppercase_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Uppercase_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Uppercase_button->FlatAppearance->BorderSize = 0;
+            this->Uppercase_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Uppercase_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->Uppercase_button->Location = System::Drawing::Point(188, 6);
+            this->Uppercase_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Uppercase_button->Name = L"Uppercase_button";
+            this->Uppercase_button->Size = System::Drawing::Size(35, 36);
+            this->Uppercase_button->TabIndex = 5;
+            this->Uppercase_button->TabStop = false;
+            this->Uppercase_button->Text = L"X";
+            this->Uppercase_button->UseVisualStyleBackColor = false;
+            this->Uppercase_button->Click += gcnew System::EventHandler(this, &MainWindow::Uppercase_button_Click);
+            this->Uppercase_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // Lowercase_button
+            // 
+            this->Lowercase_button->AutoSize = true;
+            this->Lowercase_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Lowercase_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Lowercase_button->FlatAppearance->BorderSize = 0;
+            this->Lowercase_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Lowercase_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->Lowercase_button->Location = System::Drawing::Point(229, 6);
+            this->Lowercase_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Lowercase_button->Name = L"Lowercase_button";
+            this->Lowercase_button->Size = System::Drawing::Size(35, 36);
+            this->Lowercase_button->TabIndex = 6;
+            this->Lowercase_button->TabStop = false;
+            this->Lowercase_button->Text = L"X";
+            this->Lowercase_button->UseVisualStyleBackColor = true;
+            this->Lowercase_button->Click += gcnew System::EventHandler(this, &MainWindow::Lowercase_button_Click);
+            this->Lowercase_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // Anchor_button
+            // 
+            this->Anchor_button->AutoSize = true;
+            this->Anchor_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Anchor_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Anchor_button->FlatAppearance->BorderSize = 0;
+            this->Anchor_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Anchor_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->Anchor_button->Location = System::Drawing::Point(270, 6);
+            this->Anchor_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Anchor_button->Name = L"Anchor_button";
+            this->Anchor_button->Size = System::Drawing::Size(36, 36);
+            this->Anchor_button->TabIndex = 7;
+            this->Anchor_button->TabStop = false;
+            this->Anchor_button->Text = L"B";
+            this->Anchor_button->UseVisualStyleBackColor = true;
+            this->Anchor_button->Click += gcnew System::EventHandler(this, &MainWindow::Unker_button_Click);
+            this->Anchor_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // NumList_button
+            // 
+            this->NumList_button->AutoSize = true;
+            this->NumList_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->NumList_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->NumList_button->FlatAppearance->BorderSize = 0;
+            this->NumList_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->NumList_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->NumList_button->Location = System::Drawing::Point(312, 6);
+            this->NumList_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->NumList_button->Name = L"NumList_button";
+            this->NumList_button->Size = System::Drawing::Size(36, 36);
+            this->NumList_button->TabIndex = 8;
+            this->NumList_button->TabStop = false;
+            this->NumList_button->Text = L"B";
+            this->NumList_button->UseVisualStyleBackColor = true;
+            this->NumList_button->Click += gcnew System::EventHandler(this, &MainWindow::NumList_button_Click);
+            this->NumList_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // DotList_button
+            // 
+            this->DotList_button->AutoSize = true;
+            this->DotList_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->DotList_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->DotList_button->FlatAppearance->BorderSize = 0;
+            this->DotList_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->DotList_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->DotList_button->Location = System::Drawing::Point(354, 6);
+            this->DotList_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->DotList_button->Name = L"DotList_button";
+            this->DotList_button->Size = System::Drawing::Size(36, 36);
+            this->DotList_button->TabIndex = 9;
+            this->DotList_button->TabStop = false;
+            this->DotList_button->Text = L"B";
+            this->DotList_button->UseVisualStyleBackColor = true;
+            this->DotList_button->Click += gcnew System::EventHandler(this, &MainWindow::DotList_button_Click);
+            this->DotList_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // CleanFormat_button
+            // 
+            this->CleanFormat_button->AutoSize = true;
+            this->CleanFormat_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->CleanFormat_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->CleanFormat_button->FlatAppearance->BorderSize = 0;
+            this->CleanFormat_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->CleanFormat_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->CleanFormat_button->Location = System::Drawing::Point(396, 6);
+            this->CleanFormat_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->CleanFormat_button->Name = L"CleanFormat_button";
+            this->CleanFormat_button->Size = System::Drawing::Size(36, 36);
+            this->CleanFormat_button->TabIndex = 10;
+            this->CleanFormat_button->TabStop = false;
+            this->CleanFormat_button->Text = L"B";
+            this->CleanFormat_button->UseVisualStyleBackColor = true;
+            this->CleanFormat_button->Click += gcnew System::EventHandler(this, &MainWindow::CleanFormat_button_Click);
+            this->CleanFormat_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // separatorControl3
+            // 
+            this->separatorControl3->AutoSizeMode = true;
+            this->separatorControl3->BackColor = System::Drawing::SystemColors::ControlDark;
+            this->separatorControl3->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl3->LineThickness = 2;
+            this->separatorControl3->Location = System::Drawing::Point(435, 0);
+            this->separatorControl3->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl3->Name = L"separatorControl3";
+            this->separatorControl3->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl3->Size = System::Drawing::Size(2, 48);
+            this->separatorControl3->TabIndex = 22;
+            // 
+            // LeftAlign_button
+            // 
+            this->LeftAlign_button->AutoSize = true;
+            this->LeftAlign_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->LeftAlign_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->LeftAlign_button->FlatAppearance->BorderSize = 0;
+            this->LeftAlign_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->LeftAlign_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->LeftAlign_button->Location = System::Drawing::Point(440, 6);
+            this->LeftAlign_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->LeftAlign_button->Name = L"LeftAlign_button";
+            this->LeftAlign_button->Size = System::Drawing::Size(36, 36);
+            this->LeftAlign_button->TabIndex = 12;
+            this->LeftAlign_button->TabStop = false;
+            this->LeftAlign_button->Text = L"B";
+            this->LeftAlign_button->UseVisualStyleBackColor = true;
+            this->LeftAlign_button->Click += gcnew System::EventHandler(this, &MainWindow::LeftAlign_button_Click);
+            this->LeftAlign_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // CenterAlign_button
+            // 
+            this->CenterAlign_button->AutoSize = true;
+            this->CenterAlign_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->CenterAlign_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->CenterAlign_button->FlatAppearance->BorderSize = 0;
+            this->CenterAlign_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->CenterAlign_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->CenterAlign_button->Location = System::Drawing::Point(482, 6);
+            this->CenterAlign_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->CenterAlign_button->Name = L"CenterAlign_button";
+            this->CenterAlign_button->Size = System::Drawing::Size(36, 36);
+            this->CenterAlign_button->TabIndex = 13;
+            this->CenterAlign_button->TabStop = false;
+            this->CenterAlign_button->Text = L"B";
+            this->CenterAlign_button->UseVisualStyleBackColor = true;
+            this->CenterAlign_button->Click += gcnew System::EventHandler(this, &MainWindow::CenterAlign_button_Click);
+            this->CenterAlign_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // RightAlign_button
+            // 
+            this->RightAlign_button->AutoSize = true;
+            this->RightAlign_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->RightAlign_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->RightAlign_button->FlatAppearance->BorderSize = 0;
+            this->RightAlign_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->RightAlign_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->RightAlign_button->Location = System::Drawing::Point(524, 6);
+            this->RightAlign_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->RightAlign_button->Name = L"RightAlign_button";
+            this->RightAlign_button->Size = System::Drawing::Size(36, 36);
+            this->RightAlign_button->TabIndex = 14;
+            this->RightAlign_button->TabStop = false;
+            this->RightAlign_button->Text = L"B";
+            this->RightAlign_button->UseVisualStyleBackColor = true;
+            this->RightAlign_button->Click += gcnew System::EventHandler(this, &MainWindow::RightAlign_button_Click);
+            this->RightAlign_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // JustAlign_button
+            // 
+            this->JustAlign_button->AutoSize = true;
+            this->JustAlign_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->JustAlign_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->JustAlign_button->FlatAppearance->BorderSize = 0;
+            this->JustAlign_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->JustAlign_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->JustAlign_button->Location = System::Drawing::Point(566, 6);
+            this->JustAlign_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->JustAlign_button->Name = L"JustAlign_button";
+            this->JustAlign_button->Size = System::Drawing::Size(36, 36);
+            this->JustAlign_button->TabIndex = 15;
+            this->JustAlign_button->TabStop = false;
+            this->JustAlign_button->Text = L"B";
+            this->JustAlign_button->UseVisualStyleBackColor = true;
+            this->JustAlign_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // separatorControl2
+            // 
+            this->separatorControl2->AutoSizeMode = true;
+            this->separatorControl2->BackColor = System::Drawing::SystemColors::ControlDark;
+            this->separatorControl2->LineOrientation = System::Windows::Forms::Orientation::Vertical;
+            this->separatorControl2->LineThickness = 2;
+            this->separatorControl2->Location = System::Drawing::Point(605, 0);
+            this->separatorControl2->Margin = System::Windows::Forms::Padding(0);
+            this->separatorControl2->Name = L"separatorControl2";
+            this->separatorControl2->Padding = System::Windows::Forms::Padding(0);
+            this->separatorControl2->Size = System::Drawing::Size(2, 48);
+            this->separatorControl2->TabIndex = 21;
+            // 
+            // Date_button
+            // 
+            this->Date_button->AutoSize = true;
+            this->Date_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Date_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Date_button->FlatAppearance->BorderSize = 0;
+            this->Date_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Date_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->Date_button->Location = System::Drawing::Point(610, 6);
+            this->Date_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Date_button->Name = L"Date_button";
+            this->Date_button->Size = System::Drawing::Size(36, 36);
+            this->Date_button->TabIndex = 17;
+            this->Date_button->TabStop = false;
+            this->Date_button->Text = L"B";
+            this->Date_button->UseVisualStyleBackColor = true;
+            this->Date_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // DropDownMenu_button
+            // 
+            this->DropDownMenu_button->AutoSize = true;
+            this->DropDownMenu_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->DropDownMenu_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->DropDownMenu_button->FlatAppearance->BorderSize = 0;
+            this->DropDownMenu_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->DropDownMenu_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->DropDownMenu_button->Location = System::Drawing::Point(652, 6);
+            this->DropDownMenu_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->DropDownMenu_button->Name = L"DropDownMenu_button";
+            this->DropDownMenu_button->Size = System::Drawing::Size(36, 36);
+            this->DropDownMenu_button->TabIndex = 18;
+            this->DropDownMenu_button->TabStop = false;
+            this->DropDownMenu_button->Text = L"B";
+            this->DropDownMenu_button->UseVisualStyleBackColor = true;
+            this->DropDownMenu_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // Table_button
+            // 
+            this->Table_button->AutoSize = true;
+            this->Table_button->Dock = System::Windows::Forms::DockStyle::Left;
+            this->Table_button->FlatAppearance->BorderColor = System::Drawing::Color::Black;
+            this->Table_button->FlatAppearance->BorderSize = 0;
+            this->Table_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->Table_button->Font = (gcnew System::Drawing::Font(L"Times New Roman", 15.75F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->Table_button->Location = System::Drawing::Point(694, 6);
+            this->Table_button->Margin = System::Windows::Forms::Padding(3, 6, 3, 6);
+            this->Table_button->Name = L"Table_button";
+            this->Table_button->Size = System::Drawing::Size(36, 36);
+            this->Table_button->TabIndex = 19;
+            this->Table_button->TabStop = false;
+            this->Table_button->Text = L"B";
+            this->Table_button->UseVisualStyleBackColor = true;
+            this->Table_button->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MainWindow::richTextBox_KeyDown);
+            // 
+            // F7_button
+            // 
+            this->F7_button->Anchor = System::Windows::Forms::AnchorStyles::Top;
+            this->F7_button->Cursor = System::Windows::Forms::Cursors::Hand;
+            this->F7_button->FlatAppearance->BorderSize = 0;
+            this->F7_button->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+            this->F7_button->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+                static_cast<System::Byte>(204)));
+            this->F7_button->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(10)), static_cast<System::Int32>(static_cast<System::Byte>(80)),
+                static_cast<System::Int32>(static_cast<System::Byte>(255)));
+            this->F7_button->Location = System::Drawing::Point(573, 228);
+            this->F7_button->Name = L"F7_button";
+            this->F7_button->Size = System::Drawing::Size(173, 37);
+            this->F7_button->TabIndex = 16;
+            this->F7_button->Text = L"Продолжить";
+            this->F7_button->UseVisualStyleBackColor = true;
+            this->F7_button->Click += gcnew System::EventHandler(this, &MainWindow::F7_button_Click);
             // 
             // Anamnesis_panel
             // 
@@ -4742,7 +5812,37 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->year_numericUpDown))->EndInit();
             this->flowLayoutPanel1->ResumeLayout(false);
             this->flowLayoutPanel1->PerformLayout();
+            this->Recomendations_panel->ResumeLayout(false);
+            this->Recomendations_panel->PerformLayout();
+            this->tableLayoutPanel19->ResumeLayout(false);
+            this->tableLayoutPanel20->ResumeLayout(false);
+            this->tableLayoutPanel20->PerformLayout();
+            this->flowLayoutPanel7->ResumeLayout(false);
+            this->flowLayoutPanel7->PerformLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown3))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl7))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl8))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl9))->EndInit();
+            this->tableLayoutPanel17->ResumeLayout(false);
+            this->tableLayoutPanel17->PerformLayout();
+            this->Recommendations_groupBox->ResumeLayout(false);
+            this->tableLayoutPanel16->ResumeLayout(false);
+            this->AnalysisResults_panel->ResumeLayout(false);
+            this->tableLayoutPanel9->ResumeLayout(false);
+            this->tableLayoutPanel9->PerformLayout();
+            this->RichTextBox1_tableLayoutPanel->ResumeLayout(false);
+            this->RichTextBox1_tableLayoutPanel->PerformLayout();
+            this->flowLayoutPanel4->ResumeLayout(false);
+            this->flowLayoutPanel4->PerformLayout();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown2))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl4))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl5))->EndInit();
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl6))->EndInit();
+            this->tableLayoutPanel22->ResumeLayout(false);
+            this->tableLayoutPanel22->PerformLayout();
+            this->AnalysisResults_groupBox->ResumeLayout(false);
             this->SideInfo_panel->ResumeLayout(false);
+            (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
             this->tableLayoutPanel10->ResumeLayout(false);
             this->tableLayoutPanel10->PerformLayout();
             this->SideInfo_groupBox->ResumeLayout(false);
@@ -4754,18 +5854,6 @@ private: System::Windows::Forms::FlowLayoutPanel^ CheckBoxes_flowLayoutPanel;
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl1))->EndInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl3))->EndInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separatorControl2))->EndInit();
-            this->Recomendations_panel->ResumeLayout(false);
-            this->Recomendations_panel->PerformLayout();
-            this->tableLayoutPanel19->ResumeLayout(false);
-            this->tableLayoutPanel17->ResumeLayout(false);
-            this->tableLayoutPanel17->PerformLayout();
-            this->Recommendations_groupBox->ResumeLayout(false);
-            this->tableLayoutPanel16->ResumeLayout(false);
-            this->AnalysisResults_panel->ResumeLayout(false);
-            this->AnalysisResults_panel->PerformLayout();
-            this->tableLayoutPanel9->ResumeLayout(false);
-            this->tableLayoutPanel9->PerformLayout();
-            this->AnalysisResults_groupBox->ResumeLayout(false);
             this->Anamnesis_panel->ResumeLayout(false);
             this->tableLayoutPanel14->ResumeLayout(false);
             this->tableLayoutPanel14->PerformLayout();
@@ -4900,7 +5988,7 @@ private: System::Void Anamnesis_button_Click(System::Object^ sender, System::Eve
     }
 }
 private: System::Void AnalysisResults_button_Click(System::Object^ sender, System::EventArgs^ e) {
-    AnamnesisText = Anamnesis_textBox->Text;
+    epicris->AnamnesisText = Anamnesis_textBox->Text;
     ShowPanel(AnalysisResults_panel);
     CleanEpicrisisTabLastLabel();
     SetTabMenuLabelBottomLine(AnalysisResults_label);
@@ -5164,7 +6252,7 @@ private: System::Void RepeatCheck_dateTimePicker_ValueChanged(System::Object^ se
 private: System::Void F3_button_Click(System::Object^ sender, System::EventArgs^ e) {
     AnalyzesResults_comboBox->TabStop = true;
     AnalyzesResults_comboBox->TabIndex = 0;
-    AnamnesisText = Anamnesis_textBox->Text;
+    epicris->AnamnesisText = Anamnesis_textBox->Text;
     ShowPanel(AnalysisResults_panel);
     CleanEpicrisisTabLastLabel();
     SetTabMenuLabelBottomLine(AnalysisResults_label);
@@ -5269,13 +6357,10 @@ private: System::Void RemoveFromSideDataList(String^ str) {
 private: System::Void InsertIntoSideDataList(int index, String^ str) {
     SideDataList->Insert(index, str);
 }
-       //
-       // TODO Прописать логику обработки события проставления галок в чекбоксах
-       //
 private: System::Void SideInfoCheckBox_CheckedChanged(Object^ sender, EventArgs^ e) {
     CheckBox^ box = safe_cast<CheckBox^>(sender);
     String^ name = box->Text;
-    SideData = "";
+    epicris->SideData = "";
     if (box->Checked) {
         if (name == "Выписывается") {
             InsertIntoSideDataList(0, "Выписывается в удовлетворительном состоянии. Лучевая нагрузка: ЭЭД = значение мЗв.\n");
@@ -5349,6 +6434,7 @@ private: Void SideDataText() {
     }
 }
 private: Void InitializeData() {
+    epicris = gcnew Epicris();
     dbPath = dbPath_label->Text;
     dbHelper = gcnew DB_Helper(dbPath);
     epicrizDiagnosesList = gcnew List<String^>();
@@ -5423,45 +6509,36 @@ private: System::Void AnalyzesResults_comboBox_Leave(System::Object^ sender, Sys
     
 }
 private: System::Void Surname_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
-    Surname = Surname_comboBox->Text;
-    //Surname_comboBox->Text = Surname;
+    epicris->Surname = Surname_comboBox->Text;
 }
 private: System::Void Names_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
-    Name = Names_comboBox->Text;
-    //Names_comboBox->Text = Name;
+    epicris->Name = Names_comboBox->Text;
 }
 private: System::Void Patronymic_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
-    Patronymic = Patronymic_comboBox->Text;
-    //Patronymic_comboBox->Text = Patronymic;
+    epicris->Patronymic = Patronymic_comboBox->Text;
 }
 private: System::Void rank_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
-    Rank = rank_comboBox->Text;
-    //rank_comboBox->Text = Rank;
+    epicris->Rank = rank_comboBox->Text;
 }
 private: System::Void militaryUnit_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
-    MilitaryUnit = militaryUnit_comboBox->Text;
-    //militaryUnit_comboBox->Text = MilitaryUnit;
+    epicris->MilitaryUnit = militaryUnit_comboBox->Text;
 }
 private: System::Void birthday_dateTimePicker_Leave(System::Object^ sender, System::EventArgs^ e) {
-    Birthday = birthday_dateTimePicker->Text;
-    //birthday_dateTimePicker->Text = Birthday;
+    epicris->Birthday = birthday_dateTimePicker->Text;
 }
 private: System::Void income_dateTimePicker_Leave(System::Object^ sender, System::EventArgs^ e) {
-    IncomeDate = income_dateTimePicker->Text;
-    //income_dateTimePicker->Text = IncomeDate;
+    epicris->IncomeDate = income_dateTimePicker->Text;
 }
 private: System::Void outcome_dateTimePicker_Leave(System::Object^ sender, System::EventArgs^ e) {
-    OutcomeDate = outcome_dateTimePicker->Text;
-    //outcome_dateTimePicker->Text = OutcomeDate;
+    epicris->OutcomeDate = outcome_dateTimePicker->Text;
 }
 private: System::Void epicrizdiagnoses_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
-    Diagnosis = epicrizdiagnoses_comboBox->Text;
-    //int index = String::Substring()
-    String^ DiagnosisInMkb = SearchingStringInList(Diagnosis, epicrizDiagnosesList);
-    //epicrizdiagnoses_comboBox->Text = Diagnosis;
+    epicris->Diagnosis = epicrizdiagnoses_comboBox->Text;
+    String^ DiagnosisInMkb = SearchingStringInList(epicris->Diagnosis, epicrizDiagnosesList);
     if (DiagnosisInMkb != nullptr)
         mkb_comboBox->Text = dbHelper->SetQueryByConditionLike("epicrizDiagnoses", "mkb", "title", DiagnosisInMkb)[0];
 }
+// Ищет строку из списка, которая наиболее совпадает с данной
 private: System::String^ SearchingStringInList(String^ str, List<String^>^ Items) {
     List<String^>^ items = gcnew List<String^>(Items);
     List<String^>^ tmp_list = gcnew List<String^>();
@@ -5483,24 +6560,19 @@ private: System::String^ SearchingStringInList(String^ str, List<String^>^ Items
     return result;
 }
 private: System::Void related_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
-    RelatedDiagnosis = related_comboBox->Text;
-    //related_comboBox->Text = RelatedDiagnosis;
+    epicris->RelatedDiagnosis = related_comboBox->Text;
 }
 private: System::Void complications_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
-    Complications = complications_comboBox->Text;
-    //complications_comboBox->Text = Complications;
+    epicris->Complications = complications_comboBox->Text;
 }
 private: System::Void mkb_comboBox_Leave(System::Object^ sender, System::EventArgs^ e) {
-    Mkb = mkb_comboBox->Text;
-    //mkb_comboBox->Text;
+    epicris->Mkb = mkb_comboBox->Text;
 }
 private: System::Void id_numericUpDown_Leave(System::Object^ sender, System::EventArgs^ e) {
-    HistoryNumber = id_numericUpDown->Text;
-    id_numericUpDown->Text = HistoryNumber;
+    epicris->HistoryNumber = id_numericUpDown->Text;
 }
 private: System::Void year_numericUpDown_Leave(System::Object^ sender, System::EventArgs^ e) {
-    HistoryYear = year_numericUpDown->Text;
-    year_numericUpDown->Text = HistoryYear; 
+    epicris->HistoryYear = year_numericUpDown->Text;
 }       
 private: System::Void TabIndexedComboBox_LeaveEnterClick(System::Object^ sender, System::EventArgs^ e) {
     ComboBox^ box = safe_cast<ComboBox^>(sender);
@@ -5545,26 +6617,6 @@ private: System::Void ComboBoxDropDownLogic() {
     currentComboBox->Focus();
     currentComboBox->DroppedDown = true;
 }
-private: System::Void Test_button_Click(System::Object^ sender, System::EventArgs^ e) {
-    //GenerateRTFAndDisplay(R"([{"type":"paragraph","children":[{"text":"МОРФОЛОГИЧЕСКИЕ ИССЛЕДОВАНИЯ КРОВИ","bold":true,"underline":true}],"align":"center"},{"type":"table","columns":[{"type":"date","title":"Дата"},{"type":"text","title":"Нв г / л"},{"type":"text","title":"Эр.х10 ^ 12 / л"},{"type":"text","title":"ЦП"},{"type":"text","title":"Л х10 ^ 9 / л"},{"type":"text","title":"СОЭ Мм / ч"},{"type":"text","title":"Ht % "},{"type":"text","title":"Тр х10 ^ 9 / л"},{"type":"text","title":"Ре % "},{"type":"text","title":"t сверт."},{"type":"text","title":"t кров."},{"type":"text","title":"Млц"},{"type":"text","title":"Мтм"},{"type":"text","title":"Пя"},{"type":"text","title":"Ся"},{"type":"text","title":"Эоз"},{"type":"text","title":"Баз"},{"type":"text","title":"Мон"},{"type":"text","title":"Лиф"},{"type":"text","title":"Плз"},{"type":"text","title":"Анз"},{"type":"text","title":"Пйкл"},{"type":"text","title":"Гпхр"},{"type":"text","title":"ТЗН"}],"children":[{"type":"tableRow","children":[{"type":"tableHeaderCell","children":[{"text":"Да"},{"text":"та","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Нв г / л","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Эр.х10 ^ 12 / л","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"ЦП","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Л х10 ^ 9 / л","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"СОЭ Мм / ч","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Ht % ","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Тр х10 ^ 9 / л","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Ре % ","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"t сверт.","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"t кров.","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Млц","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Мтм","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Пя","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Ся","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Эоз","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Баз","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Мон","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Лиф","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Плз","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Анз","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Пйкл","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"Гпхр","fontSize":8}]},{"type":"tableHeaderCell","children":[{"text":"ТЗН","fontSize":8}]}]},{"type":"tableRow","children":[{"type":"tableDataCell","columnType":"date","children":[{"type":"dateInput","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]},{"type":"tableDataCell","columnType":"text","children":[{"type":"paragraph","children":[{"text":""}]}]}]}]},{"type":"paragraph","children":[{"text":""}]}])", richTextBox1);
-    //CreateTableInRichTextBox(richTextBox1);
-    // Пример JSON
-    String^ json = R"({
-      "columns": [
-        {"width": 2000},
-        {"width": 2000},
-        {"width": 2000}
-      ],
-      "rows": [
-        ["A1", "B1", "C1"],
-        ["A2", "B2", "C2"],
-        ["A3", "B3", "C3"]
-      ]
-    })";
-
-    // Создаем таблицу в RichTextBox по JSON шаблону
-    //CreateTableInRichTextBox(richTextBox, json);
-}
 private: System::Void Toolbar_button_Click(System::Object^ sender, System::EventArgs^ e) {
     Button^ button = safe_cast<Button^>(sender);
     if (button->BackColor != Color::FromKnownColor(KnownColor::AppWorkspace))
@@ -5590,7 +6642,7 @@ private: System::Void IsLazaretaV_radioButton_Click(System::Object^ sender, Syst
 }
 private: System::Void InitializeInterface() {
     id = id_numericUpDown->Value;
-    HistoryNumber = id_numericUpDown->Value.ToString();
+    epicris->HistoryNumber = id_numericUpDown->Value.ToString();
     birthday_dateTimePicker->Value = DateTime::Now.AddYears(-18);
     income_dateTimePicker->Value = DateTime::Now.AddDays(-12);
     outcome_dateTimePicker->Value = DateTime::Now.AddDays(1);
@@ -5605,16 +6657,16 @@ private: System::Void year_numericUpDown_Enter(System::Object^ sender, System::E
     numericTextBox->SelectAll();
 }
 private: System::Void AsteniaRec_button_Click(System::Object^ sender, System::EventArgs^ e) {
-    //Recommendations_richTextBox->Text = R"(1) Избегать переохлаждений; 2) ДДН согласно Методическим рекомендациям от 22.03.2021 "Профилактика осложнений новой коронавирусной инфекции(COVID - 19) в Вооруженных силах Российской Федерации", Приложению к Приказу Министра обороны Российской Федерации от « 6 » июля 2021 г. №395 «Об утверждении Особенностей проведения диспансерного наблюдения за военнослужащими Вооруженных Сил Российской Федерации и гражданами, призванными на военные сборы, проводимые в Вооруженных Силах Российской Федерации, и перечня исследований, включаемых в диспансерное наблюдение за военнослужащими Вооруженных Сил Российской Федерации и гражданами, призванными на военные сборы, проводимые в Вооруженных Силах Российской Федерации».)";
-    //Recommendations = Recommendations_richTextBox->Text;
+    richTextBox2->Text = R"(1) Избегать переохлаждений; 2) ДДН согласно Методическим рекомендациям от 22.03.2021 "Профилактика осложнений новой коронавирусной инфекции(COVID - 19) в Вооруженных силах Российской Федерации", Приложению к Приказу Министра обороны Российской Федерации от « 6 » июля 2021 г. №395 «Об утверждении Особенностей проведения диспансерного наблюдения за военнослужащими Вооруженных Сил Российской Федерации и гражданами, призванными на военные сборы, проводимые в Вооруженных Силах Российской Федерации, и перечня исследований, включаемых в диспансерное наблюдение за военнослужащими Вооруженных Сил Российской Федерации и гражданами, призванными на военные сборы, проводимые в Вооруженных Силах Российской Федерации».)";
+    epicris->Recommendations = richTextBox2->Text;
 }
 private: System::Void BronhitRec_button_Click(System::Object^ sender, System::EventArgs^ e) {
-    //Recommendations_richTextBox->Text = R"(1) Освободить от служебных обязанностей на 3е суток; 2) Избегать переохлаждений.)";
-    //Recommendations = Recommendations_richTextBox->Text;
+    richTextBox2->Text = R"(1) Освободить от служебных обязанностей на 3е суток; 2) Избегать переохлаждений.)";
+    epicris->Recommendations = richTextBox2->Text;
 }
 private: System::Void PnevmoRec_button_Click(System::Object^ sender, System::EventArgs^ e) {
-    //Recommendations_richTextBox->Text = R"(1) Реализовать решение ВВК, медицинскую реабилитацию провести в ; 2) Выполнить через 9 дней контрольную ФОГК (прям.+ . бок) с осмотром пульмонолога; 3) Исключить переохлаждения. 4) ДДН согласно Методическим рекомендациям от 22.03.2021 "Профилактика осложнений новой коронавирусной инфекции (COVID-19) в Вооруженных силах Российской Федерации", Приложению к Приказу Министра обороны Российской Федерации от « 6 » июля 2021 г. №395 «Об утверждении Особенностей проведения диспансерного наблюдения за военнослужащими Вооруженных Сил Российской Федерации и гражданами, призванными на военные сборы, проводимые в Вооруженных Силах Российской Федерации, и перечня исследований, включаемых в диспансерное наблюдение за военнослужащими Вооруженных Сил Российской Федерации и гражданами, призванными на военные сборы, проводимые в Вооруженных Силах Российской Федерации».)";
-    //Recommendations = Recommendations_richTextBox->Text;
+    richTextBox2->Text = R"(1) Реализовать решение ВВК, медицинскую реабилитацию провести в ; 2) Выполнить через 9 дней контрольную ФОГК (прям.+ . бок) с осмотром пульмонолога; 3) Исключить переохлаждения. 4) ДДН согласно Методическим рекомендациям от 22.03.2021 "Профилактика осложнений новой коронавирусной инфекции (COVID-19) в Вооруженных силах Российской Федерации", Приложению к Приказу Министра обороны Российской Федерации от « 6 » июля 2021 г. №395 «Об утверждении Особенностей проведения диспансерного наблюдения за военнослужащими Вооруженных Сил Российской Федерации и гражданами, призванными на военные сборы, проводимые в Вооруженных Силах Российской Федерации, и перечня исследований, включаемых в диспансерное наблюдение за военнослужащими Вооруженных Сил Российской Федерации и гражданами, призванными на военные сборы, проводимые в Вооруженных Силах Российской Федерации».)";
+    epicris->Recommendations = richTextBox2->Text;
 }
 private: System::Void Recommendations_checkedListBox_ItemCheck(System::Object^ sender, System::Windows::Forms::ItemCheckEventArgs^ e) {
     // Получаем индекс измененного элемента
@@ -5650,13 +6702,17 @@ private: System::Void Recommendations_checkedListBox_ItemCheck(System::Object^ s
             break;
         }
     }
-    Recommendations = nullptr;
+    epicris->Recommendations = nullptr;
     for (int i = 0; i < RecommendationsList->Count; i++) {
-        Recommendations += (i+1) + ") " + RecommendationsList[i] + " ";
+        epicris->Recommendations += (i+1) + ") " + RecommendationsList[i] + " ";
     }
 }
 private: System::Void Paste_button_Click(System::Object^ sender, System::EventArgs^ e) {
-    //Recommendations_richTextBox->Text = Recommendations;
+    epicris->Recommendations = nullptr;
+    for (int i = 0; i < RecommendationsList->Count; i++) {
+        epicris->Recommendations += (i + 1) + ") " + RecommendationsList[i] + " ";
+    }
+    richTextBox2->Text = epicris->Recommendations;
 }
 private: System::Void InitializePagesPanels() {
     PagePanelList = gcnew List<Panel^>();    
@@ -5734,8 +6790,13 @@ private: System::Void MainWindow_KeyDown(System::Object^ sender, System::Windows
 private: System::Void MainWindow_PreviewKeyDown(System::Object^ sender, System::Windows::Forms::PreviewKeyDownEventArgs^ e) {
     
 }
-void ToggleFontStyle(FontStyle style) {
-    System::Drawing::Font^ currentFont = richTextBox->SelectionFont;
+void ToggleFontStyle(FontStyle style, Object^ sender) {
+    Button^ button = safe_cast<Button^>(sender);
+    FlowLayoutPanel^ flowpanel = safe_cast<FlowLayoutPanel^>(button->Parent);
+    TableLayoutPanel^ tablepanel = safe_cast<TableLayoutPanel^>(flowpanel->Parent);
+    RichTextBox^ rtb = safe_cast<RichTextBox^>(tablepanel->Controls[0]);
+
+    System::Drawing::Font^ currentFont = rtb->SelectionFont;
     if (currentFont != nullptr)
     {
         FontStyle newStyle;
@@ -5744,21 +6805,21 @@ void ToggleFontStyle(FontStyle style) {
         else
             newStyle = currentFont->Style | style;
 
-        richTextBox->SelectionFont = gcnew System::Drawing::Font(currentFont, newStyle);
+        rtb->SelectionFont = gcnew System::Drawing::Font(currentFont, newStyle);
     }
 
 }
 private: System::Void Bold_button_Click(System::Object^ sender, System::EventArgs^ e) {
     Toolbar_button_Click(sender);
-    ToggleFontStyle(FontStyle::Bold);
+    ToggleFontStyle(FontStyle::Bold, sender);
 }
 private: System::Void Italic_button_Click(System::Object^ sender, System::EventArgs^ e) {
     Toolbar_button_Click(sender);
-    ToggleFontStyle(FontStyle::Italic);
+    ToggleFontStyle(FontStyle::Italic, sender);
 }
 private: System::Void Underline_button_Click(System::Object^ sender, System::EventArgs^ e) {
     Toolbar_button_Click(sender);
-    ToggleFontStyle(FontStyle::Underline);
+    ToggleFontStyle(FontStyle::Underline, sender);
 }
 private: System::Void Uppercase_button_Click(System::Object^ sender, System::EventArgs^ e) {
     Toolbar_button_Click(sender);
@@ -5793,24 +6854,24 @@ private: System::Void LeftAlign_button_Click(System::Object^ sender, System::Eve
     Toolbar_button_Click(sender);
     CenterAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
     RightAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
-    WideAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
+    JustAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
     richTextBox->SelectionAlignment = HorizontalAlignment::Left;
 }
 private: System::Void CenterAlign_button_Click(System::Object^ sender, System::EventArgs^ e) {
     Toolbar_button_Click(sender);
     RightAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
     LeftAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
-    WideAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
+    JustAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
     richTextBox->SelectionAlignment = HorizontalAlignment::Center;
 }
 private: System::Void RightAlign_button_Click(System::Object^ sender, System::EventArgs^ e) {
     Toolbar_button_Click(sender);
     CenterAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
     LeftAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
-    WideAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
+    JustAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
     richTextBox->SelectionAlignment = HorizontalAlignment::Right;
 }
-private: System::Void WideAlign_button_Click(System::Object^ sender, System::EventArgs^ e) {
+private: System::Void JustAlign_button_Click(System::Object^ sender, System::EventArgs^ e) {
     Toolbar_button_Click(sender);
     CenterAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
     LeftAlign_button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
@@ -5825,24 +6886,32 @@ private: System::Void Table_button_Click(System::Object^ sender, System::EventAr
 }
 private: System::Void Toolbar_button_Click(System::Object^ sender) {
     Button^ button = safe_cast<Button^>(sender);
+    FlowLayoutPanel^ flowpanel = safe_cast<FlowLayoutPanel^>(button->Parent);
+    TableLayoutPanel^ tablepanel = safe_cast<TableLayoutPanel^>(flowpanel->Parent);
+    RichTextBox^ rtb = safe_cast<RichTextBox^>(tablepanel->Controls[0]);
+
     if (button->BackColor != Color::FromKnownColor(KnownColor::AppWorkspace))
         button->BackColor = Color::FromKnownColor(KnownColor::AppWorkspace);
     else
         button->BackColor = Color::FromKnownColor(KnownColor::ControlLightLight);
-    richTextBox->Focus();
+    rtb->Focus();
 }
 private: System::Void Fontsize_numericUpDown_ValueChanged(System::Object^ sender, System::EventArgs^ e) {
-    int previousSelectionStart = richTextBox->SelectionStart;
+    NumericUpDown^ button = safe_cast<NumericUpDown^>(sender);
+    FlowLayoutPanel^ flowpanel = safe_cast<FlowLayoutPanel^>(button->Parent);
+    TableLayoutPanel^ tablepanel = safe_cast<TableLayoutPanel^>(flowpanel->Parent);
+    RichTextBox^ rtb = safe_cast<RichTextBox^>(tablepanel->Controls[0]);
+    int previousSelectionStart = rtb->SelectionStart;
     // Проверяем, есть ли выделенный текст
-    if (richTextBox->SelectionLength > 0)
+    if (rtb->SelectionLength > 0)
     {
         // Сохраняем текущую позицию каретки
         
 
         // Изменяем шрифт только для выделенного текста
-        richTextBox->SelectionFont = gcnew System::Drawing::Font(richTextBox->SelectionFont->FontFamily,
+        rtb->SelectionFont = gcnew System::Drawing::Font(rtb->SelectionFont->FontFamily,
             (float)Fontsize_numericUpDown->Value,
-            richTextBox->SelectionFont->Style);
+            rtb->SelectionFont->Style);
 
         // Возвращаем фокус на RichTextBox
 
@@ -5852,29 +6921,48 @@ private: System::Void Fontsize_numericUpDown_ValueChanged(System::Object^ sender
     else // Нет выделенного текста, изменяем шрифт для дальнейшего ввода
     {
         // Меняем шрифт только для текущей позиции каретки
-        richTextBox->SelectionFont = gcnew System::Drawing::Font(richTextBox->Font->FontFamily,
+        rtb->SelectionFont = gcnew System::Drawing::Font(rtb->Font->FontFamily,
             (float)Fontsize_numericUpDown->Value,
-            richTextBox->Font->Style);
-        richTextBox->SelectionStart = previousSelectionStart;
-        richTextBox->SelectionLength = 0;
+            rtb->Font->Style);
+        rtb->SelectionStart = previousSelectionStart;
+        rtb->SelectionLength = 0;
     }
-    richTextBox->Focus();
+    rtb->Focus();
     
 }
 private: System::Void richTextBox_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e) {
     if (e->Control && (e->KeyCode == Keys::B)) {
         Toolbar_button_Click(Bold_button);
-        ToggleFontStyle(FontStyle::Bold);
+        ToggleFontStyle(FontStyle::Bold, sender);
     }
     if (e->Control && (e->KeyCode == Keys::I)) {
         e->SuppressKeyPress = true;
         Toolbar_button_Click(Italic_button);
-        ToggleFontStyle(FontStyle::Italic);
+        ToggleFontStyle(FontStyle::Italic, sender);
     }
     if (e->Control && (e->KeyCode == Keys::U)) {
         Toolbar_button_Click(Underline_button);
-        ToggleFontStyle(FontStyle::Underline);
+        ToggleFontStyle(FontStyle::Underline, sender);
     }
+}
+private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+    StringBuilder^ builder = gcnew StringBuilder();
+    builder->Append(richTextBoxTest->Text);
+    richTextBox->Rtf = builder->ToString();
+}
+private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
+    Decimal^ value = numericUpDown1->Value;
+    String^ position = value->ToString();
+    //GenerateRTFAndDisplay(dbHelper->SetQueryByCondition("analyzes", "value", "position", position)[0], richTextBox);
+    String^ rtfString = CreateRtfDocumentFromJson(dbHelper->SetQueryByCondition("analyzes", "value", "position", position)[0]);
+    richTextBox->Rtf = rtfString;
+    richTextBoxTest->Text = rtfString;
+}
+private: System::Void SaveAnalyzes_button_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void SaveAnalyzes() {
+    String^ json = ConvertParserToJson(ConvertRtfToParser(richTextBox1->Rtf));
+
 }
 };
 }
